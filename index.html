@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OKR Workspace v2 (트리 중심)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css"/>
+<style>
+:root{--bg:#fff;--bgs:#FAFAFA;--bgh:#F4F4F5;--bgm:#F0F0F2;--bd:#E4E4E7;--bdt:#D4D4D8;--tx:#09090B;--tx2:#27272A;--tx3:#52525B;--tx4:#71717A;--tx5:#A1A1AA;--ac:#2563EB;--ach:#1D4ED8;--acbg:#EFF6FF;--s:#10B981;--sbg:#ECFDF5;--stx:#065F46;--w:#F59E0B;--wbg:#FFFBEB;--wtx:#92400E;--d:#EF4444;--dbg:#FEF2F2;--dtx:#991B1B;--ff:'Pretendard Variable',Pretendard,-apple-system,sans-serif;--fm:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html{font-size:15px}
+body{font-family:var(--ff);background:var(--bg);color:var(--tx);line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+.mono{font-family:var(--fm);font-variant-numeric:tabular-nums}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit}
+/* Login */
+.login{position:fixed;inset:0;background:#FAFAFA;display:flex;align-items:center;justify-content:center;z-index:100;padding:24px}
+.lc{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:36px 32px;width:100%;max-width:440px;box-shadow:0 8px 24px rgba(0,0,0,.04)}
+.lb{text-align:center;margin-bottom:24px}
+.lb h1{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.02em}
+.lb p{color:var(--tx4);font-size:13px}
+.lsearch{margin-bottom:10px}
+.lsearch input{width:100%;height:38px;background:#fff;border:1px solid var(--bd);border-radius:8px;padding:0 14px;font-size:13px;outline:none}
+.lsearch input:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.lul{display:grid;gap:6px;max-height:240px;overflow-y:auto;margin-bottom:14px}
+.lul-hint{font-size:11px;color:var(--tx5);text-align:center;padding:18px 0}
+.lu{display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:center;padding:10px 12px;background:#fff;border:1px solid var(--bd);border-radius:8px;cursor:pointer;transition:.12s}
+.lu:hover{background:var(--bgh)}
+.lu.sel{background:var(--acbg);border-color:var(--ac)}
+.luav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:13px}
+.lun{font-size:13px;font-weight:500}
+.lur{font-size:11px;color:var(--tx4);margin-top:1px}
+.lutag{font-family:var(--fm);font-size:10px;color:var(--tx4);padding:2px 7px;background:var(--bgh);border-radius:4px}
+.lpw input{width:100%;height:40px;background:#fff;border:1px solid var(--bd);border-radius:8px;padding:0 14px;font-size:13px;outline:none}
+.lpw input:focus{border-color:var(--ac)}
+.lerr{color:var(--dtx);font-size:11px;margin:8px 0 0;display:none}
+.lerr.on{display:block}
+.lbtn{width:100%;height:42px;background:var(--tx);color:#fff;border-radius:8px;font-weight:600;font-size:14px;margin-top:14px}
+.lbtn:hover{background:#000}
+.lhint{text-align:center;color:var(--tx5);font-size:11px;margin-top:10px;font-family:var(--fm)}
+/* App */
+.app{display:none}
+.app.on{display:block}
+.top{height:56px;background:#fff;border-bottom:1px solid var(--bd);padding:0 28px;display:flex;align-items:center;gap:28px;position:sticky;top:0;z-index:20}
+.brand{font-size:16px;font-weight:700;letter-spacing:-.02em;margin-right:14px}
+.tabs{display:flex;gap:2px;flex:1;height:100%}
+.tab{padding:0 14px;display:inline-flex;align-items:center;font-size:13px;color:var(--tx4);cursor:pointer;border-bottom:2px solid transparent;height:100%;font-weight:500;letter-spacing:-.01em}
+.tab[hidden]{display:none!important}
+.tab:hover{color:var(--tx2)}
+.tab.on{color:var(--tx);border-bottom-color:var(--tx);font-weight:600}
+.tbr{display:flex;align-items:center;gap:12px;font-family:var(--fm);font-size:11px;color:var(--tx4)}
+.uav{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:12px;cursor:pointer}
+main{padding:32px 36px;max-width:1400px;margin:0 auto}
+[data-tab]{display:none}
+[data-tab].on{display:block}
+.ph{margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.ph h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.ph p{color:var(--tx4);font-size:13px}
+.ph-r{display:flex;gap:8px}
+.btn{height:34px;padding:0 14px;border-radius:7px;font-size:13px;font-weight:500;border:1px solid var(--bd);background:#fff;color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--bdt);background:var(--bgh)}
+.btnp{background:var(--tx);color:#fff;border-color:var(--tx)}
+.btnp:hover{background:#000;border-color:#000}
+.btn-sm{height:28px;font-size:12px;padding:0 10px}
+.btn-d{color:var(--dtx);border-color:var(--bd)}
+.btn-d:hover{background:var(--dbg);border-color:var(--dbd)}
+/* Dashboard cards */
+.kgr{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.kc{padding:20px 22px;border:1px solid var(--bd);border-radius:12px;background:#fff}
+.kc-l{font-size:12px;color:var(--tx4);margin-bottom:10px;font-weight:500}
+.kc-v{font-family:var(--fm);font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.kc-v small{font-size:13px;color:var(--tx4);margin-left:4px}
+.kc-d{font-size:11px;color:var(--tx4);margin-top:6px;font-family:var(--fm)}
+/* Tree */
+.tree{padding:8px 0}
+.node{position:relative;border-left:1.5px solid var(--bd);margin-left:14px;padding-left:0}
+.node.root{border-left:none;margin-left:0}
+.row{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:8px;cursor:pointer;position:relative;margin:1px 0}
+.row:hover{background:var(--bgh)}
+.row.sel{background:var(--acbg)}
+.row.root{padding:14px 16px;background:var(--bgs);margin-bottom:6px;border:1px solid var(--bd);border-radius:10px}
+.row.root.sel{border-color:var(--ac);background:var(--acbg)}
+.expand{width:18px;height:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--tx4);font-size:10px;flex-shrink:0;border-radius:4px;transition:.12s}
+.expand:hover{background:var(--bgm);color:var(--tx)}
+.expand.open{transform:rotate(90deg)}
+.expand.leaf{visibility:hidden}
+.rd{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.rt{flex:1;min-width:0;display:flex;align-items:center;gap:10px;font-size:13px}
+.rt b{font-weight:600}
+.rid{font-family:var(--fm);font-size:11px;color:var(--tx5);font-weight:500}
+.biz-tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:6px;font-size:12px;font-weight:600;border:1px solid;letter-spacing:-.01em}
+.rtag{font-family:var(--fm);font-size:10px;color:var(--tx4);background:var(--bgm);padding:2px 6px;border-radius:4px}
+.row.root .rt{font-size:15px;font-weight:600}
+.row.lvl1 .rt{font-size:14px;font-weight:600}
+.rprog{display:flex;align-items:center;gap:10px;min-width:120px;flex-shrink:0}
+.rbar{width:60px;height:5px;background:var(--bgm);border-radius:99px;overflow:hidden}
+.rbar-f{height:100%;background:var(--ac);border-radius:99px}
+.rpct{font-family:var(--fm);font-size:12px;font-weight:600;min-width:38px;text-align:right}
+.rpct.s{color:var(--stx)}.rpct.o{color:var(--ac)}.rpct.w{color:var(--wtx)}.rpct.d{color:var(--dtx)}
+.rown{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--tx3);min-width:80px}
+.rown .av{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:600;font-family:var(--fm)}
+.children{margin-left:22px}
+.children[hidden]{display:none}
+.empty-c{padding:8px 12px;color:var(--tx5);font-size:12px;font-style:italic;margin-left:22px}
+/* Business cards (Biz tab) */
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.bcard{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:22px;cursor:pointer;transition:.15s}
+.bcard:hover{border-color:var(--bdt);transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.04)}
+.bch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.bcn{font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px}
+.bcd{font-size:11px;color:var(--tx4);font-family:var(--fm);margin-top:4px}
+.bcobj{font-size:13px;color:var(--tx2);line-height:1.5;margin-bottom:16px;padding:10px 12px;background:var(--bgs);border-radius:8px;font-style:italic}
+.bcp{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.bcpv{font-family:var(--fm);font-size:32px;font-weight:700;letter-spacing:-.02em}
+.bcpu{font-family:var(--fm);font-size:13px;color:var(--tx4)}
+.bcpb{height:5px;background:var(--bgm);border-radius:99px;overflow:hidden;margin-bottom:12px}
+.bcpbf{height:100%;border-radius:99px;background:var(--ac)}
+.bcm{font-size:12px;color:var(--tx4);display:flex;justify-content:space-between}
+/* Report */
+.rep{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:24px;margin-bottom:14px}
+.rep h3{font-size:15px;font-weight:600;margin-bottom:14px}
+.rep-r{display:grid;grid-template-columns:140px 1fr 80px;gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bgh)}
+.rep-r:last-child{border-bottom:none}
+.rep-bar{height:8px;background:var(--bgm);border-radius:99px;overflow:hidden}
+.rep-bf{height:100%;border-radius:99px}
+.rep-table-wrap{overflow-x:auto;margin-top:6px}
+.rep-table{width:100%;border-collapse:collapse}
+.rep-table th{text-align:left;padding:8px 10px;background:var(--bgs);font-weight:600;border-bottom:1px solid var(--bd);font-size:11px;color:var(--tx3);white-space:nowrap}
+.rep-table td{padding:8px 10px;border-bottom:1px solid var(--bgh);vertical-align:top}
+.rep-table tbody tr:hover{background:var(--bgh)}
+.rep-filter{display:grid;grid-template-columns:1fr auto auto;gap:10px;margin-bottom:14px;align-items:center}
+.rep-filter input[type=text]{padding:9px 12px;border:1px solid var(--bd);border-radius:7px;font-size:12px}
+.rep-filter select{height:36px;padding:0 10px;border:1px solid var(--bd);border-radius:7px;font-size:12px;background:#fff}
+.rep-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{padding:4px 10px;border:1px solid var(--bd);border-radius:99px;font-size:11px;font-weight:500;cursor:pointer;background:#fff;color:var(--tx2);transition:all .12s}
+.chip:hover{border-color:var(--bdt);color:var(--tx)}
+.chip.on{background:var(--tx);color:#fff;border-color:var(--tx)}
+.rep-memo{font-size:11px;color:#1E40AF;background:#EFF6FF;padding:3px 8px;border-radius:5px;margin-top:4px;display:inline-block;border:1px solid #DBEAFE}
+.mykr-card{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin-bottom:10px;cursor:pointer;transition:all .12s}
+.mykr-card:hover{border-color:var(--bdt);box-shadow:0 4px 12px rgba(0,0,0,.05)}
+.mykr-card-h{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:6px}
+.mykr-card-t{font-size:14px;font-weight:500;line-height:1.55;color:var(--tx);flex:1;word-break:keep-all}
+.mykr-card-r{text-align:right;white-space:nowrap;flex-shrink:0}
+.mykr-card-p{font-size:20px;font-weight:700;font-family:var(--fm)}
+.mykr-card-meta{font-size:11px;color:var(--tx4);margin-bottom:10px;line-height:1.5}
+.mykr-card-bar{height:6px;background:var(--bgm);border-radius:99px;overflow:hidden}
+.mykr-card-bar-f{height:100%;border-radius:99px;transition:width .3s}
+.add-ik-row{padding:10px 14px;border:1px dashed var(--bd);border-radius:7px;margin-top:6px;text-align:center;font-size:12px;color:var(--tx4);cursor:pointer;transition:all .12s;background:var(--bgs)}
+.add-ik-row:hover{border-color:var(--ac);color:var(--ac);background:var(--acbg)}
+.pct-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:99px;font-family:var(--fm);font-size:11px;font-weight:600;margin-left:6px}
+.pct-badge.over{background:#DBEAFE;color:#1E40AF}
+.pct-badge.ok{background:var(--sbg);color:var(--stx)}
+.pct-badge.warn{background:var(--wbg);color:var(--wtx)}
+.pct-badge.risk{background:var(--dbg);color:var(--dtx)}
+.pct-color.over{color:#1E40AF}
+.pct-color.ok{color:var(--stx)}
+.pct-color.warn{color:var(--wtx)}
+.pct-color.risk{color:var(--dtx)}
+.pct-badge.none{background:#F3F4F6;color:#6B7280}
+.pct-color.none{color:#6B7280}
+.kc-meter-f.none{background:#9CA3AF}
+.pct-badge.idle{background:#E0E7FF;color:#3730A3}
+.pct-color.idle{color:#3730A3}
+.kc-meter-f.idle{background:#818CF8}
+.trend{display:inline-flex;align-items:center;gap:2px;font-family:var(--fm);font-size:11px;color:var(--tx4);margin-left:4px}
+.trend.up{color:var(--stx)}
+.trend.down{color:var(--dtx)}
+.kr-flag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:99px;font-family:var(--fm);font-size:10px;font-weight:600;margin-left:6px;white-space:nowrap}
+.kr-flag.pending{background:#FEF3C7;color:#92400E}
+.kr-flag.health{background:#DBEAFE;color:#1E40AF}
+.kr-flag.link{background:#E0E7FF;color:#3730A3}
+.kr-flag.wait{background:#F3F4F6;color:#374151}
+.rid{display:none}
+.owner-picker{border:1px solid var(--bd);border-radius:6px;padding:6px;background:var(--bgs);min-height:40px}
+.owner-chips{display:flex;flex-wrap:wrap;gap:4px;min-height:20px}
+.owner-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500;border:1px solid}
+.owner-chip .x{cursor:pointer;font-weight:700;padding:0 2px;opacity:.6}
+.owner-chip .x:hover{opacity:1}
+.owner-picker input{width:100%;border:none;background:transparent;outline:none;padding:4px 6px;font-size:12px;border-top:1px solid var(--bd);margin-top:4px}
+.owner-options{max-height:140px;overflow-y:auto;margin-top:2px}
+.owner-opt{padding:6px 10px;font-size:12px;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:6px}
+.owner-opt:hover{background:var(--bgh)}
+.owner-opt .g-mark{font-size:10px;background:#F3F4F6;color:#52525B;padding:1px 5px;border-radius:99px;font-weight:600}
+.wait-note{font-size:11px;color:var(--wtx);background:var(--wbg);border:1px dashed #FDE68A;border-radius:6px;padding:6px 10px;margin-top:8px}
+/* Dashboard 카드 강화 */
+.kc{position:relative;overflow:hidden}
+.kc-v{font-size:42px}
+.kc-meter{height:6px;background:var(--bgm);border-radius:99px;overflow:hidden;margin-top:10px}
+.kc-meter-f{height:100%;background:var(--ac);border-radius:99px}
+.kc-meter-f.over{background:#1E40AF}
+.kc-meter-f.ok{background:var(--s)}
+.kc-meter-f.warn{background:var(--w)}
+.kc-meter-f.risk{background:var(--d)}
+.kc-badge-row{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap}
+/* 비밀번호 변경 모달 */
+.modal{position:fixed;inset:0;background:rgba(9,9,11,.4);display:none;align-items:center;justify-content:center;z-index:60;padding:24px}
+.modal.on{display:flex}
+.modal-c{background:#fff;border-radius:14px;max-width:440px;width:100%;padding:26px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-h{font-size:17px;font-weight:600;margin-bottom:14px;letter-spacing:-.01em}
+.modal-f{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.modal input{width:100%;height:38px;border:1px solid var(--bd);border-radius:8px;padding:0 12px;font-size:13px;outline:none;margin-bottom:10px}
+.modal input:focus{border-color:var(--ac)}
+.src-tag{display:inline-flex;align-items:center;padding:1px 6px;border-radius:4px;font-family:var(--fm);font-size:9px;font-weight:600;margin-left:5px;letter-spacing:.02em}
+.src-tag.dummy{background:#F3F4F6;color:#71717A;border:1px solid #E4E4E7}
+.src-tag.real{background:#DBEAFE;color:#1E40AF;border:1px solid #BFDBFE}
+.src-tag.unset{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A}
+/* Org shapes */
+.org-shapes{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px}
+.org-shape{padding:18px 22px;border:2px solid var(--bd);border-radius:14px;cursor:pointer;background:#fff;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:150px;transition:.15s;position:relative}
+.org-shape:hover{border-color:var(--bdt);transform:translateY(-1px)}
+.org-shape.on{border-color:var(--ac);background:var(--acbg)}
+.org-shape-c{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;margin-bottom:4px}
+.org-shape-n{font-size:14px;font-weight:600}
+.org-shape-l{font-family:var(--fm);font-size:11px;color:var(--tx4)}
+.org-shape-cnt{position:absolute;top:8px;right:10px;font-family:var(--fm);font-size:10px;background:var(--bgm);padding:2px 7px;border-radius:99px;color:var(--tx3);font-weight:500}
+.org-shape.all{background:var(--tx);border-color:var(--tx)}
+.org-shape.all .org-shape-n,.org-shape.all .org-shape-l{color:#fff}
+.org-shape.all .org-shape-cnt{background:rgba(255,255,255,.2);color:#fff}
+/* User table */
+.utbl{background:#fff;border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.uth{display:grid;grid-template-columns:36px 1fr 1fr 110px 110px 50px;gap:14px;padding:12px 18px;background:var(--bgs);font-family:var(--fm);font-size:10px;color:var(--tx4);text-transform:uppercase;letter-spacing:.06em;font-weight:600;border-bottom:1px solid var(--bd)}
+.urow{display:grid;grid-template-columns:36px 1fr 1fr 110px 110px 50px;gap:14px;padding:13px 18px;border-bottom:1px solid var(--bgh);align-items:center;font-size:13px}
+.urow:last-child{border-bottom:none}
+.urow:hover{background:var(--bgs)}
+.uavn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:12px}
+.usub{font-size:11px;color:var(--tx4);margin-top:2px}
+.urtag{font-family:var(--fm);font-size:11px;color:var(--tx3);padding:3px 8px;background:var(--bgm);border-radius:5px}
+/* Setting */
+.sgrp{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:22px;margin-bottom:14px}
+.sgrp h3{font-size:15px;font-weight:600;margin-bottom:4px}
+.sgrp .desc{font-size:12px;color:var(--tx4);margin-bottom:14px}
+.srow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--bgh);font-size:13px}
+.srow:last-child{border-bottom:none}
+.srow label{font-weight:500}
+.srow .sub{font-size:11px;color:var(--tx4);margin-top:2px}
+.srow select,.srow input{height:32px;border:1px solid var(--bd);border-radius:6px;padding:0 10px;font-size:12px;background:#fff;outline:none;min-width:180px}
+/* Modal */
+.modal{position:fixed;inset:0;background:rgba(9,9,11,.5);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;backdrop-filter:blur(4px)}
+.modal[hidden]{display:none}
+.mc{background:#fff;border-radius:14px;max-width:620px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 48px rgba(0,0,0,.18)}
+.mh{padding:22px 26px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
+.mh h3{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.mh .sub{font-family:var(--fm);font-size:11px;color:var(--tx4);margin-top:3px}
+.mcl{padding:6px 10px;color:var(--tx4);font-size:22px;cursor:pointer;border-radius:6px;line-height:1}
+.mcl:hover{background:var(--bgh);color:var(--tx)}
+.mb{padding:22px 26px}
+.mf{padding:16px 26px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end}
+.mf .lf{margin-right:auto;font-family:var(--fm);font-size:11px;color:var(--tx4);align-self:center}
+.fg{margin-bottom:16px}
+.fg label{display:block;font-size:12px;font-weight:500;margin-bottom:6px}
+.fg input,.fg textarea,.fg select{width:100%;border:1px solid var(--bd);border-radius:7px;padding:9px 12px;font-size:13px;background:#fff;outline:none}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.fg textarea{resize:vertical;min-height:60px;line-height:1.5}
+.fg .hint{font-size:11px;color:var(--tx4);margin-top:5px}
+.knum{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:14px;background:var(--bgs);border-radius:8px;margin-bottom:14px}
+.knl{font-family:var(--fm);font-size:10px;color:var(--tx4);text-transform:uppercase;margin-bottom:3px;letter-spacing:.06em}
+.knv{font-family:var(--fm);font-size:16px;font-weight:600}
+.bd{font-family:var(--fm);font-size:11px;font-weight:500;padding:2px 8px;border-radius:4px}
+.bd.s{background:var(--sbg);color:var(--stx)}.bd.o{background:var(--acbg);color:var(--ach)}.bd.w{background:var(--wbg);color:var(--wtx)}.bd.d{background:var(--dbg);color:var(--dtx)}
+.bd.com{background:#E0E7FF;color:#3730A3}.bd.asp{background:#FCE7F3;color:#9D174D}
+.lock-b{padding:10px 14px;background:var(--bgs);border:1px solid var(--bd);border-radius:7px;font-size:12px;color:var(--tx3);margin-bottom:14px}
+.empty{padding:60px 20px;text-align:center;color:var(--tx4)}
+.empty-i{font-size:38px;margin-bottom:12px;opacity:.4}
+.empty-t{font-size:14px;font-weight:500;color:var(--tx2);margin-bottom:6px}
+.empty-d{font-size:12px}
+@media(max-width:1100px){.kgr{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.kgr{grid-template-columns:1fr}.top{padding:0 16px;gap:14px}.tab{padding:0 8px;font-size:12px}.brand{font-size:14px;margin-right:6px}main{padding:24px 18px}}
+</style></head><body>
+<div class="login" id="login"><div class="lc">
+<div class="lb"><h1>OKR Workspace</h1><p>이름으로 검색 또는 사업부 선택</p></div>
+<div class="lsearch"><input type="text" id="userSearch" placeholder="이름 또는 사업부 검색 (예: 곽경훈, 익스)" autocomplete="off"></div>
+<div class="lul" id="userList"></div>
+<div class="lpw"><input type="password" id="pw" placeholder="비밀번호 (초기 1234)"></div>
+<div class="lerr" id="loginErr">비밀번호가 일치하지 않습니다</div>
+<button class="lbtn" id="loginBtn">로그인</button>
+<div class="lhint">초기 비밀번호: 1234</div>
+</div></div>
+<div class="modal" id="mPw" hidden><div class="modal-c">
+<div class="modal-h">비밀번호 변경</div>
+<input type="password" id="pwOld" placeholder="현재 비밀번호">
+<input type="password" id="pwNew" placeholder="새 비밀번호 (4자 이상)">
+<input type="password" id="pwNew2" placeholder="새 비밀번호 확인">
+<div id="pwMsg" style="color:var(--dtx);font-size:11px;display:none">비밀번호 불일치</div>
+<div class="modal-f"><button class="btn" onclick="closePwChange()">취소</button><button class="btn btnp" onclick="savePw()">변경</button></div>
+</div></div>
+<div class="app" id="app">
+<header class="top">
+<div class="brand">OKR</div>
+<nav class="tabs">
+<button class="tab" data-v="dash">대시보드</button>
+<button class="tab" data-v="myKr">내 KR</button>
+
+<button class="tab" data-v="biz">사업별</button>
+<button class="tab" data-v="rep" hidden>진행 리포트</button>
+<button class="tab" data-v="user">사용자</button>
+<button class="tab" data-v="set">설정</button>
+</nav>
+<div class="tbr"><span class="mono" id="topDate"></span><div class="uav" id="topUav" onclick="logout()" title="로그아웃"></div></div>
+</header>
+<main id="root"></main>
+</div>
+<div class="modal" id="mKr" hidden><div class="mc"><div class="mh"><div><h3 id="mkT"></h3><div class="sub" id="mkS"></div></div><div class="mcl" onclick="closeM('mKr')">×</div></div>
+<div class="mb" id="mkB"></div>
+<div class="mf"><span class="lf" id="mkLf"></span><button class="btn btn-d" id="mkDel" onclick="delKr()" style="display:none;margin-right:20px">삭제</button><button class="btn" onclick="closeM('mKr')">닫기</button><button class="btn btnp" id="mkSave" onclick="saveKr()">저장</button></div></div></div>
+<div class="modal" id="mPickParent" hidden><div class="mc" style="max-width:480px"><div class="mh"><div><h3>상위 사업 KR 선택</h3><div class="sub" id="mPickSub"></div></div><div class="mcl" onclick="closeM('mPickParent')">×</div></div>
+<div class="mb"><div class="fg"><label>이 하위 과제가 어느 사업 KR 아래에 들어갈지 선택</label><select id="pickParentSel" style="width:100%;height:38px;padding:0 10px;border:1px solid var(--bd);border-radius:7px;font-size:13px"></select></div></div>
+<div class="mf"><button class="btn" onclick="closeM('mPickParent')">취소</button><button class="btn btnp" onclick="confirmPickParent()">확인</button></div></div></div>
+<div class="modal" id="mObj" hidden><div class="mc" style="max-width:520px"><div class="mh"><div><h3 id="mObjT">OBJECTIVE 수정</h3></div><div class="mcl" onclick="closeM('mObj')">×</div></div>
+<div class="mb"><div class="fg"><label>OBJECTIVE 텍스트</label><input type="text" id="objText" placeholder="목표 한 문장"></div></div>
+<div class="mf"><button class="btn" onclick="closeM('mObj')">취소</button><button class="btn btnp" onclick="saveObj()">저장</button></div></div></div>
+<div class="modal" id="mUser" hidden><div class="mc"><div class="mh"><div><h3 id="muT">사용자 편집</h3><div class="sub" id="muS"></div></div><div class="mcl" onclick="closeM('mUser')">×</div></div>
+<div class="mb">
+<div class="fg"><label>이름</label><input type="text" id="uN"></div>
+<div class="fg"><label>이메일</label><input type="text" id="uE"></div>
+<div class="fg"><label>역할</label><select id="uR"><option value="staff">스탭</option><option value="admin">관리자</option></select><div id="uRhint" style="display:none;font-size:11px;color:var(--tx3);margin-top:4px">본인 권한은 변경할 수 없습니다 (관리자 잠금 방지).</div></div>
+<div class="fg"><label>사업부 (복수 선택)</label><div id="uBuList" style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;padding:6px 0"></div></div>
+<div class="fg"><label>소속 팀 (지원팀 · 사업부와 별개)</label><div style="display:flex;gap:16px;padding:6px 0"><label style="font-size:12px;display:flex;align-items:center;gap:5px"><input type="checkbox" id="uTeam_mgmt"> 경영지원팀</label><label style="font-size:12px;display:flex;align-items:center;gap:5px"><input type="checkbox" id="uTeam_ops"> 운영지원팀</label></div></div>
+</div><div class="mf"><button class="btn btn-d" id="uDel" onclick="delUser()" style="margin-right:auto">삭제</button><button class="btn" onclick="closeM('mUser')">취소</button><button class="btn btnp" onclick="saveUser()">저장</button></div></div></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const RL={admin:'관리자',staff:'스탭'};
+const Q_START=new Date('2026-04-01'),TODAY=new Date(),Q_END=new Date('2026-06-30');
+const dLeft=Math.ceil((Q_END-TODAY)/86400000);
+const BU={be:{name:'보따리익스 사업부'},lg:{name:'로지스 사업부'},er:{name:'이레이즈 마케팅 사업부'},fd:{name:'보따리푸드 사업부'},co:{name:'코코박스 사업부 (회의 대기)',wait:true},bz:{name:'비즈니스 사업부 (회의 대기)',wait:true}};
+const COLORS={exp:'#2563EB',lgt:'#059669',erz:'#DB2777',fod:'#7C3AED',coc:'#D97706',biz:'#0EA5E9'};
+const BIZ={
+exp:{name:'보따리익스 (해외물류)',bu:'be',obj:'매출 증대 및 물류 회전율 극대화',leadId:null},
+lgt:{name:'로지스 (국내물류)',bu:'lg',obj:'3PL 신뢰도 있는 파트너로 자리잡고 운영 체계를 고도화',leadId:null},
+erz:{name:'이레이즈 마케팅',bu:'er',obj:'\"AI 기반 자동화 및 서비스 자산화를 통한 수익 구조 혁신과 시장 지배력 강화\"',leadId:null},
+fod:{name:'보따리푸드 (국내 e커머스)',bu:'fd',obj:'상품군 확대 및 판매 채널 효율화',leadId:null}};
+const GROUPS={g_exp:{name:'익스 전체',biz:'exp',color:'#2563EB'},g_lgt:{name:'로지스 전체',biz:'lgt',color:'#059669'},g_erz:{name:'마케팅 전체',biz:'erz',color:'#DB2777'},g_fod:{name:'푸드 전체',biz:'fod',color:'#7C3AED'},g_mgmt:{name:'경영지원팀',biz:null,color:'#0EA5E9'},g_ops:{name:'운영지원팀',biz:null,color:'#F97316'}};
+function ownerInfo(oid){if(!oid)return null;if(String(oid).startsWith('g_')){const g=GROUPS[oid];return g?{type:'group',name:g.name,color:g.color,initial:'群'}:null}const u=uById(oid);return u?{type:'user',name:u.name,color:u.color,initial:u.name[0]}:null}
+function getOwners(k){if(!k)return [];if(k.owners&&k.owners.length)return k.owners;if(k.owner)return [k.owner];return []}
+function renderOwners(k){const oids=getOwners(k);if(!oids.length)return '<span style="color:var(--tx5);font-size:11px">미배정</span>';const first=ownerInfo(oids[0]);if(!first)return '-';const more=oids.length-1;return `<span class="av" style="background:${first.color}">${first.initial}</span>${first.name}${first.type==='group'?'<span class="kr-flag link" style="margin-left:4px">그룹</span>':''}${more>0?`<span class="kr-flag" style="background:#F3F4F6;color:#52525B;margin-left:4px">외 ${more}</span>`:''}`}
+const USERS=[
+{id:'u1',name:'곽경훈',email:'',role:'admin',bu:null,bus:[],title:'선임매니저',color:'#06B6D4',src:'real'},
+{id:'u2',name:'박병훈',email:'',role:'admin',bu:null,bus:[],title:'대표이사',color:'#059669',src:'real'},
+{id:'u3',name:'이유란',email:'',role:'admin',bu:null,bus:['er','fd'],title:'상무',color:'#0EA5E9',src:'real'},
+{id:'u4',name:'이성일',email:'',role:'admin',bu:null,bus:['er'],title:'이사',color:'#DB2777',src:'real'},
+{id:'u5',name:'강여울',email:'',role:'staff',bu:null,bus:[],title:'선임매니저',color:'#3B82F6',src:'real'},
+{id:'u6',name:'윤숙진',email:'',role:'staff',bu:null,bus:[],title:'선임매니저',color:'#10B981',src:'real'},
+{id:'u7',name:'황혜정',email:'',role:'staff',bu:null,bus:[],title:'선임매니저',color:'#F59E0B',src:'real'},
+{id:'u8',name:'심현희',email:'',role:'staff',bu:null,bus:[],title:'매니저',color:'#A855F7',src:'real'},
+{id:'u9',name:'오승애',email:'',role:'staff',bu:null,bus:[],title:'매니저',color:'#EC4899',src:'real'},
+{id:'u10',name:'박근정',email:'',role:'staff',bu:null,bus:['er'],title:'부장',color:'#84CC16',src:'real'},
+{id:'u11',name:'이수인',email:'',role:'staff',bu:null,bus:['er'],title:'책임매니저',color:'#F97316',src:'real'},
+{id:'u12',name:'장지욱',email:'',role:'staff',bu:null,bus:['er'],title:'책임매니저',color:'#8B5CF6',src:'real'},
+{id:'u13',name:'한태영',email:'',role:'staff',bu:null,bus:['er'],title:'책임매니저',color:'#14B8A6',src:'real'},
+{id:'u14',name:'김경현',email:'',role:'staff',bu:null,bus:['er'],title:'선임매니저',color:'#3B82F6',src:'real'},
+{id:'u15',name:'서솔이',email:'',role:'staff',bu:null,bus:['er'],title:'매니저',color:'#10B981',src:'real'},
+{id:'u16',name:'윤혜나',email:'',role:'staff',bu:null,bus:['er'],title:'매니저',color:'#F59E0B',src:'real'},
+{id:'u17',name:'이지우',email:'',role:'staff',bu:null,bus:['er'],title:'매니저',color:'#A855F7',src:'real'},
+{id:'u18',name:'이한솔',email:'',role:'staff',bu:null,bus:['er'],title:'매니저',color:'#EC4899',src:'real'},
+{id:'u19',name:'남정현',email:'',role:'staff',bu:null,bus:['be'],title:'선임매니저',color:'#84CC16',src:'real'},
+{id:'u20',name:'임호준',email:'',role:'staff',bu:null,bus:['be'],title:'선임매니저',color:'#F97316',src:'real'},
+{id:'u21',name:'김동환',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#8B5CF6',src:'real'},
+{id:'u22',name:'김수현',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#14B8A6',src:'real'},
+{id:'u23',name:'노영래',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#3B82F6',src:'real'},
+{id:'u24',name:'문홍식',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#10B981',src:'real'},
+{id:'u25',name:'박재호',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#F59E0B',src:'real'},
+{id:'u26',name:'박진형',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#A855F7',src:'real'},
+{id:'u27',name:'손성진',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#EC4899',src:'real'},
+{id:'u28',name:'이규혁',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#84CC16',src:'real'},
+{id:'u29',name:'이범열',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#F97316',src:'real'},
+{id:'u30',name:'이인우',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#8B5CF6',src:'real'},
+{id:'u31',name:'홍승윤',email:'',role:'staff',bu:null,bus:['be'],title:'매니저',color:'#14B8A6',src:'real'},
+{id:'u32',name:'박종덕',email:'',role:'staff',bu:null,bus:['lg'],title:'책임매니저',color:'#3B82F6',src:'real'},
+{id:'u33',name:'김태형',email:'',role:'staff',bu:null,bus:['lg'],title:'선임매니저',color:'#10B981',src:'real'},
+{id:'u34',name:'손영진',email:'',role:'staff',bu:null,bus:['lg'],title:'매니저',color:'#F59E0B',src:'real'},
+{id:'u35',name:'이상호',email:'',role:'staff',bu:null,bus:['lg'],title:'매니저',color:'#A855F7',src:'real'},
+{id:'u36',name:'최영미',email:'',role:'staff',bu:null,bus:['lg'],title:'매니저',color:'#EC4899',src:'real'}];
+const CO={obj:'2026년 사업별 수익성 기반의 전사 매출 구조 정상화 및 성장 모드 전환',subObj:'각 사업부별 KR을 \'측정 가능한 실무 지표\'로 전환하여 목표 달성',progress:62,target:75,period:'2026.04.01 — 2026.06.30',daysLeft:50,krs:[
+{id:'CO-KR-1',biz:'exp'},{id:'CO-KR-2',biz:'lgt'},{id:'CO-KR-3',biz:'erz'},{id:'CO-KR-4',biz:'fod'}]};
+const KRS={
+'MKT-KR-1':{biz:'erz',text:'매체관리 수임료 150%',note:'',period:'',cur:0,tgt:150,unit:'%',type:'committed',owners:[],parent:'CO-KR-3',children:[]},
+'MKT-KR-2':{biz:'erz',text:'마케팅 소스 자산화를 통한 수익상품의 매출대비 매출이익 85% 목표',note:'',period:'',cur:0,tgt:85,unit:'%',type:'aspirational',owners:[],parent:'CO-KR-3',children:[]},
+'MKT-KR-3':{biz:'erz',text:'업무 효율화 40% 달성',note:'• 현재 업무 프로세스의 규격화, 가이드화 작업\n• 수치의 형태로 KR 수정이 필요',period:'',cur:0,tgt:40,unit:'%',type:'committed',owners:[],parent:'CO-KR-3',children:[]},
+'MKT-KR-4':{biz:'erz',text:'수익상품 모델로 영업 달성에 대한 수치 피드백 필요',note:'',period:'',cur:0,tgt:100,unit:'',type:'committed',owners:[],parent:'CO-KR-3',children:[]},
+'LGT-KR-1':{biz:'lgt',text:'신규 3PL 고객사 5개사 계약 체결 (월 출고량 1,000건 이상 기준)',note:'• 익스 KR5 : 스테이지랩스 (익스→국내) 공유\n• 푸드 KR3 : 자체물량 증대\n• 인바운드 영업자 : 박병훈 으로 지정',period:'',cur:0,tgt:5,unit:'사',type:'committed',owners:[],parent:'CO-KR-2',children:[],linkedTo:['EXP-KR-5','FOD-KR-3']},
+'LGT-KR-2':{biz:'lgt',text:'출고 정확도 99% 이상 유지 (오배송률 1% 이하)',note:'',period:'',cur:0,tgt:99,unit:'%',type:'committed',owners:[],parent:'CO-KR-2',children:[]},
+'LGT-KR-3':{biz:'lgt',text:'국내택배 매출 상향 (C2C 보따리택배 사이트 이용자 1,000명 목표)',note:'',period:'',cur:0,tgt:1000,unit:'명',type:'committed',owners:[],parent:'CO-KR-2',children:[]},
+'LGT-KR-4':{biz:'lgt',text:'근무자 이탈로 인한 안정화 최우선 (수치 목표 불가)',note:'',period:'',cur:0,tgt:100,unit:'',type:'aspirational',owners:[],parent:'CO-KR-2',children:[],flag:'health'},
+'EXP-KR-1':{biz:'exp',text:'[통합 매출] 2026년 전체 매출(개인+기업) 전년 대비 115% 달성',note:'',period:'',cur:0,tgt:115,unit:'%',type:'committed',owners:[],parent:'CO-KR-1',children:[]},
+'EXP-KR-2':{biz:'exp',text:'[가속화/품질] 전산 도입 후 결제 대기 리드타임 10% 단축 및 보상 50% 절감',note:'',period:'',cur:0,tgt:10,unit:'%',type:'committed',owners:[],parent:'CO-KR-1',children:[]},
+'EXP-KR-3':{biz:'exp',text:'[확장] 신규 전략 국가(6개국) 매출 비중 10% 확보',note:'',period:'',cur:0,tgt:10,unit:'%',type:'committed',owners:[],parent:'CO-KR-1',children:[]},
+'EXP-KR-4':{biz:'exp',text:'[인프라] 구매대행 리뉴얼 및 결제 대기 리드타임 10% 단축',note:'',period:'',cur:0,tgt:10,unit:'%',type:'committed',owners:[],parent:'CO-KR-1',children:[]},
+'EXP-KR-5':{biz:'exp',text:'[효율] 익스-로지스 공동 운영 가동률 50% 및 3PL 화주사 3개 유치',note:'',period:'',cur:0,tgt:50,unit:'%',type:'committed',owners:[],parent:'CO-KR-1',children:[],linkedTo:['LGT-KR-1']},
+'FOD-KR-1':{biz:'fod',text:'[채널] 판매 채널 11개 플랫폼 풀가동 및 신규 상품 8종 확보',note:'',period:'',cur:0,tgt:11,unit:'개',type:'committed',owners:[],parent:'CO-KR-4',children:[]},
+'FOD-KR-2':{biz:'fod',text:'[수익] 누계 수익률 개선 및 비용 효율화 (-120% → -40% 이내)',note:'',period:'',baseline:-120,cur:-120,tgt:-40,unit:'%',type:'aspirational',owners:[],parent:'CO-KR-4',children:[]},
+'FOD-KR-3':{biz:'fod',text:'[연동] 로지스 현장 회전율 기여 (12월, 일 평균 주문 50건 달성)',note:'',period:'',cur:0,tgt:50,unit:'건',type:'committed',owners:[],parent:'CO-KR-4',children:[],linkedTo:['LGT-KR-1']}
+};
+
+const STORE='okr-v10';
+let state={cu:null,selU:null,exp:{},sel:null,history:{}};
+/* Firebase 단일문서 동기화 (길1) */
+const firebaseConfig={apiKey:"AIzaSyDcWwGpaCwGDk2A6NI321eBFiY21JEjDo0",authDomain:"okr-dash-74b02.firebaseapp.com",projectId:"okr-dash-74b02",storageBucket:"okr-dash-74b02.firebasestorage.app",messagingSenderId:"501932953488",appId:"1:501932953488:web:25f992823d400c4d7eed15"};
+let DOC=null,_applyingCloud=false,_cloudReady=false,_pushT=null,_lastSavedAt=0,_lastSig='',_rrT=null;const _pendKr=new Set();function sigOf(p){return JSON.stringify([p._krs,p._users,p._biz,p._co,p._history,p._settings,p._passwords,p._leaders]);}function curPayload(){return{_krs:KRS,_users:USERS,_biz:BIZ,_co:CO,_history:state.history||{},_settings:state.settings||{},_passwords:state.passwords||{},_leaders:state.leaders||{}};}
+function fbPayload(){return{_krs:KRS,_users:USERS,_biz:BIZ,_co:CO,_history:state.history||{},_settings:state.settings||{},_passwords:state.passwords||{},_leaders:state.leaders||{},_savedAt:Date.now()};}
+function cloudKrWrite(setMap,delIds,extra){if(!DOC||_applyingCloud)return;const u={};const ids=Object.keys(setMap||{});ids.forEach(id=>{u['_krs.'+id]=setMap[id];_pendKr.add(id);});(delIds||[]).forEach(id=>{u['_krs.'+id]=firebase.firestore.FieldValue.delete();});if(extra)Object.assign(u,extra);u._savedAt=Date.now();DOC.update(u).then(()=>{ids.forEach(id=>_pendKr.delete(id));_lastSig=sigOf(curPayload());}).catch(e=>console.warn('cloud kr',e));}
+function cloudMeta(){if(!DOC||_applyingCloud)return;DOC.update({_users:USERS,_biz:BIZ,_co:CO,_settings:state.settings||{},_passwords:state.passwords||{},_leaders:state.leaders||{},_savedAt:Date.now()}).then(()=>{_lastSig=sigOf(curPayload());}).catch(e=>console.warn('cloud meta',e));}
+function cloudInit(){if(!DOC)return;DOC.set({...curPayload(),_savedAt:Date.now()}).then(()=>{_lastSig=sigOf(curPayload());}).catch(e=>console.warn('cloud init',e));}
+function applyCloud(d){if(!d)return;if(d._krs){const nk={};Object.entries(d._krs).forEach(([id,k])=>{nk[id]=k});Object.keys(KRS).forEach(k=>{if(!(k in nk)&&!_pendKr.has(k))delete KRS[k]});Object.entries(nk).forEach(([id,k])=>{const def=KRS[id]||{};KRS[id]={...def,...k}})}if(d._users){USERS.length=0;d._users.forEach(u=>{if(u.role!=='admin'&&u.role!=='staff')u.role='staff';USERS.push(u)})}if(d._biz){Object.entries(d._biz).forEach(([id,b])=>{if(BIZ[id])Object.assign(BIZ[id],b)})}if(d._co)Object.assign(CO,d._co);if(d._history)state.history=d._history;if(d._settings)state.settings={...(state.settings||{}),...d._settings};if(d._passwords)state.passwords=d._passwords;if(d._leaders)state.leaders=d._leaders;}
+function anyModalOpen(){return[...document.querySelectorAll('.modal')].some(m=>!m.hidden);}
+function cloudReRender(){clearTimeout(_rrT);_rrT=setTimeout(()=>{const y=window.scrollY;try{renderUL()}catch(e){}if(state.cu){const v=location.hash.replace('#','')||'dash';try{go(v)}catch(e){}}window.scrollTo(0,y);},150);}
+function startSync(){if(!DOC||DOC._subbed)return;DOC._subbed=true;DOC.onSnapshot(snap=>{if(snap.metadata&&snap.metadata.hasPendingWrites)return;if(!snap.exists){cloudInit();return;}const d=snap.data();const sig=sigOf(d);if(sig===_lastSig)return;if(anyModalOpen())return;_applyingCloud=true;applyCloud(d);_applyingCloud=false;_cloudReady=true;_lastSig=sigOf(curPayload());cloudReRender();},err=>console.warn('cloud snapshot',err));}
+function initCloud(){try{if(!window.firebase||!firebase.initializeApp){console.warn('Firebase SDK 미로드 - 로컬 모드');return;}firebase.initializeApp(firebaseConfig);DOC=firebase.firestore().collection('okr').doc('data');firebase.auth().signInAnonymously().catch(e=>console.warn('anon auth',e));firebase.auth().onAuthStateChanged(u=>{if(u)startSync();});}catch(e){console.warn('firebase init',e);}}
+function loadS(){try{let s=localStorage.getItem(STORE);if(!s){for(let v=20;v>=1;v--){const o=localStorage.getItem('okr-v'+v);if(o){s=o;localStorage.setItem(STORE,s);localStorage.removeItem('okr-v'+v);break}}}if(!s)return;const d=JSON.parse(s);if(d._krs){const newKrs={};Object.entries(d._krs).forEach(([id,k])=>{newKrs[id]=k});Object.keys(KRS).forEach(k=>{if(!(k in newKrs))delete KRS[k]});Object.entries(newKrs).forEach(([id,k])=>{const def=KRS[id]||{};KRS[id]={...def,...k}});delete d._krs}if(d._users){USERS.length=0;d._users.forEach(u=>{if(u.role!=='admin'&&u.role!=='staff')u.role='staff';USERS.push(u)});delete d._users}if(d._biz){Object.entries(d._biz).forEach(([id,b])=>{if(BIZ[id])Object.assign(BIZ[id],b)});delete d._biz}if(d._co){Object.assign(CO,d._co);delete d._co}state={...state,...d}}catch(e){}}
+function saveS(){try{localStorage.setItem(STORE,JSON.stringify({...state,_krs:KRS,_users:USERS,_biz:BIZ,_co:CO}))}catch(e){}}
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const uById=id=>USERS.find(u=>u.id===id);
+const getUserBus=u=>u?.bus&&u.bus.length?u.bus:(u?.bu?[u.bu]:[]);
+const pctCls=p=>p===-1?'none':p===-2?'idle':p>=100?'over':p>=70?'ok':p>=40?'warn':'risk';
+const pctBadge=p=>{if(p===-1)return '미등록';if(p===-2)return '시작';if(p>=100)return '↑ 초과';if(p>=70)return '정상';if(p>=40)return '주의';return '↓ 위험'};
+const pct=k=>{if(!k||(!k.tgt&&k.tgt!==0))return -1;const b=k.baseline??0;if(b===0&&k.cur===0)return -1;if(k.cur===b&&b!==k.tgt)return -2;const range=k.tgt-b;if(range===0)return 100;const r=Math.round(((k.cur-b)/range)*100);return Math.min(100,Math.max(0,r))};
+const pctTxt=p=>p===-1?'—':p===-2?'0%':p+'%';
+const pctW=p=>Math.max(0,p);
+const status=p=>p>=95?'s':p>=70?'o':p>=40?'w':'d';
+// 권한
+function canEdit(krId){const u=uById(state.cu);if(!u)return false;const k=KRS[krId];if(!k)return false;if(u.role==='admin')return true;if(state.settings&&state.settings.viewerMode)return false;const ows=getOwners(k);const L=state.leaders||{};if(ows.some(o=>String(o).startsWith('g_')&&L[o]===state.cu))return true;return ows.some(o=>!String(o).startsWith('g_')&&o===state.cu)}
+function canEditUser(){const u=uById(state.cu);return u&&u.role==='admin'}
+// 자식 KR 집계 진척
+function avgChildren(krId){const k=KRS[krId];if(!k||!k.children||!k.children.length)return null;const cs=k.children.map(c=>pct(KRS[c]));return Math.round(cs.reduce((a,b)=>a+b,0)/cs.length)}
+// 사업 진척: 사업 KR들의 평균
+function bizPct(bid){const ks=Object.entries(KRS).filter(([id,k])=>k.biz===bid&&!id.includes('-IK-'));if(!ks.length)return -1;const ps=ks.map(([id,k])=>pct(k)).filter(p=>p>=0);if(!ps.length)return -1;return Math.round(ps.reduce((a,b)=>a+b,0)/ps.length)}
+// 전사 진척: 사업 평균
+function coPct(){const ps=Object.keys(BIZ).map(b=>bizPct(b)).filter(p=>p>=0);if(!ps.length)return -1;return Math.round(ps.reduce((a,b)=>a+b,0)/ps.length)}
+
+// ============ LOGIN ============
+function renderUL(f=''){const fs=f.toLowerCase().trim();if(!fs){$('#userList').innerHTML='<div class="lul-hint">검색창에 이름이나 사업부를 입력하세요<br>(예: "곽경훈", "익스", "관리자")</div>';return}const list=USERS.filter(u=>u.name.toLowerCase().includes(fs)||(getUserBus(u).some(b=>BU[b]?.name.toLowerCase().includes(fs)))||(RL[u.role]||'').toLowerCase().includes(fs));$('#userList').innerHTML=list.length?list.map(u=>`<div class="lu ${state.selU===u.id?'sel':''}" onclick="selU('${u.id}')"><div class="luav" style="background:${u.color}">${u.name[0]}</div><div><div class="lun">${u.name}</div><div class="lur">${(()=>{const bs=getUserBus(u);return bs.length?bs.map(b=>BU[b]?.name).filter(Boolean).join(', '):'전사'})()}</div></div><div class="lutag">${RL[u.role]}<span class="src-tag ${u.src||'dummy'}">${u.src==='real'?'실제':'더미'}</span></div></div>`).join(''):'<div class="lul-hint">검색 결과 없음</div>'}
+function selU(id){state.selU=id;renderUL()}
+function doLogin(){if(!state.selU){alert('사용자 선택');return}const pw=state.passwords&&state.passwords[state.selU]?state.passwords[state.selU]:'1234';if($('#pw').value!==pw){$('#loginErr').classList.add('on');return}state.cu=state.selU;saveS();showApp()}
+function showApp(){$('#login').style.display='none';$('#app').classList.add('on');const u=uById(state.cu);const _d=new Date();$('#topDate').textContent=`${_d.getFullYear()}.${String(_d.getMonth()+1).padStart(2,'0')}.${String(_d.getDate()).padStart(2,'0')} KST`;$('#topUav').textContent=u.name[0];$('#topUav').style.background=u.color;{const bs=getUserBus(u);if(bs.length){const myBiz=Object.entries(BIZ).find(([id,b])=>bs.includes(b.bu));if(myBiz){const ck=CO.krs.find(c=>c.biz===myBiz[0]);if(ck){state.exp['CO-O']=true;state.exp[ck.id]=true;state.focusBiz=myBiz[0]}}}}const init=location.hash.replace('#','')||(u.role==='admin'?'dash':'myKr');go(init)}
+function logout(){state.cu=null;state.selU=null;saveS();location.reload()}
+
+// ============ ROUTE ============
+function go(v){const tabs=['dash','myKr','biz','rep','user','set','tree'];if(!tabs.includes(v))v='dash';let h='';if(v==='dash')h=rDash();else if(v==='tree')h=rTree();else if(v==='biz')h=rBiz();else if(v==='rep')h=rRep();else if(v==='user')h=rUser();else if(v==='set')h=rSet();else if(v==='myKr')h=rMyKr();$('#root').innerHTML=`<div data-tab="${v}" class="on">${h}</div>`;$$('.tab').forEach(t=>t.classList.toggle('on',t.dataset.v===v));if(location.hash.replace('#','')!==v)history.replaceState(null,'','#'+v);window.scrollTo({top:0})}
+
+// ============ DASHBOARD ============
+function rDash(){const cp=coPct();let total=0,ok=0,w=0,d=0;Object.entries(KRS).forEach(([id,k])=>{if(id.includes('-IK-'))return;total++;const p=pct(k);if(p>=70)ok++;else if(p>=40)w++;else d++});const users=USERS.length;return `
+<div class="ph"><div><h1>대시보드</h1><p>${CO.period} · D-${dLeft} · ${total}개 사업 KR</p></div></div>
+<div class="kgr">
+<div class="kc"><div class="kc-l">전사 평균 진척도</div><div class="kc-v mono pct-color ${pctCls(cp)}">${cp<0?'—':cp}<small>${cp<0?'':'%'}</small><span class="pct-badge ${pctCls(cp)}">${pctBadge(cp)}</span></div><div class="kc-meter"><div class="kc-meter-f ${pctCls(cp)}" style="width:${pctW(cp)}%"></div></div><div class="kc-d">6개 사업 평균 · 전주 대비 <span class="trend up">↑ +4pt</span></div></div>
+<div class="kc"><div class="kc-l">정상·달성 KR</div><div class="kc-v mono pct-color ok">${ok}<small>/${total}</small></div><div class="kc-meter"><div class="kc-meter-f ok" style="width:${ok/total*100}%"></div></div><div class="kc-d">달성률 <b>${Math.round(ok/total*100)}%</b> · 70% 이상</div></div>
+<div class="kc"><div class="kc-l">주의·위험 KR</div><div class="kc-v mono pct-color risk">${w+d}<small>/${total}</small></div><div class="kc-meter"><div class="kc-meter-f risk" style="width:${(w+d)/total*100}%"></div></div><div class="kc-d"><span class="pct-badge warn">주의 ${w}</span><span class="pct-badge risk">위험 ${d}</span></div></div>
+<div class="kc"><div class="kc-l">전체 사용자</div><div class="kc-v mono">${users}<small>명</small></div><div class="kc-d">${Object.keys(BU).length}개 사업부 · 활성 100%</div></div>
+</div>
+<div class="bgrid">${Object.entries(BIZ).map(([id,b])=>{const p=bizPct(id);return `<div class="bcard" onclick="openBizDetail('${id}')">
+<div class="bch"><div><div class="bcn"><span class="rd" style="background:${COLORS[id]}"></span>${b.name}</div><div class="bcd">${BU[b.bu].name}${uById(b.leadId)?` · 리더 ${uById(b.leadId).name}`:' · 리더 미배정'}</div></div></div>
+<div class="bcobj">${b.obj}</div>
+<div class="bcp"><div><span class="bcpv mono">${p}</span><span class="bcpu">%</span></div></div>
+<div class="bcpb"><div class="bcpbf" style="width:${p}%;background:${COLORS[id]}"></div></div>
+<div class="bcm"><span>사업 KR 진행</span><span class="mono">${p}%</span></div>
+</div>`}).join('')}</div>`}
+
+// ============ TREE ============
+function rTree(){const cp=coPct();return `
+<div class="ph"><div><h1>OKR 트리</h1><p>전사 → 사업 → 사업 KR → 개인 KR — 클릭하여 펼침/접기</p></div><div class="ph-r"><button class="btn btn-sm" onclick="expAll(true)">모두 펼치기</button><button class="btn btn-sm" onclick="expAll(false)">모두 접기</button></div></div>
+<div class="tree">
+<div class="node root">
+<div class="row root ${state.sel==='CO-O'?'sel':''}" onclick="selRow('CO-O')">
+<div class="expand ${state.exp['CO-O']?'open':''}" onclick="event.stopPropagation();togE('CO-O')">▶</div>
+<div class="rd" style="background:var(--tx)"></div>
+<div class="rt"><b>${CO.obj}</b><span class="rtag">전사 OBJECTIVE</span>${CO.subObj?`<div style="font-size:11px;color:var(--tx4);margin-top:4px;font-weight:400">(실무) ${CO.subObj}</div>`:''}</div>
+<div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(cp)}%"></div></div><span class="rpct pct-color ${pctCls(cp)}">${pctTxt(cp)}</span></div>
+</div>
+<div class="children" ${!state.exp['CO-O']?'hidden':''}>
+${CO.krs.map(ck=>{const b=BIZ[ck.biz];const bp=bizPct(ck.biz);const kex=state.exp[ck.id];return `
+<div class="node">
+<div class="row lvl1 ${state.sel===ck.id?'sel':''}" onclick="selRow('${ck.id}')">
+<div class="expand ${kex?'open':''}" onclick="event.stopPropagation();togE('${ck.id}')">▶</div>
+<div class="rd" style="background:${COLORS[ck.biz]}"></div>
+<div class="rt"><b>${b.obj}</b><span class="rid">${ck.id}</span><span class="biz-tag" style="background:${COLORS[ck.biz]}1A;color:${COLORS[ck.biz]};border-color:${COLORS[ck.biz]}40">▎ ${b.name}</span></div>
+<div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(bp)}%;background:${COLORS[ck.biz]}"></div></div><span class="rpct pct-color ${pctCls(bp)}">${pctTxt(bp)}</span>${bp>=0?`<span class="pct-badge ${pctCls(bp)}" style="margin-left:4px">${pctBadge(bp)}</span>`:''}</div>
+</div>
+<div class="children" ${!kex?'hidden':''}>
+${Object.entries(KRS).filter(([id,k])=>k.parent===ck.id).map(([id,k])=>{const p=pct(k);const ow=ownerInfo(k.owner);const iks=k.children||[];const ikex=state.exp[id];return `
+<div class="node">
+<div class="row ${state.sel===id?'sel':''}" onclick="selRow('${id}');openKr('${id}')">
+<div class="expand ${iks.length?(ikex?'open':''):'leaf'}" onclick="event.stopPropagation();togE('${id}')">▶</div>
+<div class="rd" style="background:${COLORS[ck.biz]};opacity:.5"></div>
+<div class="rt"><span>${k.text}</span><span class="rid">${id}</span><span class="bd ${k.type==='committed'?'com':'asp'}">${k.type==='committed'?'필수':'도전'}</span>${k.flag==='pending'?'<span class="kr-flag pending">📝 피드백 필요</span>':''}${k.flag==='health'?'<span class="kr-flag health">🛡 정성 지표</span>':''}${k.linkedTo&&k.linkedTo.length?`<span class="kr-flag link">🔗 ${k.linkedTo.length}개 연결</span>`:''}</div>
+<div class="rown">${renderOwners(k)}</div>
+<div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(p)}%;background:${COLORS[ck.biz]}"></div></div><span class="rpct pct-color ${pctCls(p)}">${pctTxt(p)}</span></div>
+</div>
+${iks.length?`<div class="children" ${!ikex?'hidden':''}>
+${iks.map(ikid=>{const ik=KRS[ikid];if(!ik)return'';const ip=pct(ik);const iow=ownerInfo(ik.owner);return `
+<div class="row" onclick="openKr('${ikid}')">
+<div class="expand leaf">▶</div>
+<div class="rd" style="background:${COLORS[ck.biz]};opacity:.3"></div>
+<div class="rt"><span class="rtag">과제</span><span>${ik.text}</span><span class="rid">${ikid}</span></div>
+<div class="rown">${renderOwners(ik)}</div>
+<div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(ip)}%;background:${COLORS[ck.biz]};opacity:.7"></div></div><span class="rpct pct-color ${pctCls(ip)}">${pctTxt(ip)}</span></div>
+</div>`}).join('')}
+</div>`:''}
+</div>`}).join('')||'<div class="empty-c">(13일 회의 후 등록 예정)</div>'}
+</div>
+</div>`}).join('')}
+</div>
+</div>
+</div>`}
+function togE(id){state.exp[id]=!state.exp[id];saveS();go(location.hash.replace('#','')||'biz')}
+function expAll(o){if(o){state.exp['CO-O']=true;CO.krs.forEach(ck=>{state.exp[ck.id]=true;Object.entries(KRS).filter(([id,k])=>k.parent===ck.id).forEach(([id])=>state.exp[id]=true)})}else{state.exp={}}saveS();go(location.hash.replace('#','')||'biz')}
+function selRow(id){state.sel=id;saveS()}
+
+// ============ BIZ ============
+function rBizDetail(bid){const b=BIZ[bid];const bkrs=Object.entries(KRS).filter(([id,k])=>k.biz===bid&&!id.includes('-IK-')&&!id.includes('-GK-'));const bp=bizPct(bid);const isAdmin=uById(state.cu)?.role==='admin';return `<div class="ph"><div><div style="display:flex;align-items:center;gap:10px"><span onclick="backToBizList()" style="cursor:pointer;color:var(--tx3);font-size:13px">← 사업 목록</span><h1 style="margin:0">${b.name}</h1></div><p style="margin-top:6px"><span class="rd" style="background:${COLORS[bid]};display:inline-block;width:8px;height:8px;border-radius:99px;margin-right:6px"></span>${b.obj}${isAdmin?`<span onclick="editBizObj('${bid}')" style="cursor:pointer;color:var(--ac);font-size:12px;margin-left:8px">✎ 수정</span>`:''}</p></div><div class="ph-r" style="display:flex;align-items:center;gap:10px">${isAdmin?`<button class="btn" onclick="openPickParent('${bid}')">+ 하위 과제</button><button class="btn btnp" onclick="newKr('${bid}')">+ 사업 KR</button>`:''}<span class="mono pct-color ${pctCls(bp)}" style="font-size:22px;font-weight:700">${pctTxt(bp)}</span>${bp>=0?`<span class="pct-badge ${pctCls(bp)}">${pctBadge(bp)}</span>`:''}</div></div>
+<div class="tree">${bkrs.map(([id,k])=>{const p=pct(k);const ow=ownerInfo(k.owner);const iks=k.children||[];const ikex=state.exp[id]!==false;return `<div class="node">
+<div class="row root ${state.sel===id?'sel':''}" onclick="selRow('${id}');openKr('${id}')">
+<div class="expand ${iks.length?(ikex?'open':''):'leaf'}" onclick="event.stopPropagation();togE('${id}')">▶</div>
+<div class="rd" style="background:${COLORS[bid]}"></div>
+<div class="rt"><b>${k.text}</b><span class="rid">${id}</span><span class="bd ${k.type==='committed'?'com':'asp'}">${k.type==='committed'?'필수':'도전'}</span></div>
+<div class="rown">${renderOwners(k)}</div>
+<div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(p)}%;background:${COLORS[bid]}"></div></div><span class="rpct pct-color ${pctCls(p)}">${pctTxt(p)}</span></div>
+</div>
+${iks.length?`<div class="children" ${!ikex?'hidden':''}>${iks.map(ikid=>{const ik=KRS[ikid];if(!ik)return'';const ip=pct(ik);const iow=ownerInfo(ik.owner);return `<div class="row" onclick="openKr('${ikid}')">
+<div class="expand leaf">▶</div>
+<div class="rd" style="background:${COLORS[bid]};opacity:.5"></div>
+<div class="rt"><span class="rtag">과제</span><span>${ik.text}</span><span class="rid">${ikid}</span></div>
+<div class="rown">${renderOwners(ik)}</div>
+<div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(ip)}%;background:${COLORS[bid]};opacity:.7"></div></div><span class="rpct pct-color ${pctCls(ip)}">${pctTxt(ip)}</span></div>
+</div>`}).join('')}</div>`:''}
+</div>`}).join('')}</div>`}
+function rBiz(){if(state.bizDetail&&BIZ[state.bizDetail])return rBizDetail(state.bizDetail);return `<div class="ph"><div><h1>사업별 OKR</h1><p>각 사업의 목표와 진행 현황 · 클릭 시 미니 조직도</p></div></div>
+<div class="bgrid">${Object.entries(BIZ).map(([id,b])=>{const p=bizPct(id);const krs=Object.entries(KRS).filter(([kid,k])=>k.biz===id&&!kid.includes('-IK-'));return `<div class="bcard" onclick="openBizDetail('${id}')">
+<div class="bch"><div><div class="bcn"><span class="rd" style="background:${COLORS[id]}"></span>${b.name}</div><div class="bcd">${BU[b.bu].name} · 리더 ${uById(b.leadId)?.name||'-'} · ${krs.length} KR</div></div></div>
+<div class="bcobj">${b.obj}</div>
+<div class="bcp"><div><span class="bcpv mono">${p<0?'—':p}</span><span class="bcpu">${p<0?'':'%'}</span></div></div>
+<div class="bcpb"><div class="bcpbf" style="width:${pctW(p)}%;background:${COLORS[id]}"></div></div>
+<div class="bcm"><span>${krs.length}개 KR</span><span class="mono">${pctTxt(p)}</span></div>
+</div>`}).join('')}</div>`}
+function openBizDetail(bid){state.bizDetail=bid;state.exp={};state.exp['CO-O']=true;saveS();go('biz')}
+function backToBizList(){state.bizDetail=null;saveS();go('biz')}
+
+// ============ REPORT ============
+function rRep(){
+if(!state.repFilter)state.repFilter={q:'',biz:'',status:'',sort:'biz'};
+const fr=state.repFilter;
+const filterFn=([id,k])=>{const p=pct(k);const q=(fr.q||'').toLowerCase();if(q&&!k.text.toLowerCase().includes(q)&&!id.toLowerCase().includes(q))return false;if(fr.biz&&k.biz!==fr.biz)return false;if(fr.status){if(fr.status==='unset'&&p>=0)return false;if(fr.status==='risk'&&!(p>=0&&p<40))return false;if(fr.status==='warn'&&!(p>=40&&p<70))return false;if(fr.status==='ok'&&!(p>=70&&p<100))return false;if(fr.status==='done'&&p<100)return false}return true};
+const sortFn=(a,b)=>{const s=fr.sort||'biz';if(s==='pct_asc')return pct(a[1])-pct(b[1]);if(s==='pct_desc')return pct(b[1])-pct(a[1]);if(s==='id')return a[0].localeCompare(b[0]);const ba=a[1].biz||'zz',bb=b[1].biz||'zz';if(ba!==bb)return ba.localeCompare(bb);return a[0].localeCompare(b[0])};
+const watch=Object.entries(KRS).filter(([id,k])=>{const p=pct(k);return p>=0&&p<70}).sort((a,b)=>pct(a[1])-pct(b[1]));
+const all=Object.entries(KRS).filter(filterFn).sort(sortFn);
+const renderRow=(id,k)=>{const p=pct(k);const biz=BIZ[k.biz];const owns=getOwners(k).map(o=>ownerInfo(o)?.name).filter(Boolean).join(', ')||'미배정';const lastMemo=(state.history?.[id]||[]).slice(-1)[0]?.memo||'';return `<tr onclick="openKr('${id}')" style="cursor:pointer"><td><div style="font-weight:500;font-size:12px">${k.text}</div><div style="font-size:10px;color:var(--tx5);margin-top:2px">${id}</div>${lastMemo?`<div class="rep-memo">💬 ${lastMemo}</div>`:''}</td><td style="font-size:11px">${biz?biz.name:'-'}</td><td style="font-size:11px">${owns}</td><td class="mono" style="font-size:11px">${k.cur}${k.unit||''}</td><td class="mono" style="font-size:11px">${k.tgt}${k.unit||''}</td><td class="mono pct-color ${pctCls(p)}" style="font-size:11px">${pctTxt(p)}</td><td>${p>=0?`<span class="pct-badge ${pctCls(p)}">${pctBadge(p)}</span>`:'<span style="color:var(--tx5);font-size:10px">미등록</span>'}</td></tr>`};
+return `<div class="ph"><div><h1>진행 리포트</h1><p>위험 KR 집중 관리 + 필터·정렬·체크인 메모</p></div></div>
+<div class="rep"><h3>⚠ 위험·주의 KR (${watch.length}건)</h3>
+${watch.length?`<div class="rep-table-wrap"><table class="rep-table"><thead><tr><th>KR</th><th>사업</th><th>담당자</th><th>현재</th><th>목표</th><th>진척</th><th>상태</th></tr></thead><tbody>${watch.map(([id,k])=>renderRow(id,k)).join('')}</tbody></table></div>`:'<div style="padding:24px;text-align:center;color:var(--tx5);font-size:12px">⭐ 위험/주의 KR 없음 (미등록 제외)</div>'}
+</div>
+<div class="rep"><h3>전체 KR 관리 (${all.length}/${Object.keys(KRS).length}건)</h3>
+<div class="rep-chips">
+<span class="chip ${!fr.biz?'on':''}" onclick="setRepFilter('biz','')">전체 사업</span>
+${Object.entries(BIZ).map(([id,b])=>`<span class="chip ${fr.biz===id?'on':''}" onclick="setRepFilter('biz','${id}')">${b.name}</span>`).join('')}
+</div>
+<div class="rep-filter">
+<input type="text" id="repQ" oninput="state.repFilter.q=this.value;updateRepBody()" value="${fr.q||''}" placeholder="🔍 KR 본문/ID 검색...">
+<select onchange="setRepFilter('status',this.value)">
+<option value="">전체 상태</option>
+<option value="unset" ${fr.status==='unset'?'selected':''}>미등록</option>
+<option value="risk" ${fr.status==='risk'?'selected':''}>위험 (&lt;40%)</option>
+<option value="warn" ${fr.status==='warn'?'selected':''}>주의 (40~69%)</option>
+<option value="ok" ${fr.status==='ok'?'selected':''}>정상 (70~99%)</option>
+<option value="done" ${fr.status==='done'?'selected':''}>달성 (100%+)</option>
+</select>
+<select onchange="setRepFilter('sort',this.value)">
+<option value="biz" ${fr.sort==='biz'?'selected':''}>사업순</option>
+<option value="pct_asc" ${fr.sort==='pct_asc'?'selected':''}>진척 낮은 순</option>
+<option value="pct_desc" ${fr.sort==='pct_desc'?'selected':''}>진척 높은 순</option>
+<option value="id" ${fr.sort==='id'?'selected':''}>ID 순</option>
+</select>
+</div>
+<div id="repTableWrap"><div class="rep-table-wrap"><table class="rep-table"><thead><tr><th>KR</th><th>사업</th><th>담당자</th><th>현재</th><th>목표</th><th>진척</th><th>상태</th></tr></thead><tbody id="repTbody">${all.length?all.map(([id,k])=>renderRow(id,k)).join(''):'<tr><td colspan="7" style="padding:24px;text-align:center;color:var(--tx5);font-size:12px">조건에 맞는 KR 없음</td></tr>'}</tbody></table></div></div>
+</div>`}
+function setRepFilter(k,v){if(!state.repFilter)state.repFilter={};state.repFilter[k]=v;saveS();go('rep')}
+function updateRepBody(){if(!state.repFilter)state.repFilter={q:'',biz:'',status:'',sort:'biz'};const fr=state.repFilter;const filterFn=([id,k])=>{const p=pct(k);const q=(fr.q||'').toLowerCase();if(q&&!k.text.toLowerCase().includes(q)&&!id.toLowerCase().includes(q))return false;if(fr.biz&&k.biz!==fr.biz)return false;if(fr.status){if(fr.status==='unset'&&p>=0)return false;if(fr.status==='risk'&&!(p>=0&&p<40))return false;if(fr.status==='warn'&&!(p>=40&&p<70))return false;if(fr.status==='ok'&&!(p>=70&&p<100))return false;if(fr.status==='done'&&p<100)return false}return true};const sortFn=(a,b)=>{const s=fr.sort||'biz';if(s==='pct_asc')return pct(a[1])-pct(b[1]);if(s==='pct_desc')return pct(b[1])-pct(a[1]);if(s==='id')return a[0].localeCompare(b[0]);const ba=a[1].biz||'zz',bb=b[1].biz||'zz';if(ba!==bb)return ba.localeCompare(bb);return a[0].localeCompare(b[0])};const all=Object.entries(KRS).filter(filterFn).sort(sortFn);const renderRow=(id,k)=>{const p=pct(k);const biz=BIZ[k.biz];const owns=getOwners(k).map(o=>ownerInfo(o)?.name).filter(Boolean).join(', ')||'미배정';const lastMemo=(state.history?.[id]||[]).slice(-1)[0]?.memo||'';return `<tr onclick="openKr('${id}')" style="cursor:pointer"><td><div style="font-weight:500;font-size:12px">${k.text}</div><div style="font-size:10px;color:var(--tx5);margin-top:2px">${id}</div>${lastMemo?`<div class="rep-memo">💬 ${lastMemo}</div>`:''}</td><td style="font-size:11px">${biz?biz.name:'-'}</td><td style="font-size:11px">${owns}</td><td class="mono" style="font-size:11px">${k.cur}${k.unit||''}</td><td class="mono" style="font-size:11px">${k.tgt}${k.unit||''}</td><td class="mono pct-color ${pctCls(p)}" style="font-size:11px">${pctTxt(p)}</td><td>${p>=0?`<span class="pct-badge ${pctCls(p)}">${pctBadge(p)}</span>`:'<span style="color:var(--tx5);font-size:10px">미등록</span>'}</td></tr>`};const el=document.getElementById('repTbody');if(el)el.innerHTML=all.length?all.map(([id,k])=>renderRow(id,k)).join(''):'<tr><td colspan="7" style="padding:24px;text-align:center;color:var(--tx5);font-size:12px">조건에 맞는 KR 없음</td></tr>'}
+function rMyKr(){const u=uById(state.cu);if(!u)return '<div class="ph"><div><h1>내 KR</h1></div></div>';
+const myBus=getUserBus(u);
+const myBizIds=Object.entries(BIZ).filter(([id,b])=>myBus.includes(b.bu)).map(([id,b])=>id);
+const myGroupIds=[...myBizIds.map(id=>'g_'+id),...((u.teams)||[])];
+const personal=Object.entries(KRS).filter(([id,k])=>getOwners(k).includes(state.cu));
+const group=Object.entries(KRS).filter(([id,k])=>{const os=getOwners(k);return os.some(o=>myGroupIds.includes(o))&&!os.includes(state.cu)});
+const ps=personal.map(([id,k])=>pct(k)).filter(p=>p>=0);
+const avgP=ps.length?Math.round(ps.reduce((a,b)=>a+b,0)/ps.length):-1;
+const renderMyRow=([id,k])=>{const p=pct(k);const biz=BIZ[k.biz];const lastMemo=(state.history?.[id]||[]).slice(-1)[0]?.memo||'';return `<div class="mykr-card" onclick="openKr('${id}')"><div class="mykr-card-h"><div class="mykr-card-t">${k.text}</div><div class="mykr-card-r"><div class="mykr-card-p pct-color ${pctCls(p)}">${pctTxt(p)}</div>${p>=0?`<div style="margin-top:4px"><span class="pct-badge ${pctCls(p)}">${pctBadge(p)}</span></div>`:''}</div></div><div class="mykr-card-meta">${biz?biz.name:''}${k.period?` · ${k.period}`:''}${lastMemo?` · 💬 ${lastMemo}`:''}</div><div class="mykr-card-bar"><div class="mykr-card-bar-f" style="width:${pctW(p)}%;background:${k.biz?COLORS[k.biz]:'#999'}"></div></div></div>`};
+return `<div class="ph"><div><h1>내 KR</h1><p>${u.name} · 개인 ${personal.length}개 · 소속 그룹 ${group.length}개${avgP>=0?` · 평균 진척 ${avgP}%`:''}</p></div></div>
+<div class="rep"><h3>👤 내가 담당 (개인)</h3>
+${personal.length?personal.map(renderMyRow).join(''):'<div style="padding:24px;text-align:center;color:var(--tx5);font-size:12px">담당 KR이 없습니다 — 관리자에게 배정 요청하세요</div>'}
+</div>
+<div class="rep"><h3>👥 내가 속한 그룹 KR</h3>
+${group.length?group.map(renderMyRow).join(''):'<div style="padding:24px;text-align:center;color:var(--tx5);font-size:12px">소속 그룹 KR이 없습니다</div>'}
+</div>`}
+function rUser(){const u=uById(state.cu);const can=canEditUser();const f=state.userFilter;const filtered=f===null||f===undefined?USERS:f==='all'?USERS:f==='etc'?USERS.filter(u=>!getUserBus(u).length):USERS.filter(u=>getUserBus(u).includes(f));const buCnt=id=>USERS.filter(u=>getUserBus(u).includes(id)).length;const etcCnt=USERS.filter(u=>!getUserBus(u).length).length;return `<div class="ph"><div><h1>사용자 · 조직도</h1><p>${USERS.length}명 · ${can?'관리자/임원만 편집 가능':'조회만 가능'}</p></div>${can?'<div class="ph-r"><button class="btn btnp" onclick="newUser()">+ 사용자 추가</button></div>':''}</div>
+<div class="org-shapes">
+<div class="org-shape all ${!f||f==='all'?'on':''}" onclick="filterUser(null)"><div class="org-shape-c" style="background:rgba(255,255,255,.2)">전</div><div class="org-shape-n">전체</div><div class="org-shape-l">All users</div><span class="org-shape-cnt">${USERS.length}</span></div>
+${Object.entries(BU).map(([id,b])=>`<div class="org-shape ${f===id?'on':''}" onclick="filterUser('${id}')"><div class="org-shape-c" style="background:${COLORS[b.biz?.[0]||Object.values(BIZ).find(x=>x.bu===id)?.id]||'#71717A'}">${b.name[0]}</div><div class="org-shape-n">${b.name.replace(' 사업부','')}</div><div class="org-shape-l">${b.name}</div><span class="org-shape-cnt">${buCnt(id)}</span></div>`).join('')}
+<div class="org-shape ${f==='etc'?'on':''}" onclick="filterUser('etc')"><div class="org-shape-c" style="background:#6366F1">전</div><div class="org-shape-n">전사</div><div class="org-shape-l">관리자·임원</div><span class="org-shape-cnt">${etcCnt}</span></div>
+</div>
+<div class="utbl"><div class="uth"><div></div><div>이름·이메일</div><div>사업부</div><div>역할</div><div>색상</div><div></div></div>
+${filtered.length?filtered.map(usr=>{const kct=Object.values(KRS).filter(k=>k.owner===usr.id).length;return `<div class="urow" onclick="${can?`openUser('${usr.id}')`:''}"><div class="uavn" style="background:${usr.color}">${usr.name[0]}</div><div><div style="font-weight:500">${usr.name}</div><div class="usub">${usr.email||usr.id}</div></div><div>${(()=>{const bs=getUserBus(usr);return bs.length?bs.map(b=>BU[b]?.name).filter(Boolean).join(', '):'전사'})()}</div><div><span class="urtag">${RL[usr.role]||usr.role}</span></div><div class="mono" style="font-size:11px;color:var(--tx3)">${kct}개 KR</div><div style="text-align:right;color:var(--tx5)">${can?'›':''}</div></div>`}).join(''):'<div style="padding:32px;text-align:center;color:var(--tx4);font-size:13px">해당 사업부에 인원이 없습니다</div>'}
+</div>`}
+function filterUser(bu){state.userFilter=state.userFilter===bu?null:bu;go('user')}
+function renderBuList(selected){selected=selected||[];$('#uBuList').innerHTML=Object.entries(BU).map(([id,b])=>`<label style="display:flex;align-items:center;gap:6px;font-size:12px;padding:6px 8px;background:var(--bgs);border-radius:6px;cursor:pointer"><input type="checkbox" value="${id}" ${selected.includes(id)?'checked':''}>${b.name}</label>`).join('')}
+function newUser(){if(!canEditUser())return;state.editUid=null;$('#muT').textContent='사용자 추가';$('#muS').textContent='';$('#uN').value='';$('#uE').value='';$('#uR').value='staff';$('#uR').disabled=false;$('#uRhint').style.display='none';renderBuList([]);if($('#uTeam_mgmt')){$('#uTeam_mgmt').checked=false;$('#uTeam_ops').checked=false;}$('#uDel').style.display='none';$('#mUser').hidden=false}
+function openUser(id){if(!canEditUser())return;const u=uById(id);if(!u)return;state.editUid=id;$('#muT').textContent='사용자 편집';$('#muS').textContent=u.name;$('#uN').value=u.name;$('#uE').value=u.email||'';$('#uR').value=u.role;$('#uR').disabled=(id===state.cu);$('#uRhint').style.display=(id===state.cu)?'block':'none';renderBuList(getUserBus(u));if($('#uTeam_mgmt')){$('#uTeam_mgmt').checked=(u.teams||[]).includes('g_mgmt');$('#uTeam_ops').checked=(u.teams||[]).includes('g_ops');}$('#uDel').style.display=id!==state.cu?'inline-flex':'none';$('#mUser').hidden=false}
+function saveUser(){const n=$('#uN').value.trim();if(!n)return alert('이름 입력');const r=$('#uR').value,e=$('#uE').value;const bus=Array.from($('#uBuList').querySelectorAll('input:checked')).map(i=>i.value);const teams=[];if($('#uTeam_mgmt')&&$('#uTeam_mgmt').checked)teams.push('g_mgmt');if($('#uTeam_ops')&&$('#uTeam_ops').checked)teams.push('g_ops');const oldRole=state.editUid?uById(state.editUid)?.role:null;if(state.editUid){const u=uById(state.editUid);u.name=n;u.email=e;u.role=r;u.bus=bus;u.teams=teams;delete u.bu}else{const ni='u'+(Math.max(...USERS.map(u=>+u.id.slice(1)))+1);const cs=['#3B82F6','#10B981','#F59E0B','#A855F7','#EC4899'];USERS.push({id:ni,name:n,email:e,role:r,bus,teams,color:cs[USERS.length%cs.length]})}saveS();cloudMeta();closeM('mUser');if(state.editUid===state.cu&&oldRole&&oldRole!==r){alert('본인 권한이 변경되어 페이지를 다시 로드합니다.');location.reload();return}go('user')}
+function delUser(){if(!state.editUid)return;if(!confirm('삭제하시겠습니까?'))return;const idx=USERS.findIndex(u=>u.id===state.editUid);if(idx>=0){Object.values(KRS).forEach(k=>{if(k.owner===state.editUid)k.owner=null});USERS.splice(idx,1)}saveS();cloudMeta();closeM('mUser');go('user')}
+
+// ============ SETTINGS ============
+function rViewerToggle(){const on=!!(state.settings&&state.settings.viewerMode);return `<div class="sgrp"><h3>전사 편집 잠금 (뷰어 모드)</h3><div class="desc">켜면 스탭은 모두 열람만 가능합니다. 관리자만 편집할 수 있어요. 12일 전사 열람 오픈 때 켜고, 19일 편집 오픈 때 끄세요.</div><div class="srow"><div><label>현재 상태</label><div class="sub">${on?'🔒 편집 잠금 ON — 스탭 열람만(관리자만 편집)':'✏️ 편집 가능 (평상시)'}</div></div><button class="btn ${on?'':'btnp'}" onclick="setViewerMode(${on?'false':'true'})">${on?'편집 잠금 해제':'편집 잠금 켜기'}</button></div></div>`;}
+function setViewerMode(v){const u=uById(state.cu);if(!u||u.role!=='admin'){alert('관리자만');return}if(!state.settings)state.settings={};state.settings.viewerMode=!!v;saveS();cloudMeta();go('set');}
+function rLeaders(){const L=state.leaders||{};let rows='';for(const gid in GROUPS){const g=GROUPS[gid];let opts='<option value="">(리더 없음)</option>';USERS.forEach(us=>{opts+=`<option value="${us.id}"${L[gid]===us.id?' selected':''}>${us.name}</option>`;});rows+=`<div class="srow"><div><label>${g.name}</label></div><select onchange="setLeader('${gid}',this.value)">${opts}</select></div>`;}return `<div class="sgrp"><h3>그룹·팀 리더</h3><div class="desc">그룹/팀에 맡긴 KR은 여기 지정된 리더(+관리자)만 수정할 수 있습니다.</div>${rows}</div>`;}
+function setLeader(gid,uid){const u=uById(state.cu);if(!u||u.role!=='admin'){alert('관리자만');return}if(!state.leaders)state.leaders={};if(uid)state.leaders[gid]=uid;else delete state.leaders[gid];saveS();cloudMeta();}
+function rSet(){const u=uById(state.cu);const admin=u.role==='admin';const s=state.settings||(state.settings={qStart:'2026-04-01',qEnd:'2026-06-30',calcMode:'auto',meetCycle:'주기적 (별도 운영)'});return `<div class="ph"><div><h1>설정</h1><p>권한: ${RL[u.role]}${admin?' · 편집 가능':' · 조회만'}</p></div>${admin?'<div class="ph-r"><button class="btn btnp" onclick="saveSettings()">변경 저장</button></div>':''}</div>
+<div class="sgrp"><h3>분기 정보</h3><div class="desc">관리자만 편집 가능</div>
+<div class="srow"><div><label>분기 시작일</label></div><input type="date" id="setQStart" value="${s.qStart}" ${!admin?'disabled':''}></div>
+<div class="srow"><div><label>분기 종료일</label></div><input type="date" id="setQEnd" value="${s.qEnd}" ${!admin?'disabled':''}></div>
+<div class="srow"><div><label>잔여 일수</label><div class="sub">자동 계산</div></div><div class="mono">D-${dLeft}</div></div>
+</div>
+<div class="sgrp"><h3>OKR 진행 방식</h3><div class="desc">관리자만 편집 가능</div>
+<div class="srow"><div><label>진척률 계산</label><div class="sub">현재값/목표값 비율</div></div><select id="setCalc" ${!admin?'disabled':''}><option value="auto" ${s.calcMode==='auto'?'selected':''}>자동</option><option value="manual" ${s.calcMode==='manual'?'selected':''}>수동 (담당자 직접 입력)</option></select></div>
+<div class="srow"><div><label>OKR 회의 주기</label></div><input type="text" id="setMeet" value="${s.meetCycle}" ${!admin?'disabled':''}></div>
+</div>
+<div class="sgrp"><h3>데이터 백업·복원</h3><div class="desc">JSON 파일로 수동 백업. 기기 이전·캐시 무효화 대비 권장.</div>
+<div class="srow"><div><label>전체 백업 다운로드</label><div class="sub">현재 KR·사용자·체크인 메모 모두 JSON 1개로</div></div><button class="btn" onclick="exportData()">백업 다운로드</button></div>
+<div class="srow"><div><label>백업 파일 복원</label><div class="sub">JSON 파일 선택 → 현재 데이터 덮어씀</div></div><input type="file" accept=".json" onchange="importData(this.files[0]);this.value=''" style="font-size:12px;padding:6px"></div>
+</div>
+${admin?rViewerToggle():''}
+${admin?rLeaders():''}
+<div class="sgrp"><h3>권한 모델</h3><div class="desc">2단계 · 관리자 / 스탭</div>
+<div class="srow"><div><label><b>관리자</b></label><div class="sub">전사 전체 편집 · 사용자 관리 · 모든 KR 수정 · 그룹 KR 수정 · 설정 변경</div></div></div>
+<div class="srow"><div><label><b>스탭</b></label><div class="sub">본인이 담당(개인)으로 지정된 KR + 본인이 리더인 그룹/팀 KR 수정 · 본인 비밀번호 변경</div></div></div>
+</div>
+<div class="sgrp"><h3>내 계정</h3><div class="desc">${u.name} (${RL[u.role]})</div>
+<div class="srow"><div><label>비밀번호 변경</label><div class="sub">본인 계정 비밀번호 변경</div></div><button class="btn" onclick="openPwChange()">비밀번호 변경</button></div>
+</div>`}
+
+function openPwChange(){$('#pwOld').value='';$('#pwNew').value='';$('#pwNew2').value='';$('#pwMsg').style.display='none';$('#mPw').hidden=false}
+function closePwChange(){$('#mPw').hidden=true}
+function savePw(){const old=$('#pwOld').value;const n1=$('#pwNew').value;const n2=$('#pwNew2').value;const cur=state.passwords&&state.passwords[state.cu]?state.passwords[state.cu]:'1234';if(old!==cur){$('#pwMsg').textContent='현재 비밀번호 불일치';$('#pwMsg').style.display='block';return}if(n1.length<4){$('#pwMsg').textContent='새 비밀번호 4자 이상';$('#pwMsg').style.display='block';return}if(n1!==n2){$('#pwMsg').textContent='새 비밀번호가 일치하지 않음';$('#pwMsg').style.display='block';return}if(!state.passwords)state.passwords={};state.passwords[state.cu]=n1;saveS();cloudMeta();alert('변경 완료');closePwChange()}
+function saveSettings(){const u=uById(state.cu);if(u.role!=='admin'){alert('관리자만');return}state.settings.qStart=$('#setQStart').value;state.settings.qEnd=$('#setQEnd').value;state.settings.calcMode=$('#setCalc').value;state.settings.meetCycle=$('#setMeet').value;CO.period=state.settings.qStart.replace(/-/g,'.')+' — '+state.settings.qEnd.replace(/-/g,'.');saveS();cloudMeta();alert('저장 완료');go('set')}
+
+// ============ KR MODAL ============
+function openKr(id){const k=KRS[id];if(!k)return;state.currentKr=id;const p=pct(k);const ow=uById(k.owner);const ed=canEdit(id);const bid=k.biz||(KRS[k.parent]&&KRS[k.parent].biz);const bname=bid?BIZ[bid]?.name:'';$('#mkT').textContent=k.text;$('#mkS').textContent=`${bname} · ${id}`;$('#mkLf').textContent=ed?'':'🔒 수정 권한 없음';$('#mkSave').style.display=ed?'inline-flex':'none';$('#mkDel').style.display=(uById(state.cu)?.role==='admin')?'inline-flex':'none';
+$('#mkB').innerHTML=`${!ed?'<div class="lock-b">🔒 본인이 담당이 아니거나 권한이 없어 수정할 수 없습니다 — 조회만 가능</div>':''}<div class="knum"><div><div class="knl">진척률</div><div class="knv">${p}%</div></div><div><div class="knl">현재</div><div class="knv">${k.cur}${k.unit}<span class="src-tag ${k.cur===0?'unset':'real'}">${k.cur===0?'미등록':'실제'}</span></div></div><div><div class="knl">목표</div><div class="knv">${k.tgt}${k.unit}</div></div><div><div class="knl">상태</div><div><span class="bd ${status(p)}">${status(p)==='s'?'달성':status(p)==='o'?'정상':status(p)==='w'?'주의':'위험'}</span></div></div></div>
+<div class="fg"><label>KR 텍스트</label><input type="text" id="krT" value="${k.text.replace(/"/g,'&quot;')}" ${!ed?'disabled':''}></div>
+<div class="fg" style="display:grid;grid-template-columns:1fr 1fr 1fr 0.7fr;gap:8px"><div><label>시작값 (baseline)</label><input type="number" step="any" id="krBl" value="${k.baseline??0}" ${!ed?'disabled':''}></div><div><label>현재값</label><input type="number" step="any" id="krC" value="${k.cur}" ${!ed?'disabled':''}></div><div><label>목표값</label><input type="number" step="any" id="krTg" value="${k.tgt}" ${!ed?'disabled':''}></div><div><label>단위</label><input type="text" id="krU" value="${k.unit||''}" ${!ed?'disabled':''}></div></div><div class="fg"><label>체크인 메모 (현재값 변경 시 함께 저장)</label><input type="text" id="krMemo" placeholder="예: 7월 1주차 영업 마감 / 콜드체인 손실률 개선 등" ${!ed?'disabled':''}></div>
+<div class="fg" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label>타입</label><select id="krTy" ${!ed?'disabled':''}><option value="committed" ${k.type==='committed'?'selected':''}>필수 (committed)</option><option value="aspirational" ${k.type==='aspirational'?'selected':''}>도전 (aspirational)</option></select></div><div><label>담당자 (그룹 1 + 개인 N)</label><div class="owner-picker"><div class="owner-chips" id="krOChips"></div>${ed?'<input type="text" id="krOSearch" placeholder="이름/그룹 검색..." oninput="renderKrOpts()" onfocus="renderKrOpts()"><div class="owner-options" id="krOOpts"></div>':''}</div></div></div>
+<div class="fg"><label>세부 메모</label><textarea id="krNote" rows="4" ${!ed?'disabled':''} style="width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;font-family:inherit;line-height:1.6;resize:vertical;background:${!ed?'var(--bgs)':'#fff'};color:var(--tx2)">${(k.note||'').replace(/"/g,'&quot;')}</textarea></div><div class="fg"><label>실행 기간</label><input type="text" id="krPeriod" value="${(k.period||'').replace(/"/g,'&quot;')}" ${!ed?'disabled':''} placeholder="예: 6월 ~ 12월"></div><div class="fg"><label>현재값 변경 히스토리</label><div style="font-size:11px;color:var(--tx4);padding:8px 10px;background:var(--bgs);border-radius:6px">${(state.history[id]||[]).slice(-3).reverse().map(h=>`${h.at} · ${h.cur} → ${h.newCur} (${h.by})${h.memo?` — 💬 ${h.memo}`:''}`).join('<br>')||'기록 없음'}</div></div>`;
+state.krOwners=[...getOwners(k)];renderKrChips();if(ed){renderKrOpts()}if($('#krMemo'))$('#krMemo').value='';$('#mKr').hidden=false}
+function saveKr(){const id=state.currentKr;const k=KRS[id];if(!k||!canEdit(id))return;const oldCur=k.cur;k.text=$('#krT').value;k.baseline=parseFloat($('#krBl').value)||0;k.cur=parseFloat($('#krC').value)||0;k.tgt=parseFloat($('#krTg').value)||1;k.unit=$('#krU').value;k.type=$('#krTy').value;k.owners=[...(state.krOwners||[])];delete k.owner;k.note=$('#krNote')?.value||'';k.period=$('#krPeriod')?.value||'';state.isNewKr=false;const memo=$('#krMemo')?.value||'';if(oldCur!==k.cur){if(!state.history[id])state.history[id]=[];state.history[id].push({at:new Date().toISOString().slice(0,16).replace('T',' '),cur:oldCur,newCur:k.cur,by:uById(state.cu)?.name||'-',memo})}saveS();cloudKrWrite({[id]:KRS[id],...(k.parent&&KRS[k.parent]?{[k.parent]:KRS[k.parent]}:{})},null,{['_history.'+id]:state.history[id]||[]});closeM('mKr');go(location.hash.replace('#','')||'biz')}
+function renderKrChips(){const el=$('#krOChips');if(!el)return;const oids=state.krOwners||[];el.innerHTML=oids.length?oids.map(oid=>{const info=ownerInfo(oid);if(!info)return '';return `<span class="owner-chip" style="background:${info.color}1A;color:${info.color};border-color:${info.color}40">${info.type==='group'?'群 ':''}${info.name}<span class="x" onclick="removeKrOwner('${oid}')">×</span></span>`}).join(''):'<span style="color:var(--tx5);font-size:11px;padding:4px 2px">담당자 없음 (그룹/개인 검색해 추가)</span>'}
+function renderKrOpts(){const el=$('#krOOpts');if(!el)return;const q=($('#krOSearch')?.value||'').toLowerCase();const cur=state.krOwners||[];const opts=[...Object.entries(GROUPS).map(([id,g])=>({id,name:g.name,type:'group'})),...USERS.map(u=>({id:u.id,name:u.name,type:'user'}))].filter(o=>!cur.includes(o.id)&&o.name.toLowerCase().includes(q));el.innerHTML=opts.length?opts.slice(0,50).map(o=>`<div class="owner-opt" onclick="addKrOwner('${o.id}')">${o.type==='group'?'<span class="g-mark">그룹</span>':''}${o.name}</div>`).join(''):'<div style="padding:8px;font-size:11px;color:var(--tx5)">검색 결과 없음</div>'}
+function addKrOwner(oid){if(!state.krOwners)state.krOwners=[];if(state.krOwners.includes(oid))return;state.krOwners.push(oid);if($('#krOSearch'))$('#krOSearch').value='';renderKrChips();renderKrOpts()}
+function removeKrOwner(oid){state.krOwners=(state.krOwners||[]).filter(o=>o!==oid);renderKrChips();renderKrOpts()}
+const BIZ_PREFIX={exp:'EXP-KR-',lgt:'LGT-KR-',erz:'MKT-KR-',fod:'FOD-KR-'};
+function nextKrId(bid){const pfx=BIZ_PREFIX[bid]||(bid.toUpperCase()+'-KR-');let n=1;while(KRS[pfx+n])n++;return pfx+n}
+function newKr(bid){const u=uById(state.cu);if(!u||u.role!=='admin'){alert('관리자만');return}const ck=CO.krs.find(x=>x.biz===bid);const id=nextKrId(bid);KRS[id]={biz:bid,text:'',note:'',period:'',cur:0,tgt:100,unit:'%',type:'committed',owners:[],parent:ck?ck.id:'',children:[]};state.isNewKr=true;saveS();openKr(id)}
+function nextIkId(bid){const pfx=(BIZ_PREFIX[bid]||(bid.toUpperCase()+'-KR-')).replace('-KR-','-IK-');let n=1;while(KRS[pfx+n])n++;return pfx+n}
+function newIK(parentId){const u=uById(state.cu);if(!u||u.role!=='admin'){alert('관리자만');return}const parent=KRS[parentId];if(!parent){alert('상위 KR 없음');return}const bid=parent.biz;const id=nextIkId(bid);KRS[id]={biz:bid,text:'',note:'',period:'',cur:0,tgt:100,unit:'%',type:'committed',owners:[],parent:parentId,children:[]};if(!parent.children)parent.children=[];parent.children.push(id);state.isNewKr=true;state.exp[parentId]=true;saveS();openKr(id)}
+function delKr(){const id=state.currentKr;if(!id||!KRS[id])return;const u=uById(state.cu);if(!u||u.role!=='admin'){alert('관리자만 삭제 가능');return}const k0=KRS[id];const kids=KRS[id].children||[];let hist=(state.history[id]||[]).length;kids.forEach(kid=>{hist+=(state.history[kid]||[]).length});if(!confirm('정말 삭제할까요?\n\n['+id+'] '+(k0.text||'')+'\n· 하위 과제 '+kids.length+'개\n· 누적 체크인 기록 '+hist+'개\n\n삭제하면 위 내용이 영구 삭제되며 복구할 수 없습니다.'))return;const _par=KRS[id].parent;kids.forEach(kid=>delete KRS[kid]);Object.values(KRS).forEach(k=>{if(k.children)k.children=k.children.filter(c=>c!==id)});delete KRS[id];saveS();cloudKrWrite(_par&&KRS[_par]?{[_par]:KRS[_par]}:{},[id,...kids]);closeM('mKr');go('biz')}
+function editBizObj(bid){const u=uById(state.cu);if(!u||u.role!=='admin'){alert('관리자만');return}state.editObjType='biz';state.editObjBid=bid;$('#mObjT').textContent=`사업 OBJECTIVE — ${BIZ[bid].name}`;$('#objText').value=BIZ[bid].obj;$('#mObj').hidden=false;setTimeout(()=>$('#objText').focus(),50)}
+function editCoObj(){const u=uById(state.cu);if(!u||u.role!=='admin'){alert('관리자만');return}state.editObjType='co';$('#mObjT').textContent='전사 OBJECTIVE';$('#objText').value=CO.obj;$('#mObj').hidden=false;setTimeout(()=>$('#objText').focus(),50)}
+function openPickParent(bid){const u=uById(state.cu);if(!u||u.role!=='admin'){alert('관리자만');return}const bkrs=Object.entries(KRS).filter(([id,k])=>k.biz===bid&&!id.includes('-IK-')&&!id.includes('-GK-'));if(!bkrs.length){alert('이 사업에 사업 KR이 없습니다. 먼저 사업 KR을 추가해주세요.');return}state.pickParentBid=bid;$('#mPickSub').textContent=BIZ[bid].name;$('#pickParentSel').innerHTML=bkrs.map(([id,k])=>`<option value="${id}">${id} — ${k.text||'(미입력)'}</option>`).join('');$('#mPickParent').hidden=false}
+function confirmPickParent(){const pid=$('#pickParentSel').value;if(!pid)return;closeM('mPickParent');newIK(pid)}
+function saveObj(){const v=$('#objText').value.trim();if(!v){alert('내용 입력');return}if(state.editObjType==='biz'){BIZ[state.editObjBid].obj=v}else if(state.editObjType==='co'){CO.obj=v}state.editObjType=null;state.editObjBid=null;saveS();cloudMeta();closeM('mObj');go('biz')}
+function exportData(){const data={state,KRS,USERS,BIZ,CO,exportedAt:new Date().toISOString(),version:STORE};const json=JSON.stringify(data,null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`okr-backup-${new Date().toISOString().slice(0,10).replace(/-/g,'')}.json`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}
+function importData(file){if(!file)return;if(!confirm('현재 데이터를 백업 파일로 덮어씁니다. 계속할까요?'))return;const reader=new FileReader();reader.onload=e=>{try{const d=JSON.parse(e.target.result);if(d.KRS){Object.keys(KRS).forEach(k=>delete KRS[k]);Object.assign(KRS,d.KRS)}if(d.USERS){USERS.length=0;d.USERS.forEach(u=>USERS.push(u))}if(d.BIZ)Object.assign(BIZ,d.BIZ);if(d.CO)Object.assign(CO,d.CO);if(d.state)Object.assign(state,d.state);saveS();cloudInit();alert('복원 완료 (백업 시점: '+(d.exportedAt||'알 수 없음')+').\n페이지를 새로 로드합니다.');location.reload()}catch(err){alert('복원 실패: '+err.message)}};reader.readAsText(file)}
+function closeM(id){if(id==='mKr'&&state.isNewKr){const krId=state.currentKr;if(KRS[krId]){const typed=($('#krT')?.value||'').trim();const hasModel=(KRS[krId].text||'').trim();if(!hasModel&&!typed){delete KRS[krId];Object.values(KRS).forEach(k=>{if(k.children)k.children=k.children.filter(c=>c!==krId)});saveS();go('biz')}else if(!hasModel&&typed){KRS[krId].text=typed;saveS();cloudKrWrite({[krId]:KRS[krId],...(KRS[krId].parent&&KRS[KRS[krId].parent]?{[KRS[krId].parent]:KRS[KRS[krId].parent]}:{})});go(location.hash.replace('#','')||'biz')}}state.isNewKr=false}$('#'+id).hidden=true}
+
+loadS();
+$('#userSearch').addEventListener('input',e=>renderUL(e.target.value));
+$('#pw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+$('#loginBtn').addEventListener('click',doLogin);
+renderUL();
+if(state.cu)showApp();else state.exp['CO-O']=true;
+$$('.tab').forEach(t=>t.addEventListener('click',()=>go(t.dataset.v)));
+window.addEventListener('hashchange',()=>{if(state.cu){const v=location.hash.replace('#','')||'dash';go(v)}});
+Object.assign(window,{go,selU,doLogin,logout,togE,expAll,selRow,openKr,saveKr,closeM,openBizDetail,newUser,openUser,saveUser,delUser,filterUser,openPwChange,closePwChange,savePw,saveSettings});
+initCloud();
+</script></body></html>
