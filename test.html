@@ -972,9 +972,10 @@ let _progKr=null,_progConf='';
 function progBadge(id){const n=progPoints(id).length;return `<span class="pbadge" onclick="event.stopPropagation();openProg('${id}')">진행상황${n?' '+n:''}</span>`}
 function progEntryHtml(id){return `<div class="fg"><label>진행상황 (기록·그래프)</label><button class="btn" style="width:100%;justify-content:center" onclick="openProg('${id}')">진행상황 보기 &middot; 기록 ${progPoints(id).length}건</button></div>`}
 function toP(k,v){const b=(k.baseline===undefined||k.baseline===null)?0:k.baseline;const t=k.tgt;if(t===undefined||t===null||t===b)return 0;return Math.max(0,Math.min(130,Math.round((v-b)/(t-b)*100)))}
-function progPoints(id){const k=KRS[id];if(!k)return [];const out=[];const seen={};
- (((state.history||{})[id])||[]).forEach(h=>{const t=new Date(String(h.at).replace(' ','T')).getTime();if(isNaN(t))return;const v=Number(h.newCur);if(isNaN(v))return;const key=t+'_'+v;if(seen[key])return;seen[key]=1;out.push({t:t,v:v,p:toP(k,v),by:h.by||'-',memo:h.memo||'',conf:''})});
- Object.values(ACTS).forEach(a=>{if(!a||a.kr!==id)return;if(a.ty!=='log'&&a.ty!=='val')return;const v=Number(a.to);if(isNaN(v))return;const key=a.at+'_'+v;if(seen[key])return;seen[key]=1;out.push({t:a.at,v:v,p:toP(k,v),by:a.by||'-',memo:a.txt||'',conf:a.conf||''})});
+function progPoints(id){const k=KRS[id];if(!k)return [];const out=[];
+ const near=(t,v)=>out.some(q=>q.v===v&&Math.abs(q.t-t)<180000);
+ Object.values(ACTS).forEach(a=>{if(!a||a.kr!==id)return;if(a.ty!=='log'&&a.ty!=='val')return;const v=Number(a.to);if(isNaN(v))return;if(near(a.at,v))return;out.push({t:a.at,v:v,p:toP(k,v),by:a.by||'-',memo:a.txt||'',conf:a.conf||''})});
+ (((state.history||{})[id])||[]).forEach(h=>{const t=new Date(String(h.at).replace(' ','T')).getTime();if(isNaN(t))return;const v=Number(h.newCur);if(isNaN(v))return;if(near(t,v))return;out.push({t:t,v:v,p:toP(k,v),by:h.by||'-',memo:h.memo||'',conf:''})});
  out.sort((x,y)=>x.t-y.t);return out}
 function confSegs(id){const L={g:'순조',y:'주의',r:'위험'};const evs=[];
  Object.values(ACTS).forEach(a=>{if(!a||a.kr!==id)return;if(a.ty==='conf'){const inv={'순조':'g','주의':'y','위험':'r'};if(inv[a.to])evs.push({t:a.at,c:inv[a.to]})}else if(a.ty==='log'&&a.conf)evs.push({t:a.at,c:a.conf})});
