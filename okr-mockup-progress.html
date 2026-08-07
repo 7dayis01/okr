@@ -1,0 +1,282 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>목업 — KR 진행상황 보기</title>
+<style>
+:root{--bg:#fff;--bgs:#FAFAFA;--bgh:#F4F4F5;--bd:#E4E4E7;--bdt:#D4D4D8;--tx:#09090B;--tx3:#52525B;--tx4:#71717A;--tx5:#A1A1AA;--ac:#2563EB;--ach:#1D4ED8;--acbg:#EFF6FF;--s:#10B981;--sbg:#ECFDF5;--stx:#065F46;--w:#F59E0B;--wbg:#FFFBEB;--wtx:#92400E;--d:#EF4444;--dbg:#FEF2F2;--dtx:#991B1B;--fm:ui-monospace,'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:#F4F4F5;color:var(--tx);line-height:1.6;padding:24px 20px 60px;font-size:14px}
+.page{max-width:1060px;margin:0 auto}
+h1{font-size:23px;letter-spacing:-.3px}
+.lead{font-size:13px;color:var(--tx4);margin:5px 0 20px}
+.card{background:#fff;border:1px solid var(--bd);border-radius:15px;margin-bottom:20px;overflow:hidden}
+.ch{padding:13px 20px;border-bottom:1px solid var(--bd);background:var(--bgs);display:flex;align-items:center;gap:9px}
+.ch b{font-size:14.5px}
+.n{width:22px;height:22px;border-radius:50%;background:var(--ac);color:#fff;font-size:11.5px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
+.tagN{background:#DBEAFE;color:#1D4ED8;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700}
+.cb{padding:18px 20px}
+/* 진입 버튼 비교 */
+.ba{display:flex;gap:12px;align-items:stretch}
+.bx{flex:1;border-radius:10px;padding:13px 15px;font-size:12.5px;line-height:1.6}
+.bad{background:#FAFAFA;border:1px solid var(--bd);color:var(--tx3)}
+.good{background:var(--acbg);border:1px solid #BFDBFE;color:#1E3A8A}
+.arw{align-self:center;color:var(--tx5);font-weight:700}
+.rowdemo{border:1px solid var(--bd);border-radius:9px;padding:10px 13px;display:flex;align-items:center;gap:9px;background:#fff;margin-top:9px;font-size:12.5px}
+.rowdemo .dot{width:8px;height:8px;border-radius:50%;background:#DB2777;flex-shrink:0}
+.rowdemo .nm{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{font-family:var(--fm);font-size:10px;border-radius:20px;padding:2px 8px;border:1px solid var(--bd);color:var(--tx4);white-space:nowrap}
+.pill.b{background:var(--acbg);color:var(--ach);border-color:#BFDBFE;font-weight:700}
+.pill.warn{background:var(--wbg);color:var(--wtx);border-color:#FDE68A;font-weight:700}
+/* 상단 요약 */
+.mtop{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.kc{border:1px solid var(--bd);border-radius:11px;padding:11px 13px}
+.kc .l{font-size:10.5px;color:var(--tx5);margin-bottom:3px}
+.kc .v{font-size:21px;font-weight:800;font-family:var(--fm);line-height:1.2}
+.kc .s{font-size:10.5px;color:var(--tx4);margin-top:2px}
+.sig{display:flex;gap:4px;margin-top:4px}
+.sig i{flex:1;height:6px;border-radius:3px;background:var(--bgh)}
+.sig i.on.g{background:var(--s)}.sig i.on.y{background:var(--w)}.sig i.on.r{background:var(--d)}
+/* 차트 */
+.chartwrap{border:1px solid var(--bd);border-radius:12px;padding:14px 12px 10px;background:#fff}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--tx4);padding:8px 6px 0}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.sw{width:11px;height:3px;border-radius:2px;display:inline-block}
+.sw.c{width:9px;height:9px;border-radius:50%}
+.hint{font-size:11px;color:var(--tx5);text-align:right;padding:2px 6px 0}
+/* 하단 2단 */
+.two{display:grid;grid-template-columns:1.35fr 1fr;gap:16px;margin-top:18px}
+.sect h3{font-size:12.5px;color:var(--tx3);margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.sect h3 .cnt{font-family:var(--fm);font-size:10.5px;background:var(--bgh);color:var(--tx4);border-radius:20px;padding:1px 8px;font-weight:400}
+/* 기록 입력 */
+.inbox{border:1px solid var(--bdt);border-radius:11px;padding:12px 14px;background:var(--bgs)}
+.inrow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:9px}
+label{font-size:10.5px;color:var(--tx4);font-weight:600;display:block;margin-bottom:4px}
+.inp{height:32px;border:1px solid var(--bdt);border-radius:7px;background:#fff;display:flex;align-items:center;padding:0 10px;font-size:12.5px;color:var(--tx3);justify-content:space-between}
+.tarea{border:1px solid var(--bdt);border-radius:7px;background:#fff;padding:8px 10px;font-size:12.5px;color:var(--tx5);min-height:52px}
+.segp{display:flex;gap:5px}
+.segp div{flex:1;text-align:center;border:1px solid var(--bd);border-radius:7px;padding:6px 2px;font-size:11.5px;color:var(--tx4);background:#fff}
+.segp div.on.y{border-color:var(--w);background:var(--wbg);color:var(--wtx);font-weight:700;border-width:2px}
+.btnrow{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+.btn{height:32px;padding:0 14px;border-radius:8px;border:1px solid var(--bd);background:#fff;font-size:12.5px;display:inline-flex;align-items:center;color:var(--tx3)}
+.btn.p{background:#111827;color:#fff;border-color:#111827;font-weight:600}
+/* 타임라인 */
+.tl{margin-top:14px;position:relative;padding-left:20px}
+.tl::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--bd)}
+.ti{position:relative;padding:0 0 15px}
+.ti::before{content:'';position:absolute;left:-18px;top:5px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--ac)}
+.ti.g::before{border-color:var(--s)}.ti.y::before{border-color:var(--w)}.ti.r::before{border-color:var(--d)}
+.ti .hd{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--tx4);font-family:var(--fm)}
+.ti .who{font-weight:700;color:var(--tx);font-family:Pretendard,sans-serif;font-size:12.5px}
+.chg{font-family:var(--fm);font-size:11px;background:var(--bgh);border-radius:5px;padding:1px 6px}
+.chg.up{background:var(--sbg);color:var(--stx);font-weight:700}
+.ti .memo{font-size:12.5px;color:var(--tx3);margin-top:4px;background:var(--bgs);border:1px solid var(--bd);border-radius:8px;padding:8px 11px;line-height:1.55}
+.tagm{font-size:9.5px;border-radius:20px;padding:1px 7px;font-weight:700;margin-left:4px}
+.tm-y{background:var(--wbg);color:var(--wtx)}.tm-g{background:var(--sbg);color:var(--stx)}.tm-r{background:var(--dbg);color:var(--dtx)}.tm-b{background:var(--acbg);color:var(--ach)}
+/* 요약 카드 */
+.sum{border:1px solid var(--bd);border-radius:11px;padding:13px 15px;margin-bottom:10px}
+.sum h4{font-size:11.5px;color:var(--tx4);margin-bottom:7px}
+.sum .big{font-size:17px;font-weight:800;font-family:var(--fm)}
+.kv{display:flex;justify-content:space-between;font-size:12.5px;padding:5px 0;border-bottom:1px solid #F4F4F5}
+.kv:last-child{border-bottom:none}
+.kv b{font-family:var(--fm)}
+.who2{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:12.5px}
+.av{width:22px;height:22px;border-radius:50%;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.bar{flex:1;height:6px;background:var(--bgh);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:6px;background:var(--ac);border-radius:3px}
+.note{background:#F8FAFC;border-left:3px solid var(--ac);padding:11px 14px;font-size:12.5px;color:var(--tx3);border-radius:0 8px 8px 0;margin-top:15px;line-height:1.65}
+.note b{color:var(--tx)}
+.note.g{border-color:var(--s);background:#F6FEFA}
+.note.w{border-color:var(--w);background:var(--wbg);color:var(--wtx)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{border:1px solid var(--bd);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:var(--bgs);font-weight:700;color:var(--tx3);font-size:11.5px}
+.foot{font-size:11px;color:var(--tx5);text-align:center;margin-top:8px}
+@media(max-width:880px){.two{grid-template-columns:1fr}.mtop{grid-template-columns:repeat(2,1fr)}}
+</style></head><body><div class="page">
+
+<h1>목업 — KR 진행상황 보기</h1>
+<div class="lead">담당자들이 <b>진행 기록(값 + 메모 + 확신도)</b>을 쌓고, 그것이 자동으로 <b>그래프와 타임라인으로 요약</b>되는 화면입니다. 대표뿐 아니라 다른 담당자도 이 화면 하나로 현황을 파악합니다. — 기준일 2026.08.07</div>
+
+<!-- 1 진입점 -->
+<div class="card">
+<div class="ch"><span class="n">1</span><b>진입 — KR마다 '진행상황' 버튼 신설</b><span class="tagN">신규</span></div>
+<div class="cb">
+<div class="ba">
+<div class="bx bad"><b>지금</b><br>KR을 클릭하면 <b>수정 화면</b>이 열립니다. 목표값·단위·담당자 선택기 같은 편집 UI가 먼저 보이고, 진척 이력은 맨 아래에 3줄만 나옵니다. <b>"지금 어떻게 돼가나"를 읽을 화면이 없습니다.</b></div>
+<div class="arw">▶</div>
+<div class="bx good"><b>바뀐 뒤</b><br>KR 줄에 <b>진행상황</b> 버튼이 하나 더 붙습니다. 누르면 <b>읽기 + 기록 전용 화면</b>이 열립니다. 편집 UI는 없고, 담당자는 여기서 <b>진행 기록만</b> 남깁니다.</div>
+</div>
+<div class="rowdemo"><span class="dot"></span><span class="nm">매체 대행 마크업(수임료) 기준을 기존 10%에서 15%로 인상 적용</span><span class="pill">업무 1/4</span><span class="pill warn">D-54</span><span class="pill b">진행상황 ▸</span></div>
+<div class="note">기존 <b>업무</b> 배지 옆에 나란히 둡니다. 사업별·내 업무·일정 어느 화면에서든 같은 버튼으로 들어갑니다.</div>
+</div></div>
+
+<!-- 2 메인 화면 -->
+<div class="card">
+<div class="ch"><span class="n">2</span><b>진행상황 화면</b><span style="margin-left:auto;font-size:11.5px;color:var(--tx5)">매체 대행 마크업(수임료) 10% → 15% · 이레이즈 마케팅</span></div>
+<div class="cb">
+
+<!-- 상단 요약 -->
+<div class="mtop">
+<div class="kc"><div class="l">진척률</div><div class="v" style="color:var(--ac)">82<small style="font-size:12px">%</small></div><div class="s">목표 150% 기준</div></div>
+<div class="kc"><div class="l">최근 4주 변화</div><div class="v" style="color:var(--stx)">+20<small style="font-size:12px">%p</small></div><div class="s">62% → 82%</div></div>
+<div class="kc"><div class="l">마감</div><div class="v">D-54</div><div class="s">2026.09.30</div></div>
+<div class="kc"><div class="l">확신도</div><div class="v" style="font-size:15px;color:var(--wtx);padding-top:4px">주의</div><div class="sig"><i class="on g"></i><i class="on y"></i><i></i></div></div>
+<div class="kc"><div class="l">마지막 기록</div><div class="v" style="font-size:15px;padding-top:4px">2일 전</div><div class="s">기록 8건 · 참여 4명</div></div>
+</div>
+
+<!-- 차트 -->
+<div class="chartwrap">
+<svg viewBox="0 0 800 265" width="100%" height="265" style="display:block">
+  <!-- y grid -->
+  <g font-family="ui-monospace,monospace" font-size="9.5" fill="#A1A1AA">
+    <line x1="60" y1="190" x2="740" y2="190" stroke="#E4E4E7"/><text x="30" y="193">0%</text>
+    <line x1="60" y1="147.5" x2="740" y2="147.5" stroke="#F1F1F3"/><text x="24" y="150.5">25%</text>
+    <line x1="60" y1="105" x2="740" y2="105" stroke="#F1F1F3"/><text x="24" y="108">50%</text>
+    <line x1="60" y1="62.5" x2="740" y2="62.5" stroke="#F1F1F3"/><text x="24" y="65.5">75%</text>
+    <line x1="60" y1="20" x2="740" y2="20" stroke="#D4D4D8" stroke-dasharray="4 3"/><text x="18" y="23">100%</text>
+  </g>
+  <!-- x months -->
+  <g font-family="ui-monospace,monospace" font-size="9.5" fill="#A1A1AA" text-anchor="middle">
+    <text x="115" y="207">4월</text><text x="229" y="207">5월</text><text x="342" y="207">6월</text>
+    <text x="455" y="207">7월</text><text x="571" y="207">8월</text><text x="684" y="207">9월</text>
+  </g>
+  <g stroke="#F4F4F5"><line x1="171.5" y1="20" x2="171.5" y2="190"/><line x1="286.7" y1="20" x2="286.7" y2="190"/><line x1="398.1" y1="20" x2="398.1" y2="190"/><line x1="513.4" y1="20" x2="513.4" y2="190"/><line x1="628.6" y1="20" x2="628.6" y2="190"/></g>
+  <!-- area + line -->
+  <path d="M60,190 L130.6,169.6 L197.5,147.5 L271.8,137.3 L338.7,108.4 L401.9,96.5 L468.7,84.6 L528.2,50.6 L528.2,190 L60,190 Z" fill="#2563EB" opacity=".07"/>
+  <path d="M60,190 L130.6,169.6 L197.5,147.5 L271.8,137.3 L338.7,108.4 L401.9,96.5 L468.7,84.6 L528.2,50.6" fill="none" stroke="#2563EB" stroke-width="2.4" stroke-linejoin="round"/>
+  <!-- 예상선(마감까지) -->
+  <path d="M528.2,50.6 L740,20" fill="none" stroke="#A1A1AA" stroke-width="1.6" stroke-dasharray="5 4"/>
+  <!-- today -->
+  <line x1="535.6" y1="14" x2="535.6" y2="196" stroke="#EF4444" stroke-width="1.6"/>
+  <rect x="516" y="4" width="40" height="13" rx="3" fill="#EF4444"/><text x="536" y="14" font-size="9" fill="#fff" text-anchor="middle" font-family="ui-monospace,monospace">오늘</text>
+  <!-- 기록 점 -->
+  <g>
+    <circle cx="130.6" cy="169.6" r="4.5" fill="#fff" stroke="#10B981" stroke-width="2.4"/>
+    <circle cx="197.5" cy="147.5" r="4.5" fill="#fff" stroke="#10B981" stroke-width="2.4"/>
+    <circle cx="271.8" cy="137.3" r="4.5" fill="#fff" stroke="#F59E0B" stroke-width="2.4"/>
+    <circle cx="338.7" cy="108.4" r="4.5" fill="#fff" stroke="#F59E0B" stroke-width="2.4"/>
+    <circle cx="401.9" cy="96.5" r="4.5" fill="#fff" stroke="#EF4444" stroke-width="2.4"/>
+    <circle cx="468.7" cy="84.6" r="4.5" fill="#fff" stroke="#10B981" stroke-width="2.4"/>
+    <circle cx="528.2" cy="50.6" r="6" fill="#2563EB" stroke="#fff" stroke-width="2.4"/>
+  </g>
+  <!-- 말풍선 (선택된 기록) -->
+  <g>
+    <rect x="392" y="30" width="230" height="17" rx="4" fill="#111827" opacity=".92"/>
+    <text x="400" y="42" font-size="10" fill="#fff" font-family="Pretendard,sans-serif">8/5 곽경훈 · 62 → 82% · 7월 수임료 집계 반영</text>
+  </g>
+  <!-- 확신도 띠 -->
+  <text x="16" y="234" font-size="9.5" fill="#71717A" font-family="Pretendard,sans-serif">확신도</text>
+  <g>
+    <rect x="60" y="226" width="211.8" height="11" rx="3" fill="#10B981" opacity=".85"/>
+    <rect x="271.8" y="226" width="130.1" height="11" rx="3" fill="#F59E0B" opacity=".85"/>
+    <rect x="401.9" y="226" width="66.8" height="11" rx="3" fill="#EF4444" opacity=".85"/>
+    <rect x="468.7" y="226" width="59.5" height="11" rx="3" fill="#10B981" opacity=".85"/>
+    <rect x="528.2" y="226" width="211.8" height="11" rx="3" fill="#F59E0B" opacity=".4"/>
+  </g>
+  <!-- 업무 완료 -->
+  <text x="16" y="255" font-size="9.5" fill="#71717A" font-family="Pretendard,sans-serif">업무</text>
+  <g>
+    <rect x="60" y="247" width="680" height="9" rx="3" fill="#F4F4F5"/>
+    <rect x="60" y="247" width="170" height="9" rx="3" fill="#7C3AED" opacity=".75"/>
+    <text x="240" y="255" font-size="9" fill="#71717A" font-family="ui-monospace,monospace">1 / 4 완료</text>
+  </g>
+</svg>
+<div class="legend">
+<span><i class="sw" style="background:#2563EB"></i> 진척률 실제</span>
+<span><i class="sw" style="background:#A1A1AA"></i> 마감까지 필요한 속도</span>
+<span><i class="sw c" style="background:#fff;border:2px solid #10B981"></i> 기록 시점 (테두리 = 그때의 확신도)</span>
+<span><i class="sw" style="background:#EF4444"></i> 오늘</span>
+</div>
+<div class="hint">그래프의 점을 클릭하면 그때 남긴 메모가 열립니다 — <b>숫자가 왜 올랐는지/멈췄는지</b>가 바로 연결됩니다.</div>
+</div>
+
+<!-- 하단 2단 -->
+<div class="two">
+
+<!-- 좌: 기록 입력 + 타임라인 -->
+<div class="sect">
+<h3>진행 기록 남기기 <span class="cnt">담당자·관리자</span></h3>
+<div class="inbox">
+<div class="inrow">
+<div><label>현재값 (선택)</label><div class="inp">82 <span style="color:var(--tx5);font-size:11px">%</span></div></div>
+<div><label>확신도 (선택)</label><div class="segp"><div>순조</div><div class="on y">주의</div><div>위험</div></div></div>
+</div>
+<div><label>진행 내용 · 특이사항 <span style="color:var(--d)">필수</span></label><div class="tarea">무엇이 진행됐고, 무엇이 막혀 있는지 적어주세요. @이름 으로 다른 담당자를 부를 수 있습니다.</div></div>
+<div class="btnrow"><span style="font-size:11px;color:var(--tx5);margin-right:auto;align-self:center">값을 안 바꿔도 <b>메모만</b> 남길 수 있습니다</span><div class="btn">취소</div><div class="btn p">기록 남기기</div></div>
+</div>
+
+<h3 style="margin-top:20px">기록 타임라인 <span class="cnt">8건</span></h3>
+<div class="tl">
+<div class="ti y"><div class="hd"><span class="who">곽경훈</span><span>2026.08.05</span><span class="chg">62</span>→<span class="chg up">82%</span><span class="tagm tm-y">주의</span></div><div class="memo">7월 마감 기준 수임료 집계 반영. 목표 대비 순항이나 <b>8월 신규 유입이 줄어</b> 하반기 유지가 불확실합니다. 대응안은 8/14 미팅에서 논의.</div></div>
+<div class="ti g"><div class="hd"><span class="who">박근정</span><span>2026.07.20</span><span class="chg">55</span>→<span class="chg up">62%</span><span class="tagm tm-g">순조</span></div><div class="memo">A사·D사 재계약 완료(15% 적용). 남은 곳은 B사, C사입니다.</div></div>
+<div class="ti r"><div class="hd"><span class="who">이수인</span><span>2026.07.02</span><span class="chg">48</span>→<span class="chg up">55%</span><span class="tagm tm-r">위험</span></div><div class="memo">C사가 경쟁사 제안을 받은 정황. 인상 협의가 오히려 이탈 요인이 될 수 있어 <span style="background:#EFF6FF;color:#1D4ED8;border-radius:4px;padding:0 4px;font-weight:600">@곽경훈</span> 판단 필요합니다.</div></div>
+<div class="ti y"><div class="hd"><span class="who">박근정</span><span>2026.06.15</span><span class="chg">31</span>→<span class="chg up">48%</span><span class="tagm tm-y">주의</span></div><div class="memo">단가표 개정안 발송 완료. 회신이 느려 일정이 2주 밀릴 수 있습니다.</div></div>
+<div class="ti y"><div class="hd"><span class="who">김경현</span><span>2026.05.28</span><span class="chg" style="background:#F4F4F5;color:#71717A">값 변경 없음</span><span class="tagm tm-y">주의</span></div><div class="memo">내부 단가 기준 정리 중. 이번 주는 진척 없음 — 법무 검토 대기.</div></div>
+<div class="ti g" style="padding-bottom:0"><div class="hd"><span class="who">곽경훈</span><span>2026.05.08</span><span class="chg">12</span>→<span class="chg up">25%</span><span class="tagm tm-g">순조</span></div><div class="memo">1차 대상 8개사 선정 및 협의 착수.</div></div>
+</div>
+</div>
+
+<!-- 우: 자동 요약 -->
+<div class="sect">
+<h3>자동 요약 <span class="cnt">입력값에서 계산</span></h3>
+
+<div class="sum" style="border-color:#FDE68A;background:var(--wbg)">
+<h4 style="color:var(--wtx)">지금 이 KR의 상태</h4>
+<div style="font-size:12.5px;color:var(--wtx);line-height:1.6">진척은 <b>82%로 순항</b>하지만, 담당자 확신도가 <b>주의</b>이고 최근 기록에 <b>이탈 위험(C사)</b>이 언급됐습니다. 숫자만 보면 놓칠 위험입니다.</div>
+</div>
+
+<div class="sum">
+<h4>속도</h4>
+<div class="kv"><span>최근 4주</span><b style="color:var(--stx)">+20%p</b></div>
+<div class="kv"><span>월평균</span><b>+16%p</b></div>
+<div class="kv"><span>마감까지 필요한 속도</span><b>+10%p / 월</b></div>
+<div class="kv"><span>현재 속도 유지 시</span><b style="color:var(--stx)">9월 중 달성</b></div>
+</div>
+
+<div class="sum">
+<h4>기록 활동</h4>
+<div class="kv"><span>총 기록</span><b>8건</b></div>
+<div class="kv"><span>마지막 기록</span><b>2일 전</b></div>
+<div class="kv"><span>평균 간격</span><b>17일</b></div>
+<div class="kv"><span>확신도 변경</span><b>4회</b></div>
+</div>
+
+<div class="sum">
+<h4>참여 담당자</h4>
+<div class="who2"><span class="av" style="background:#06B6D4">곽</span><span style="width:52px">곽경훈</span><span class="bar"><i style="width:100%"></i></span><span style="font-family:var(--fm);font-size:11px;color:var(--tx4)">3건</span></div>
+<div class="who2"><span class="av" style="background:#84CC16">근</span><span style="width:52px">박근정</span><span class="bar"><i style="width:67%"></i></span><span style="font-family:var(--fm);font-size:11px;color:var(--tx4)">2건</span></div>
+<div class="who2"><span class="av" style="background:#F97316">수</span><span style="width:52px">이수인</span><span class="bar"><i style="width:67%"></i></span><span style="font-family:var(--fm);font-size:11px;color:var(--tx4)">2건</span></div>
+<div class="who2"><span class="av" style="background:#3B82F6">경</span><span style="width:52px">김경현</span><span class="bar"><i style="width:33%"></i></span><span style="font-family:var(--fm);font-size:11px;color:var(--tx4)">1건</span></div>
+</div>
+
+<div class="sum">
+<h4>하위 업무</h4>
+<div class="kv"><span>완료</span><b>1 / 4</b></div>
+<div class="kv"><span>지연</span><b style="color:var(--dtx)">1건</b></div>
+<div class="kv"><span style="color:var(--ac);cursor:pointer">업무 표 열기 ▸</span><b></b></div>
+</div>
+
+<div class="btnrow" style="justify-content:stretch"><div class="btn" style="flex:1;justify-content:center">텍스트 복사</div><div class="btn" style="flex:1;justify-content:center">인쇄 / PDF</div></div>
+</div>
+</div>
+
+</div></div>
+
+<!-- 3 설계 의도 -->
+<div class="card">
+<div class="ch"><span class="n">3</span><b>왜 이렇게 설계했는지</b></div>
+<div class="cb">
+<table>
+<tr><th style="width:22%">요소</th><th style="width:39%">지금의 문제</th><th>이 화면에서의 해결</th></tr>
+<tr><td><b>기록이 안 쌓임</b></td><td>체크인 메모가 <b>현재값을 바꿀 때만</b> 저장돼서, 값이 안 변하면 아무것도 안 남습니다. (전사 이력 2건)</td><td><b>값 없이 메모만</b> 남길 수 있게 분리. "이번 주 진척 없음, 법무 대기"도 기록이 됩니다.</td></tr>
+<tr><td><b>숫자와 맥락이 끊김</b></td><td>진척률 그래프와 메모가 따로 놀아, 왜 올랐는지 왜 멈췄는지 모릅니다.</td><td>그래프의 <b>점 = 기록</b>. 점을 누르면 그때 메모가 열립니다. 숫자와 이유가 붙습니다.</td></tr>
+<tr><td><b>숫자만으론 위험을 못 봄</b></td><td>82%면 정상으로 보입니다.</td><td>그래프 아래 <b>확신도 띠</b>로 "그때 담당자가 어떻게 느꼈는지"가 색으로 보입니다. 빨간 구간이 있으면 눈에 띕니다.</td></tr>
+<tr><td><b>달성 가능한지 판단 불가</b></td><td>현재 진척률만 보입니다.</td><td>회색 점선 = <b>마감까지 필요한 속도</b>. 실선이 점선보다 완만하면 이대로는 못 맞춘다는 뜻입니다.</td></tr>
+<tr><td><b>누가 관리 중인지 모름</b></td><td>담당자 이름만 있고 실제 참여 여부는 알 수 없습니다.</td><td><b>참여 담당자</b> 카드로 누가 실제로 기록을 남기는지 보입니다.</td></tr>
+</table>
+
+<div class="note g"><b>새로 저장하는 것은 '진행 기록' 하나뿐입니다.</b> 나머지(그래프·속도·요약·참여 현황)는 전부 이 기록에서 <b>자동으로 계산</b>됩니다. 담당자가 할 일은 <b>가끔 들어와 한 줄 남기는 것</b>뿐입니다.</div>
+
+<div class="note w"><b>솔직한 우려</b> — 이 화면의 성패는 기능이 아니라 <b>담당자가 기록을 남기느냐</b>에 달려 있습니다. 지금 이력이 2건이라는 건 아무도 안 남기고 있다는 뜻입니다. 그래서 <b>값 없이 메모만</b> 남길 수 있게 문턱을 낮췄고, 마지막 기록이 오래되면 '내 업무'에서 <b>정체</b>로 올라오게 연결했습니다. 그래도 주 1회 정도의 약속은 필요합니다.</div>
+</div></div>
+
+<div class="foot">※ 목업입니다. 실제 데이터는 변경되지 않았고 화면 구성안만 보여드립니다. — 2026.08.07</div>
+</div></body></html>
