@@ -77,6 +77,14 @@ td.c{text-align:center}
 .mini{border:1px solid var(--bd);border-radius:12px;padding:15px 17px;font-size:13.5px;line-height:1.7}
 .mini h4{font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:7px}
 ul{margin:8px 0 0 19px}li{margin-bottom:5px;color:var(--tx3)}
+.path{display:flex;align-items:flex-start;gap:9px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:11px;padding:11px 14px;margin-bottom:16px;font-size:13px;line-height:1.65}
+.path .lab{background:#0F172A;color:#fff;font-size:10.5px;font-weight:800;border-radius:6px;padding:3px 9px;flex-shrink:0;letter-spacing:.4px}
+.path .go{color:var(--tx3)}
+.path .go b{color:var(--tx);background:#fff;border:1px solid var(--bdt);border-radius:6px;padding:1px 8px;font-size:12.5px;white-space:nowrap;display:inline-block;margin:1px 0}
+.path .go i{font-style:normal;color:var(--tx5);margin:0 4px}
+.ptbl td:first-child{white-space:nowrap;font-weight:700;width:20%}
+.ptbl td b{background:var(--bgs);border:1px solid var(--bd);border-radius:5px;padding:1px 7px;font-size:12px;white-space:nowrap;display:inline-block;margin:1px 0}
+.ptbl td i{font-style:normal;color:var(--tx5);margin:0 3px}
 .foot{font-size:12px;color:var(--tx5);text-align:center;margin-top:20px;line-height:1.8}
 @media(max-width:800px){.ba{grid-template-columns:1fr;gap:8px}.arw{transform:rotate(90deg)}.buckets{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
 </style></head><body><div class="page">
@@ -95,8 +103,26 @@ ul{margin:8px 0 0 19px}li{margin-bottom:5px;color:var(--tx3)}
 
 <!-- 0 -->
 <div class="card">
-<div class="ch"><span class="n c1">0</span><b>먼저, 화면 위쪽 메뉴가 늘었습니다</b></div>
+<div class="ch"><span class="n c3">＊</span><b>바뀐 곳 · 경로 한눈에</b></div>
 <div class="cb">
+<table class="ptbl">
+<tr><th style="width:20%">바뀐 것</th><th>어디로 가면 되나</th></tr>
+<tr><td>새 메뉴 2개</td><td>화면 맨 위 메뉴줄에 <b>일정</b> <b>활동</b> 추가 · <b>내 KR</b><i>→</i><b>내 업무</b> 이름 변경</td></tr>
+<tr><td>진행상황 보기</td><td><b>사업별</b><i>→</i>사업 선택<i>→</i>KR 줄의 <b>진행상황</b> &nbsp;|&nbsp; 또는 <b>KR 클릭</b><i>→</i><b>진행상황 보기</b></td></tr>
+<tr><td>하위 업무 표</td><td><b>사업별</b><i>→</i>KR 줄의 <b>업무</b> &nbsp;|&nbsp; 또는 <b>KR 클릭</b><i>→</i><b>업무 관리 열기</b></td></tr>
+<tr><td>마감일 입력</td><td><b>KR 클릭</b><i>→</i><b>시작일 / 마감일</b><i>→</i><b>저장</b></td></tr>
+<tr><td>확신도 (신호등)</td><td><b>KR 클릭</b><i>→</i><b>확신도</b> &nbsp;|&nbsp; 또는 <b>진행상황</b><i>→</i><b>기록 남기기</b> 안에서</td></tr>
+<tr><td>코멘트 · @이름</td><td><b>KR 클릭</b><i>→</i>팝업 <b>맨 아래 코멘트</b></td></tr>
+<tr><td>내 업무 5구간</td><td>상단 메뉴 <b>내 업무</b></td></tr>
+<tr><td>분기 타임라인</td><td>상단 메뉴 <b>일정</b></td></tr>
+<tr><td>변경 피드 · 알림</td><td>상단 메뉴 <b>활동</b> (빨간 숫자 = 안 읽은 소식)</td></tr>
+<tr><td>대시보드 정리</td><td>상단 메뉴 <b>대시보드</b> — 지연·이번 주·정체·기한 미설정 4칸</td></tr>
+</table>
+</div></div>
+
+<div class="card">
+<div class="ch"><span class="n c1">0</span><b>먼저, 화면 위쪽 메뉴가 늘었습니다</b></div>
+<div class="cb"><div class="path"><span class="lab">경로</span><div class="go">로그인 후 <b>화면 맨 위 메뉴줄</b> — 어느 화면에서나 보입니다</div></div>
 <div class="fig">
 <div class="tabbar"><div class="tb">대시보드</div><div class="tb on">내 업무</div><div class="tb">사업별</div><div class="tb new">일정</div><div class="tb new">활동<span class="rb">3</span></div><div class="tb">사용자</div><div class="tb">설정</div></div>
 <div class="figcap">'내 KR' 이름이 <b>내 업무</b>로 바뀌고, <b>일정</b>과 <b>활동</b> 두 개가 새로 생겼습니다</div>
@@ -112,7 +138,7 @@ ul{margin:8px 0 0 19px}li{margin-bottom:5px;color:var(--tx3)}
 <!-- 1 -->
 <div class="card">
 <div class="ch"><span class="n c2">1</span><b>KR 하나에 버튼 두 개가 붙습니다</b></div>
-<div class="cb">
+<div class="cb"><div class="path"><span class="lab">경로</span><div class="go"><b>사업별</b><i>→</i><b>사업 하나 선택</b><i>→</i><b>KR 목록의 각 줄 오른쪽</b> &nbsp;또는&nbsp; <b>내 업무</b><i>→</i><b>목록의 각 줄</b></div></div>
 <div class="big">지금은 KR을 누르면 <b>수정 화면</b>만 열립니다. 이제 KR 줄에 버튼이 두 개 붙어서, 하고 싶은 일에 맞게 골라 들어갑니다.</div>
 <div class="fig">
 <div class="krrow"><span class="dot"></span><span class="nm">매체 대행 마크업(수임료) 10% → 15% 인상</span><span class="pill task">업무 1/4</span><span class="pill prog">진행상황 5</span><span class="pill soon">D-52</span></div>
@@ -129,7 +155,7 @@ ul{margin:8px 0 0 19px}li{margin-bottom:5px;color:var(--tx3)}
 <!-- 2 진행상황 -->
 <div class="card">
 <div class="ch"><span class="n c2">2</span><b>진행상황 화면 — 이번 개선의 핵심</b></div>
-<div class="cb">
+<div class="cb"><div class="path"><span class="lab">경로</span><div class="go"><b>사업별</b><i>→</i><b>KR 줄의 보라색 진행상황 버튼</b><br style="line-height:2">또는 <b>KR 클릭</b><i>→</i><b>팝업 아래쪽 진행상황 보기 버튼</b></div></div>
 <div class="big">담당자가 <b>짧은 기록 한 줄</b>을 남기면, 그걸 모아서 <b>그래프와 요약이 저절로</b> 만들어집니다. 대표님도, 다른 담당자도 이 화면 하나만 보면 됩니다.</div>
 
 <div class="ba">
@@ -201,7 +227,7 @@ ul{margin:8px 0 0 19px}li{margin-bottom:5px;color:var(--tx3)}
 <!-- 3 업무 -->
 <div class="card">
 <div class="ch"><span class="n c1">3</span><b>하위 업무 — 실무를 표로 적습니다</b></div>
-<div class="cb">
+<div class="cb"><div class="path"><span class="lab">경로</span><div class="go"><b>사업별</b><i>→</i><b>KR 줄의 파란색 업무 버튼</b><br style="line-height:2">또는 <b>KR 클릭</b><i>→</i><b>팝업 아래쪽 업무 관리 열기 버튼</b></div></div>
 <div class="big">KR은 <b>"수수료 15%로 올리기"</b> 같은 목표입니다. 그걸 하려고 실제로 하는 일(어떤 광고주와 언제 무엇을)은 적을 데가 없었습니다. 이제 KR 아래에 <b>표</b>가 생깁니다.</div>
 <div class="fig">
 <table style="font-size:12.5px">
@@ -227,7 +253,7 @@ ul{margin:8px 0 0 19px}li{margin-bottom:5px;color:var(--tx3)}
 <!-- 4 내 업무 -->
 <div class="card">
 <div class="ch"><span class="n c4">4</span><b>내 업무 — 급한 순서로 자동 정리</b></div>
-<div class="cb">
+<div class="cb"><div class="path"><span class="lab">경로</span><div class="go"><b>상단 메뉴 내 업무</b> &nbsp;·&nbsp; 마감일 입력은 <b>KR 클릭</b><i>→</i><b>시작일 / 마감일 칸</b><i>→</i><b>저장</b></div></div>
 <div class="big">전에는 담당 KR이 그냥 쭉 나열됐습니다. 이제 <b>마감일과 마지막 기록</b>을 보고 컴퓨터가 알아서 5칸으로 나눠줍니다.</div>
 <div class="fig">
 <div class="buckets">
@@ -245,7 +271,7 @@ ul{margin:8px 0 0 19px}li{margin-bottom:5px;color:var(--tx3)}
 <!-- 5 일정 -->
 <div class="card">
 <div class="ch"><span class="n c3">5</span><b>일정 — 이번 분기를 한 화면에</b></div>
-<div class="cb">
+<div class="cb"><div class="path"><span class="lab">경로</span><div class="go"><b>상단 메뉴 일정</b> &nbsp;·&nbsp; 분기 이동은 화면 위 <b>◀ 이전</b> / <b>다음 ▶</b></div></div>
 <div class="fig">
 <svg viewBox="0 0 780 200" width="100%" height="200" style="display:block">
 <rect x="0" y="0" width="780" height="26" fill="#FAFAFA" stroke="#E4E4E7"/>
@@ -271,7 +297,7 @@ ul{margin:8px 0 0 19px}li{margin-bottom:5px;color:var(--tx3)}
 <!-- 6 활동 -->
 <div class="card">
 <div class="ch"><span class="n c5">6</span><b>활동 — 누가 무엇을 바꿨는지</b></div>
-<div class="cb">
+<div class="cb"><div class="path"><span class="lab">경로</span><div class="go"><b>상단 메뉴 활동</b> &nbsp;·&nbsp; 코멘트 작성은 <b>KR 클릭</b><i>→</i><b>팝업 맨 아래 코멘트 칸</b></div></div>
 <div class="fig" style="padding:0;overflow:hidden">
 <div style="background:#FAFAFA;border-bottom:1px solid var(--bd);padding:9px 15px;font-size:12.5px;color:var(--tx3)">최근 7일 업데이트 <b>5명 / 36명</b> (14%) · 지연 <b style="color:var(--dtx)">2건</b> · 정체 <b style="color:#3730A3">5건</b></div>
 <div style="padding:13px 15px">
@@ -300,7 +326,7 @@ KR 안 코멘트에 <span class="kbd">@박근정</span> 처럼 적으면, 그분
 <!-- 7 대시보드 -->
 <div class="card">
 <div class="ch"><span class="n c1">7</span><b>대시보드는 오히려 더 단순해집니다</b></div>
-<div class="cb">
+<div class="cb"><div class="path"><span class="lab">경로</span><div class="go"><b>상단 메뉴 대시보드</b></div></div>
 <div class="ba">
 <div class="bx bef"><div class="t">한때 넣었다가 뺀 것</div>
 · 담당자별 KR 부하 → <b>뺐습니다</b><br><span style="font-size:12.5px">사람마다 15건씩 똑같이 나와서 아무 정보가 없었습니다. 실제 일의 양이 아니라 소속을 세고 있었습니다.</span><br><br>
@@ -316,7 +342,7 @@ KR 안 코멘트에 <span class="kbd">@박근정</span> 처럼 적으면, 그분
 <!-- 8 테스트 -->
 <div class="card">
 <div class="ch"><span class="n c2">8</span><b>이렇게 한번 해보세요 (5분)</b></div>
-<div class="cb">
+<div class="cb"><div class="path"><span class="lab">경로</span><div class="go"><b>https://7dayis01.github.io/okr/test.html</b> &nbsp;·&nbsp; 비밀번호 전원 <b>1234</b></div></div>
 <div class="steps">
 <div class="step"><div class="sn">1</div><div class="st2">테스트 주소 접속 → 본인 이름 → 비밀번호 <span class="kbd">1234</span></div></div>
 <div class="step"><div class="sn">2</div><div class="st2"><b>내 업무</b>를 열어봅니다. 대부분 <b>기한 미설정</b>이면 정상입니다.</div></div>
