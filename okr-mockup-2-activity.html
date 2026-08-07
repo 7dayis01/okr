@@ -1,0 +1,206 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>목업 2안 · 활동·알림</title>
+<style>
+:root{--bg:#fff;--bgs:#FAFAFA;--bgh:#F4F4F5;--bd:#E4E4E7;--bdt:#D4D4D8;--tx:#09090B;--tx3:#52525B;--tx4:#71717A;--tx5:#A1A1AA;--ac:#2563EB;--acbg:#EFF6FF;--s:#10B981;--sbg:#ECFDF5;--stx:#065F46;--w:#F59E0B;--wbg:#FFFBEB;--wtx:#92400E;--d:#EF4444;--dbg:#FEF2F2;--dtx:#991B1B;--fm:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:#F4F4F5;color:var(--tx);line-height:1.6;padding:26px;font-size:14px}
+.page{max-width:1040px;margin:0 auto}
+h1{font-size:22px;letter-spacing:-.3px}
+.lead{font-size:13px;color:var(--tx4);margin:4px 0 18px}
+.mock{background:#fff;border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:22px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.mh{padding:13px 18px;border-bottom:1px solid var(--bd);background:var(--bgs);display:flex;align-items:center;gap:9px}
+.mh b{font-size:14px}.mh .num{width:21px;height:21px;border-radius:50%;background:#7C3AED;color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.mh .tagN{background:#EDE9FE;color:#5B21B6;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700}
+.mb{padding:18px}
+.tabs{display:flex;gap:3px;border-bottom:1px solid var(--bd);padding:0 18px;background:#fff}
+.tab{padding:11px 14px;font-size:13px;color:var(--tx4);border-bottom:2px solid transparent;position:relative}
+.tab.on{color:var(--ac);border-bottom-color:var(--ac);font-weight:700}
+.bdg{background:#EF4444;color:#fff;font-size:9.5px;font-family:var(--fm);border-radius:20px;padding:1px 6px;margin-left:5px;vertical-align:middle;font-weight:700}
+.seg{display:inline-flex;gap:4px;background:var(--bgh);border-radius:9px;padding:3px;margin-bottom:14px}
+.seg div{font-size:12px;padding:5px 13px;border-radius:7px;color:var(--tx4)}
+.seg div.on{background:#fff;color:var(--tx);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.07)}
+/* feed */
+.day{font-size:11px;font-family:var(--fm);color:var(--tx5);margin:14px 0 8px;display:flex;align-items:center;gap:8px}
+.day::after{content:'';flex:1;height:1px;background:var(--bd)}
+.day:first-child{margin-top:0}
+.fi{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid #F4F4F5;align-items:flex-start}
+.fi.unread{background:#FAFBFF;border-left:2px solid var(--ac);padding-left:11px;margin-left:-13px;border-radius:0 6px 6px 0}
+.av{width:28px;height:28px;border-radius:50%;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
+.fc{flex:1;min-width:0}
+.fc .l1{font-size:13px;line-height:1.5}
+.fc .l1 b{font-weight:700}
+.fc .l1 .kr{color:var(--ac);font-weight:600}
+.chg{font-family:var(--fm);font-size:11.5px;background:var(--bgh);border-radius:5px;padding:1px 6px;margin:0 2px}
+.chg.up{background:var(--sbg);color:var(--stx)}
+.memo{font-size:12px;color:var(--tx3);background:var(--bgs);border:1px solid var(--bd);border-radius:8px;padding:7px 10px;margin-top:6px;line-height:1.5}
+.tm{font-size:10.5px;color:var(--tx5);font-family:var(--fm);flex-shrink:0;padding-top:3px}
+.mine{font-size:9.5px;background:#EFF6FF;color:#1D4ED8;border-radius:20px;padding:1px 6px;margin-left:5px;font-weight:700}
+.note{background:#F8FAFC;border-left:3px solid #7C3AED;padding:10px 13px;font-size:12.5px;color:var(--tx3);border-radius:0 8px 8px 0;margin-top:14px;line-height:1.65}
+.note b{color:var(--tx)}
+.warnbox{background:var(--wbg);border:1px solid #FDE68A;color:var(--wtx);border-radius:9px;padding:10px 13px;font-size:12.5px;line-height:1.6}
+/* kr card */
+.card{border:1px solid var(--bd);border-radius:11px;padding:14px 16px}
+.card.idle{border-color:#C7D2FE;background:#FBFCFF}
+.ctop{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.ctop .nm{font-size:14px;font-weight:700;flex:1}
+.flag{font-family:var(--fm);font-size:10px;font-weight:700;border-radius:20px;padding:2px 8px}
+.flag.idle{background:#EEF2FF;color:#3730A3}
+.flag.late{background:var(--dbg);color:var(--dtx)}
+.bar{height:6px;background:var(--bgh);border-radius:3px;overflow:hidden;margin:8px 0}
+.bar i{display:block;height:6px;border-radius:3px}
+/* comment */
+.cm{display:flex;gap:9px;padding:9px 0;border-top:1px solid #F4F4F5}
+.cm .b{flex:1}
+.cm .who{font-size:12px;font-weight:700}.cm .who span{font-weight:400;color:var(--tx5);font-size:10.5px;font-family:var(--fm);margin-left:6px}
+.cm .tx{font-size:12.5px;color:var(--tx3);margin-top:1px}
+.men{background:#EFF6FF;color:#1D4ED8;border-radius:4px;padding:0 4px;font-weight:600}
+.cinp{display:flex;gap:8px;margin-top:10px;align-items:center}
+.cinp .f{flex:1;height:34px;border:1px solid var(--bdt);border-radius:8px;display:flex;align-items:center;padding:0 11px;font-size:12.5px;color:var(--tx5)}
+.cinp .btn{height:34px;padding:0 15px;border-radius:8px;background:var(--tx);color:#fff;font-size:12.5px;display:flex;align-items:center;font-weight:600}
+/* signal */
+.sig{display:flex;gap:7px}
+.sig div{flex:1;border:1px solid var(--bd);border-radius:9px;padding:9px 4px;text-align:center;font-size:12px;color:var(--tx4)}
+.sig div.on{border-width:2px}
+.sig div.g.on{border-color:var(--s);background:var(--sbg);color:var(--stx);font-weight:700}
+.sig div.y.on{border-color:var(--w);background:var(--wbg);color:var(--wtx);font-weight:700}
+.sig div.r.on{border-color:var(--d);background:var(--dbg);color:var(--dtx);font-weight:700}
+/* load */
+.ld{display:flex;align-items:center;gap:11px;padding:7px 0;border-bottom:1px solid #F4F4F5}
+.ld .n{width:74px;font-size:12.5px;flex-shrink:0}
+.ld .t{flex:1;height:16px;background:var(--bgh);border-radius:4px;overflow:hidden}
+.ld .t i{display:block;height:16px;border-radius:4px}
+.ld .v{width:74px;text-align:right;font-family:var(--fm);font-size:11.5px;color:var(--tx4);flex-shrink:0}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{border:1px solid var(--bd);padding:9px 11px;text-align:left}
+th{background:var(--bgs);font-weight:700;color:var(--tx3)}
+td.c{text-align:center;font-weight:700}
+.foot{font-size:11px;color:var(--tx5);text-align:center;margin:6px 0 30px}
+</style></head><body><div class="page">
+
+<h1>목업 2안 — 활동 · 알림 <span style="font-size:12px;color:var(--tx5);font-weight:400">(1안 위에 얹는 2단계)</span></h1>
+<div class="lead">이미 저장되고 있는 <b>변경 이력</b>을 전사 피드로 꺼내고, 마지막 접속 이후 새 소식에 <b>빨간 배지</b>를 띄웁니다. 여기에 <b>코멘트·@언급</b>과 <b>확신도 신호등</b>을 더해 "숫자 뒤의 상황"을 공유합니다. — 기준일 2026.08.07</div>
+
+<!-- 1 -->
+<div class="mock">
+<div class="mh"><span class="num">1</span><b>탭 구성 — '활동' 탭 신설 + 안 읽은 배지</b><span class="tagN">신규</span></div>
+<div class="tabs">
+<div class="tab">대시보드</div><div class="tab">내 업무</div><div class="tab">사업별</div><div class="tab">일정</div><div class="tab on">활동<span class="bdg">5</span></div><div class="tab">사용자</div><div class="tab">설정</div>
+</div>
+<div class="mb" style="padding-top:14px">
+<div class="warnbox">⚠️ <b>먼저 알아두실 점 — 알림의 한계</b><br>
+지금 구조(무료 정적 호스팅 + Firebase)에서는 <b>앱에 들어왔을 때 배지로 보여주는 것</b>까지가 가능합니다. 앱이 꺼져 있는데 카톡·이메일·휴대폰 푸시를 보내는 건 <b>서버와 유료 플랜</b>이 필요해 이번 범위에서는 제외했습니다.</div>
+</div></div>
+
+<!-- 2 -->
+<div class="mock">
+<div class="mh"><span class="num">2</span><b>'활동' 탭 — 전사 변경 피드</b><span style="font-size:11px;color:var(--tx5);margin-left:auto">곽경훈 님 화면 예시</span></div>
+<div class="mb">
+<div class="seg"><div class="on">전체</div><div>내 관련 <span style="font-family:var(--fm);font-size:10px">3</span></div><div>우리 사업부</div></div>
+
+<div class="day">오늘 · 8월 7일 (금) — 마지막 접속 이후 <b style="color:#EF4444">새 소식 5건</b></div>
+
+<div class="fi unread"><div class="av" style="background:#059669">병</div><div class="fc">
+<div class="l1"><b>박병훈</b>님이 <span class="kr">신규 3PL 고객사 5개사 계약</span> 을 <span class="chg">2</span>→<span class="chg up">3 사</span> 로 업데이트<span class="mine">내 관련</span></div>
+<div class="memo">💬 A사 계약 완료, B사는 다음 주 화요일 최종 미팅. 목표 5개사는 9월 내 가능해 보입니다.</div>
+</div><div class="tm">14:22</div></div>
+
+<div class="fi unread"><div class="av" style="background:#84CC16">근</div><div class="fc">
+<div class="l1"><b>박근정</b>님이 <span class="kr">[KR2] 콘텐츠 자동화</span> 에 코멘트를 남김 — <span class="men">@곽경훈</span> 님 언급<span class="mine">내 관련</span></div>
+<div class="memo">💬 @곽경훈 워드프레스 계정 권한이 아직 안 나와서 D-2인데 대기 중입니다. 확인 부탁드려요.</div>
+</div><div class="tm">11:40</div></div>
+
+<div class="fi unread"><div class="av" style="background:#F97316">수</div><div class="fc">
+<div class="l1"><b>이수인</b>님이 <span class="kr">매체관리 수임료 150%</span> 의 확신도를 <span class="chg">순조</span>→<span class="chg" style="background:var(--wbg);color:var(--wtx)">주의</span> 로 변경</div>
+<div class="memo">💬 수치는 82%로 좋아 보이지만 8월 신규 유입이 줄어 하반기 유지가 불확실합니다.</div>
+</div><div class="tm">10:15</div></div>
+
+<div class="fi unread"><div class="av" style="background:#A1A1AA">시</div><div class="fc">
+<div class="l1"><b>시스템</b>이 <span class="kr">업무 효율화 40% 달성</span> 을 <b style="color:#3730A3">정체(28일 미업데이트)</b> 로 표시</div>
+</div><div class="tm">09:00</div></div>
+
+<div class="fi unread"><div class="av" style="background:#A1A1AA">시</div><div class="fc">
+<div class="l1"><b>시스템</b>이 <span class="kr">[KR1] 워드프레스 GEO 작업</span> 을 <b style="color:#991B1B">지연(마감 7일 경과)</b> 로 표시<span class="mine">내 관련</span></div>
+</div><div class="tm">09:00</div></div>
+
+<div class="day">어제 · 8월 6일 (목)</div>
+
+<div class="fi"><div class="av" style="background:#0EA5E9">유</div><div class="fc">
+<div class="l1"><b>이유란</b>님이 <span class="kr">[채널] 판매 채널 11개 플랫폼 풀가동</span> 을 <span class="chg">6</span>→<span class="chg up">8 개</span> 로 업데이트</div>
+</div><div class="tm">17:03</div></div>
+
+<div class="fi"><div class="av" style="background:#8B5CF6">지</div><div class="fc">
+<div class="l1"><b>장지욱</b>님이 <span class="kr">[KR4] 업무 자동화 및 표준화</span> 의 마감일을 <span class="chg">09.15</span>→<span class="chg">09.30</span> 으로 변경</div>
+<div class="memo">💬 개발 일정이 밀려 2주 연장합니다.</div>
+</div><div class="tm">15:48</div></div>
+
+<div class="note"><b>기록되는 항목</b> — 현재값·진척 변경 / 마감일 변경 / 코멘트·언급 / 확신도 변경 / 시스템 자동 판정(지연·정체) / KR 추가·삭제.<br>
+<b>지금도 이미 저장되고 있습니다.</b> 현재값 변경 이력은 이미 쌓이는 중이라, 이걸 화면으로 꺼내는 작업이 핵심입니다.</div>
+</div></div>
+
+<!-- 3 -->
+<div class="mock">
+<div class="mh"><span class="num">3</span><b>KR 상세 — 정체 플래그 · 코멘트 · 확신도</b></div>
+<div class="mb">
+<div class="card idle">
+<div class="ctop"><div class="nm">업무 효율화 40% 달성</div><span class="flag idle">🔵 정체 28일</span><span class="flag late" style="background:var(--bgh);color:var(--tx4)">D-54</span></div>
+<div class="bar"><i style="width:30%;background:#818CF8"></i></div>
+<div style="font-size:11.5px;color:var(--tx5);font-family:var(--fm)">30% · 마지막 업데이트 2026.07.10 · 담당 박근정</div>
+
+<div style="margin-top:16px"><div style="font-size:11.5px;font-weight:700;color:var(--tx3);margin-bottom:5px">담당자 확신도 (숫자로 안 잡히는 위험)</div>
+<div class="sig"><div class="g">🟢 순조</div><div class="y on">🟡 주의</div><div class="r">🔴 위험</div></div></div>
+
+<div style="margin-top:18px"><div style="font-size:11.5px;font-weight:700;color:var(--tx3);margin-bottom:2px">코멘트 3</div>
+<div class="cm"><div class="av" style="background:#84CC16;width:24px;height:24px;font-size:10px">근</div><div class="b"><div class="who">박근정 <span>08.07 11:40</span></div><div class="tx"><span class="men">@곽경훈</span> 프로세스 규격화 문서는 끝났는데 수치 기준을 못 정해서 멈춰 있습니다.</div></div></div>
+<div class="cm"><div class="av" style="background:#06B6D4;width:24px;height:24px;font-size:10px">경</div><div class="b"><div class="who">곽경훈 <span>08.07 13:02</span></div><div class="tx">"투입 공수 절감률"로 잡으시죠. 월 50시간 → 30시간이면 40%입니다.</div></div></div>
+<div class="cm"><div class="av" style="background:#84CC16;width:24px;height:24px;font-size:10px">근</div><div class="b"><div class="who">박근정 <span>08.07 13:20</span></div><div class="tx">좋습니다. 측정 방식 '숫자형'으로 바꾸고 다음 주 월요일에 첫 값 입력하겠습니다.</div></div></div>
+<div class="cinp"><div class="f">코멘트 입력… (@이름 으로 담당자를 부를 수 있습니다)</div><div class="btn">등록</div></div>
+</div></div>
+
+<div class="note"><b>왜 코멘트인가</b> — 지금은 메모 한 칸에 여러 사람의 이야기가 덮어써집니다. 코멘트로 쌓으면 <b>"왜 멈춰 있었는지"가 기록으로 남고</b>, @언급된 사람에게는 위의 활동 배지가 뜹니다.</div>
+</div></div>
+
+<!-- 4 -->
+<div class="mock">
+<div class="mh"><span class="num">4</span><b>대시보드 상단 — 주간 업데이트율 · 담당자별 부하</b></div>
+<div class="mb">
+<div style="display:flex;gap:16px;align-items:flex-start">
+<div style="flex:1">
+<div style="font-size:11.5px;font-weight:700;color:var(--tx3);margin-bottom:7px">이번 주 체크인 현황 (매주 금요일 기준)</div>
+<div style="border:1px solid var(--bd);border-radius:11px;padding:14px 16px">
+<div style="display:flex;align-items:baseline;gap:8px"><div style="font-size:30px;font-weight:800;font-family:var(--fm);color:var(--ac)">61%</div><div style="font-size:12.5px;color:var(--tx4)">36명 중 <b>22명</b>이 업데이트</div></div>
+<div class="bar" style="height:8px;margin:11px 0 8px"><i style="width:61%;background:#2563EB;height:8px"></i></div>
+<div style="font-size:11.5px;color:var(--tx4)">미업데이트 14명 — <span style="color:var(--dtx)">이레이즈 6 · 익스 4 · 푸드 3 · 로지스 1</span></div>
+</div>
+<div class="note" style="margin-top:11px;font-size:12px">도구보다 <b>리듬</b>이 성패를 가릅니다. 이 숫자 하나가 "금요일엔 값을 넣는다"는 습관을 만듭니다.</div>
+</div>
+<div style="flex:1">
+<div style="font-size:11.5px;font-weight:700;color:var(--tx3);margin-bottom:7px">담당자별 KR 부하 (상위 6명)</div>
+<div style="border:1px solid var(--bd);border-radius:11px;padding:12px 16px">
+<div class="ld"><div class="n">박근정</div><div class="t"><i style="width:100%;background:#EF4444"></i></div><div class="v">8건 · 지연2</div></div>
+<div class="ld"><div class="n">이수인</div><div class="t"><i style="width:75%;background:#F59E0B"></i></div><div class="v">6건 · 지연1</div></div>
+<div class="ld"><div class="n">장지욱</div><div class="t"><i style="width:50%;background:#10B981"></i></div><div class="v">4건</div></div>
+<div class="ld"><div class="n">한태영</div><div class="t"><i style="width:37%;background:#10B981"></i></div><div class="v">3건</div></div>
+<div class="ld"><div class="n">김경현</div><div class="t"><i style="width:25%;background:#10B981"></i></div><div class="v">2건</div></div>
+<div class="ld" style="border-bottom:none"><div class="n">서솔이</div><div class="t"><i style="width:0%;background:#E4E4E7"></i></div><div class="v" style="color:var(--tx5)">0건</div></div>
+</div>
+<div class="note" style="margin-top:11px;font-size:12px">한 사람이 8건을 지고 있고 옆자리는 0건인 상황은 <b>지금은 확인할 방법이 없습니다.</b> 분배 조정의 근거가 됩니다.</div>
+</div>
+</div>
+</div></div>
+
+<!-- 5 -->
+<div class="mock">
+<div class="mh"><span class="num">5</span><b>1안 · 2안 정리</b></div>
+<div class="mb">
+<table>
+<tr><th style="width:15%">구분</th><th style="width:42%">1안 — 일정 골격</th><th>2안 — 활동·알림</th></tr>
+<tr><td><b>핵심</b></td><td>마감일·D-day·지연/정체 4구간 분류, '일정' 탭(타임라인)</td><td>변경 피드·안 읽은 배지, 코멘트·@언급, 확신도, 업데이트율·부하</td></tr>
+<tr><td><b>해결</b></td><td>"내가 뭘 언제까지 해야 하나"</td><td>"남들은 지금 뭘 하고 있나 / 왜 멈췄나"</td></tr>
+<tr><td><b>선행</b></td><td class="c" style="color:var(--stx)">없음 — 바로 가능</td><td class="c" style="color:var(--wtx)">1안 필요 (지연·정체 판정에 마감일이 있어야 함)</td></tr>
+<tr><td><b>기존 데이터</b></td><td class="c" style="color:var(--stx)">영향 없음</td><td class="c" style="color:var(--stx)">영향 없음</td></tr>
+<tr><td><b>추천</b></td><td class="c" style="color:var(--ac)">먼저 적용 → 2주 사용</td><td class="c" style="color:var(--tx4)">반응 확인 후 적용</td></tr>
+</table>
+<div class="note" style="border-color:var(--d);background:#FEF7F7"><b>솔직한 우려</b> — 두 안을 한꺼번에 켜면 화면이 갑자기 복잡해져 직원들이 오히려 안 씁니다. 1안으로 "마감일을 넣는다"는 습관이 붙은 뒤 2안을 켜는 순서를 권합니다.</div>
+</div></div>
+
+<div class="foot">※ 목업입니다. 실제 데이터는 전혀 변경되지 않았고, 화면 구성안만 보여드립니다. — 2026.08.07</div>
+</div></body></html>
