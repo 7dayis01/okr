@@ -1,0 +1,337 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OKR 개선안 안내 — 그림으로 보는 새 기능</title>
+<style>
+:root{--bd:#E4E4E7;--bdt:#D4D4D8;--tx:#09090B;--tx3:#52525B;--tx4:#71717A;--tx5:#A1A1AA;--bgs:#FAFAFA;--bgh:#F4F4F5;--ac:#2563EB;--ach:#1D4ED8;--acbg:#EFF6FF;--s:#10B981;--sbg:#ECFDF5;--stx:#065F46;--w:#F59E0B;--wbg:#FFFBEB;--wtx:#92400E;--d:#EF4444;--dbg:#FEF2F2;--dtx:#991B1B;--pp:#7C3AED;--ppbg:#F5F3FF;--fm:ui-monospace,'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:#F4F4F5;color:var(--tx);line-height:1.7;padding:22px 18px 70px;font-size:14.5px}
+.page{max-width:1000px;margin:0 auto}
+.hero{background:#fff;border:1px solid var(--bd);border-radius:18px;padding:28px 30px;margin-bottom:20px;text-align:center}
+h1{font-size:27px;letter-spacing:-.5px}
+.hs{font-size:14px;color:var(--tx4);margin-top:8px}
+.url{display:inline-flex;align-items:center;gap:9px;background:#111827;color:#fff;border-radius:10px;padding:11px 18px;font-family:var(--fm);font-size:13.5px;margin-top:16px;text-decoration:none}
+.url b{background:#374151;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700}
+.card{background:#fff;border:1px solid var(--bd);border-radius:16px;margin-bottom:20px;overflow:hidden}
+.ch{padding:15px 22px;border-bottom:1px solid var(--bd);background:var(--bgs);display:flex;align-items:center;gap:10px}
+.ch b{font-size:16.5px}
+.n{width:26px;height:26px;border-radius:9px;color:#fff;font-size:13px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:800}
+.c1{background:var(--ac)}.c2{background:var(--pp)}.c3{background:#0891B2}.c4{background:#DB2777}.c5{background:#65A30D}
+.cb{padding:20px 22px}
+.big{font-size:15px;color:var(--tx3);margin-bottom:16px;line-height:1.75}
+.big b{color:var(--tx)}
+/* 비포애프터 */
+.ba{display:grid;grid-template-columns:1fr 46px 1fr;gap:0;align-items:center;margin:14px 0}
+.bx{border-radius:13px;padding:16px 18px;font-size:13.5px;line-height:1.7;min-height:100%}
+.bef{background:#FAFAFA;border:1px solid var(--bd);color:var(--tx3)}
+.aft{background:var(--acbg);border:1px solid #BFDBFE;color:#1E3A8A}
+.bx .t{font-size:11.5px;font-weight:800;letter-spacing:.5px;margin-bottom:7px;opacity:.75}
+.arw{text-align:center;font-size:22px;color:var(--tx5)}
+/* 그림 요소 */
+.fig{border:1px solid var(--bd);border-radius:13px;padding:16px;background:#fff;margin:14px 0}
+.figcap{font-size:12px;color:var(--tx5);text-align:center;margin-top:9px}
+.tabbar{display:flex;gap:2px;border-bottom:2px solid var(--bd);padding:0 6px;flex-wrap:wrap}
+.tb{padding:9px 13px;font-size:13px;color:var(--tx4);border-bottom:3px solid transparent;margin-bottom:-2px}
+.tb.on{color:var(--ac);border-bottom-color:var(--ac);font-weight:800}
+.tb.new{color:var(--pp);font-weight:800}
+.tb.new::after{content:'NEW';font-size:8px;background:var(--pp);color:#fff;border-radius:8px;padding:1px 5px;margin-left:5px;vertical-align:top}
+.tb .rb{background:var(--d);color:#fff;font-size:9.5px;border-radius:20px;padding:1px 6px;margin-left:5px;font-weight:800}
+.krrow{border:1px solid var(--bd);border-radius:11px;padding:12px 15px;display:flex;align-items:center;gap:9px;font-size:13.5px;background:#fff;margin-top:10px}
+.krrow .dot{width:9px;height:9px;border-radius:50%;background:#DB2777;flex-shrink:0}
+.krrow .nm{flex:1;font-weight:600}
+.pill{font-family:var(--fm);font-size:10.5px;border-radius:20px;padding:3px 9px;border:1px solid var(--bd);color:var(--tx4);white-space:nowrap}
+.pill.task{background:var(--acbg);color:var(--ach);border-color:#BFDBFE;font-weight:700}
+.pill.prog{background:var(--ppbg);color:#6D28D9;border-color:#DDD6FE;font-weight:700}
+.pill.late{background:var(--dbg);color:var(--dtx);border-color:#FECACA;font-weight:700}
+.pill.soon{background:var(--wbg);color:var(--wtx);border-color:#FDE68A;font-weight:700}
+.pill.idle{background:#EEF2FF;color:#3730A3;border-color:#C7D2FE;font-weight:700}
+.pill.ok{background:var(--sbg);color:var(--stx);border-color:#A7F3D0;font-weight:700}
+.pill.none{background:var(--bgh);color:var(--tx5)}
+/* 4구간 그림 */
+.buckets{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.bk{border-radius:12px;padding:13px 11px;text-align:center;border:2px solid}
+.bk .ico{font-size:20px;line-height:1}
+.bk .ti{font-size:13px;font-weight:800;margin:5px 0 3px}
+.bk .de{font-size:11.5px;line-height:1.5}
+.bk.l{border-color:#FECACA;background:var(--dbg);color:var(--dtx)}
+.bk.s{border-color:#FDE68A;background:var(--wbg);color:var(--wtx)}
+.bk.i{border-color:#C7D2FE;background:#EEF2FF;color:#3730A3}
+.bk.o{border-color:#A7F3D0;background:var(--sbg);color:var(--stx)}
+.bk.n{border-color:var(--bd);background:var(--bgs);color:var(--tx4)}
+/* 스텝 */
+.steps{counter-reset:st}
+.step{display:flex;gap:14px;padding:13px 0;border-bottom:1px dashed var(--bd)}
+.step:last-child{border-bottom:none}
+.sn{width:26px;height:26px;border-radius:9px;background:var(--acbg);color:var(--ach);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--fm)}
+.st2{flex:1;font-size:14px}
+.kbd{background:var(--bgh);border:1px solid var(--bdt);border-radius:6px;padding:2px 8px;font-size:12.5px;font-family:var(--fm)}
+.note{border-left:4px solid var(--ac);background:#F8FAFC;padding:13px 16px;font-size:13.5px;color:var(--tx3);border-radius:0 10px 10px 0;margin-top:15px;line-height:1.7}
+.note b{color:var(--tx)}
+.note.g{border-color:var(--s);background:#F5FEFA}
+.note.w{border-color:var(--w);background:var(--wbg);color:var(--wtx)}
+.note.w b{color:var(--wtx)}
+.note.d{border-color:var(--d);background:#FEF7F7}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{border:1px solid var(--bd);padding:11px 13px;text-align:left;vertical-align:top}
+th{background:var(--bgs);font-weight:800;color:var(--tx3);font-size:12.5px}
+td.c{text-align:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini{border:1px solid var(--bd);border-radius:12px;padding:15px 17px;font-size:13.5px;line-height:1.7}
+.mini h4{font-size:14px;margin-bottom:8px;display:flex;align-items:center;gap:7px}
+ul{margin:8px 0 0 19px}li{margin-bottom:5px;color:var(--tx3)}
+.foot{font-size:12px;color:var(--tx5);text-align:center;margin-top:20px;line-height:1.8}
+@media(max-width:800px){.ba{grid-template-columns:1fr;gap:8px}.arw{transform:rotate(90deg)}.buckets{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}}
+</style></head><body><div class="page">
+
+<div class="hero">
+<h1>OKR 이렇게 바뀝니다</h1>
+<div class="hs">목표 숫자만 보던 도구에서 → <b>무슨 일을 하고 있고, 언제까지고, 지금 어떤 상황인지</b> 함께 보는 도구로.</div>
+<a class="url" href="https://7dayis01.github.io/okr/test.html">https://7dayis01.github.io/okr/test.html <b>테스트</b></a>
+<div class="note w" style="text-align:left;margin-top:18px">
+<b>먼저 알아두실 점</b><br>
+· 여기는 <b>연습장</b>입니다. 실제 OKR과 데이터가 <b>완전히 따로</b>라 무엇을 눌러도 실제 값은 안 바뀝니다.<br>
+· 비밀번호는 전부 <span class="kbd">1234</span> 입니다. 다른 분 계정으로 들어가 보셔도 됩니다.<br>
+· 화면 왼쪽 아래에 보라색 <b>TEST</b> 딱지가 있으면 연습장입니다.
+</div>
+</div>
+
+<!-- 0 -->
+<div class="card">
+<div class="ch"><span class="n c1">0</span><b>먼저, 화면 위쪽 메뉴가 늘었습니다</b></div>
+<div class="cb">
+<div class="fig">
+<div class="tabbar"><div class="tb">대시보드</div><div class="tb on">내 업무</div><div class="tb">사업별</div><div class="tb new">일정</div><div class="tb new">활동<span class="rb">3</span></div><div class="tb">사용자</div><div class="tb">설정</div></div>
+<div class="figcap">'내 KR' 이름이 <b>내 업무</b>로 바뀌고, <b>일정</b>과 <b>활동</b> 두 개가 새로 생겼습니다</div>
+</div>
+<table>
+<tr><th style="width:16%">메뉴</th><th style="width:34%">여기서 무엇을 보나</th><th>언제 들어가나</th></tr>
+<tr><td><b>내 업무</b></td><td>내가 맡은 것들이 <b>급한 순서대로</b> 정리돼 있음</td><td>출근해서 제일 먼저</td></tr>
+<tr><td><b>일정</b> <span style="color:var(--pp);font-size:11px">NEW</span></td><td>이번 분기 일이 <b>언제 몰려 있는지</b> 가로 막대로</td><td>주간 회의 전</td></tr>
+<tr><td><b>활동</b> <span style="color:var(--pp);font-size:11px">NEW</span></td><td>누가 무엇을 바꿨는지 <b>새 소식 목록</b></td><td>자리 비웠다 돌아왔을 때</td></tr>
+</table>
+</div></div>
+
+<!-- 1 -->
+<div class="card">
+<div class="ch"><span class="n c2">1</span><b>KR 하나에 버튼 두 개가 붙습니다</b></div>
+<div class="cb">
+<div class="big">지금은 KR을 누르면 <b>수정 화면</b>만 열립니다. 이제 KR 줄에 버튼이 두 개 붙어서, 하고 싶은 일에 맞게 골라 들어갑니다.</div>
+<div class="fig">
+<div class="krrow"><span class="dot"></span><span class="nm">매체 대행 마크업(수임료) 10% → 15% 인상</span><span class="pill task">업무 1/4</span><span class="pill prog">진행상황 5</span><span class="pill soon">D-52</span></div>
+<div class="figcap">KR 한 줄에 <b>업무</b> · <b>진행상황</b> 버튼과 <b>남은 날짜</b>가 함께 보입니다</div>
+</div>
+<div class="two">
+<div class="mini" style="border-color:#BFDBFE;background:var(--acbg)"><h4><span class="pill task">업무 1/4</span></h4>
+<b>실무를 적는 표</b>입니다. 광고주 목록처럼 실제로 하는 일을 엑셀처럼 적습니다.<br><span style="color:var(--tx4);font-size:12.5px">숫자 1/4 = 4건 중 1건 완료</span></div>
+<div class="mini" style="border-color:#DDD6FE;background:var(--ppbg)"><h4><span class="pill prog">진행상황 5</span></h4>
+<b>상황을 보는 화면</b>입니다. 그래프와 기록으로 "지금 어떻게 돼가나"를 봅니다.<br><span style="color:var(--tx4);font-size:12.5px">숫자 5 = 기록이 5건 쌓임</span></div>
+</div>
+</div></div>
+
+<!-- 2 진행상황 -->
+<div class="card">
+<div class="ch"><span class="n c2">2</span><b>진행상황 화면 — 이번 개선의 핵심</b></div>
+<div class="cb">
+<div class="big">담당자가 <b>짧은 기록 한 줄</b>을 남기면, 그걸 모아서 <b>그래프와 요약이 저절로</b> 만들어집니다. 대표님도, 다른 담당자도 이 화면 하나만 보면 됩니다.</div>
+
+<div class="ba">
+<div class="bx bef"><div class="t">지금</div>진척률 숫자 하나만 보입니다.<br><b>82%</b> — 좋아 보입니다.<br><br>그런데 <b>왜 82%인지, 지금 문제는 없는지</b> 알 방법이 없습니다.</div>
+<div class="arw">➜</div>
+<div class="bx aft"><div class="t">바뀐 뒤</div><b>82%</b> + 아래 정보가 함께 보입니다.<br>· 최근 4주에 +38%p 올랐다<br>· 담당자는 지금 <b>'주의'</b>로 보고 있다<br>· 최근 기록: "8월 신규 유입 감소로 하반기 불확실"<br>· 이 속도면 <b>9월 중 달성</b></div>
+</div>
+
+<!-- 그래프 설명 그림 -->
+<div class="fig">
+<svg viewBox="0 0 780 250" width="100%" height="250" style="display:block">
+<g font-size="10" fill="#A1A1AA" font-family="ui-monospace,monospace">
+<line x1="56" y1="175" x2="700" y2="175" stroke="#E4E4E7"/><text x="48" y="178" text-anchor="end">0%</text>
+<line x1="56" y1="100" x2="700" y2="100" stroke="#F1F1F3"/><text x="48" y="103" text-anchor="end">50%</text>
+<line x1="56" y1="26" x2="700" y2="26" stroke="#D4D4D8" stroke-dasharray="4 3"/><text x="48" y="29" text-anchor="end">100%</text>
+</g>
+<path d="M80,160 L190,146 L300,120 L420,98 L530,60 L530,175 L80,175 Z" fill="#2563EB" opacity=".07"/>
+<path d="M80,160 L190,146 L300,120 L420,98 L530,60" fill="none" stroke="#2563EB" stroke-width="2.8" stroke-linejoin="round"/>
+<path d="M530,60 L690,26" fill="none" stroke="#A1A1AA" stroke-width="1.8" stroke-dasharray="6 5"/>
+<line x1="540" y1="18" x2="540" y2="182" stroke="#EF4444" stroke-width="1.8"/>
+<rect x="519" y="4" width="42" height="14" rx="4" fill="#EF4444"/><text x="540" y="14.5" font-size="9.5" fill="#fff" text-anchor="middle" font-family="ui-monospace,monospace">오늘</text>
+<circle cx="80" cy="160" r="5.5" fill="#fff" stroke="#10B981" stroke-width="2.6"/>
+<circle cx="190" cy="146" r="5.5" fill="#fff" stroke="#10B981" stroke-width="2.6"/>
+<circle cx="300" cy="120" r="5.5" fill="#fff" stroke="#F59E0B" stroke-width="2.6"/>
+<circle cx="420" cy="98" r="5.5" fill="#fff" stroke="#EF4444" stroke-width="2.6"/>
+<circle cx="530" cy="60" r="7" fill="#2563EB" stroke="#fff" stroke-width="2.6"/>
+<text x="16" y="205" font-size="10" fill="#71717A" font-family="Pretendard,sans-serif">확신도</text>
+<rect x="80" y="196" width="220" height="12" rx="4" fill="#10B981" opacity=".85"/>
+<rect x="300" y="196" width="120" height="12" rx="4" fill="#F59E0B" opacity=".85"/>
+<rect x="420" y="196" width="60" height="12" rx="4" fill="#EF4444" opacity=".85"/>
+<rect x="480" y="196" width="60" height="12" rx="4" fill="#F59E0B" opacity=".85"/>
+<!-- 설명 화살표 -->
+<g font-size="11.5" font-family="Pretendard,sans-serif">
+<line x1="618" y1="45" x2="655" y2="60" stroke="#A1A1AA" stroke-width="1.2"/><text x="660" y="64" fill="#52525B">이 속도로 가야</text><text x="660" y="79" fill="#52525B">기한을 맞춥니다</text>
+<line x1="420" y1="90" x2="400" y2="52" stroke="#EF4444" stroke-width="1.2"/><rect x="292" y="34" width="116" height="18" rx="5" fill="#111827"/><text x="350" y="47" font-size="10" fill="#fff" text-anchor="middle">누르면 그때 기록이 열림</text>
+<line x1="440" y1="202" x2="490" y2="228" stroke="#A1A1AA" stroke-width="1.2"/><text x="494" y="232" fill="#52525B" font-size="11">담당자가 '위험'으로 본 시기</text>
+</g>
+</svg>
+<div class="figcap"><b>파란 선</b> = 실제 진척 &nbsp;/&nbsp; <b>회색 점선</b> = 기한을 맞추려면 가야 할 속도 &nbsp;/&nbsp; <b>동그라미</b> = 기록 (테두리 색 = 그때의 분위기) &nbsp;/&nbsp; <b>빨간 세로선</b> = 오늘</div>
+</div>
+
+<div class="note"><b>이 그림 하나로 알 수 있는 것</b><br>
+· 파란 선이 회색 점선보다 <b>완만하면</b> → 이대로는 기한을 못 맞춥니다.<br>
+· 동그라미 사이가 <b>멀면</b> → 그동안 아무도 손대지 않았다는 뜻입니다.<br>
+· 아래 띠에 <b>빨간 구간</b>이 있으면 → 숫자는 올랐어도 그때 문제가 있었다는 뜻입니다.</div>
+
+<h3 style="font-size:15px;margin:22px 0 10px">기록은 이렇게 남깁니다</h3>
+<div class="steps">
+<div class="step"><div class="sn">1</div><div class="st2">KR 줄의 <span class="pill prog">진행상황</span> 버튼을 누릅니다.</div></div>
+<div class="step"><div class="sn">2</div><div class="st2">화면 아래 <b>진행 기록 남기기</b>에 세 가지를 넣습니다.<br>
+<span class="kbd">현재값</span> 숫자가 바뀌었으면 적습니다 <span style="color:var(--tx5)">(안 바뀌었으면 비워둡니다)</span><br>
+<span class="kbd">확신도</span> 순조 / 주의 / 위험 중 하나 <span style="color:var(--tx5)">(선택)</span><br>
+<span class="kbd">진행 내용</span> 한두 줄 <span style="color:var(--d);font-weight:700">(필수)</span></div></div>
+<div class="step"><div class="sn">3</div><div class="st2"><b>기록 남기기</b>를 누르면 끝입니다. 그래프에 점이 하나 찍히고, 요약이 다시 계산됩니다.</div></div>
+</div>
+
+<div class="note g"><b>중요 — 숫자가 안 바뀌어도 기록해 주세요.</b><br>
+지금은 <b>숫자를 바꿔야만</b> 기록이 남습니다. 그래서 "이번 주는 법무 검토 대기라 진척 없음" 같은 중요한 상황이 아무 데도 안 남았습니다.<br>
+이제 <b>메모만 남겨도</b> 기록이 됩니다. 오히려 이런 기록이 더 중요합니다.</div>
+
+<div class="two" style="margin-top:14px">
+<div class="mini"><h4>오른쪽에 자동으로 계산되는 것</h4>
+<ul><li>최근 4주에 얼마나 올랐나</li><li>한 달 평균 속도</li><li>기한을 맞추려면 필요한 속도</li><li>이 속도면 언제 달성하나</li><li>기록을 누가 몇 건 남겼나</li></ul></div>
+<div class="mini"><h4>다른 사람에게 공유할 때</h4>
+<ul><li><b>텍스트 복사</b> — 현황이 글로 정리돼 복사됩니다. 카톡·메일에 그대로 붙여넣기</li><li><b>인쇄 / PDF</b> — 회의 자료로 출력</li></ul></div>
+</div>
+</div></div>
+
+<!-- 3 업무 -->
+<div class="card">
+<div class="ch"><span class="n c1">3</span><b>하위 업무 — 실무를 표로 적습니다</b></div>
+<div class="cb">
+<div class="big">KR은 <b>"수수료 15%로 올리기"</b> 같은 목표입니다. 그걸 하려고 실제로 하는 일(어떤 광고주와 언제 무엇을)은 적을 데가 없었습니다. 이제 KR 아래에 <b>표</b>가 생깁니다.</div>
+<div class="fig">
+<table style="font-size:12.5px">
+<tr><th>업무</th><th style="width:80px">담당</th><th style="width:100px">기한</th><th style="width:70px">상태</th><th style="width:100px">광고주명 <span style="color:var(--pp)">＋</span></th><th style="width:100px">월 집행액 <span style="color:var(--pp)">＋</span></th></tr>
+<tr><td>A사 수수료 재계약 협의</td><td>박근정</td><td>2026-08-20</td><td style="color:var(--wtx);font-weight:700">진행</td><td>A사 (뷰티)</td><td>3,200</td></tr>
+<tr style="background:#FAFDFB;color:var(--tx5)"><td style="text-decoration:line-through">B사 단가표 발송</td><td>김경현</td><td>2026-08-14</td><td style="color:var(--stx);font-weight:700">완료</td><td>B사 (식품)</td><td>1,800</td></tr>
+<tr><td>C사 이탈 방지 제안</td><td>이지우</td><td>2026-08-28</td><td>대기</td><td>C사 (패션)</td><td>2,500</td></tr>
+</table>
+<div class="figcap"><span style="color:var(--pp);font-weight:700">＋</span> 표시된 <b>광고주명 · 월 집행액</b> 은 담당자가 직접 만든 칸입니다. KR마다 다른 표를 만들 수 있습니다</div>
+</div>
+<div class="two">
+<div class="mini"><h4>쓰는 법</h4>
+<ul><li><b>+ 업무 추가</b> → 줄이 생깁니다</li><li><b>+ 열 추가</b> → 원하는 칸을 만듭니다</li><li><b>저장 버튼이 없습니다</b> — 칸을 벗어나면 바로 저장</li><li>다른 사람이 동시에 적어도 안 지워집니다</li></ul></div>
+<div class="mini"><h4>누가 고칠 수 있나</h4>
+<table style="font-size:12.5px;margin-top:4px">
+<tr><td>KR 목표값·현재값</td><td class="c" style="width:38%"><b>관리자만</b><br><span style="font-size:11px;color:var(--tx5)">지금과 같음</span></td></tr>
+<tr><td>하위 업무 · 진행 기록</td><td class="c" style="color:var(--stx)"><b>담당자도 가능</b><br><span style="font-size:11px;color:var(--tx5)">새로 열림</span></td></tr>
+</table>
+<div style="font-size:12px;color:var(--tx4);margin-top:8px">목표 숫자는 함부로 못 바꾸게 두고, 실무 내용만 담당자에게 열었습니다.</div></div>
+</div>
+</div></div>
+
+<!-- 4 내 업무 -->
+<div class="card">
+<div class="ch"><span class="n c4">4</span><b>내 업무 — 급한 순서로 자동 정리</b></div>
+<div class="cb">
+<div class="big">전에는 담당 KR이 그냥 쭉 나열됐습니다. 이제 <b>마감일과 마지막 기록</b>을 보고 컴퓨터가 알아서 5칸으로 나눠줍니다.</div>
+<div class="fig">
+<div class="buckets">
+<div class="bk l"><div class="ico">🔴</div><div class="ti">지연</div><div class="de">마감이<br>지났습니다</div></div>
+<div class="bk s"><div class="ico">🟡</div><div class="ti">이번 주</div><div class="de">7일 안에<br>마감입니다</div></div>
+<div class="bk i"><div class="ico">🔵</div><div class="ti">정체</div><div class="de">2주 넘게<br>기록이 없습니다</div></div>
+<div class="bk o"><div class="ico">🟢</div><div class="ti">정상</div><div class="de">일정대로<br>가고 있습니다</div></div>
+<div class="bk n"><div class="ico">⚪</div><div class="ti">기한 미설정</div><div class="de">마감일을<br>넣어주세요</div></div>
+</div>
+<div class="figcap">위에서부터 급한 순서입니다 — <b>위쪽부터 처리</b>하시면 됩니다</div>
+</div>
+<div class="note w"><b>처음 들어가면 거의 다 '기한 미설정'일 겁니다.</b> 고장이 아니라, 아직 마감일을 아무도 안 넣어서입니다. KR을 열어 <b>마감일</b>에 날짜를 넣으면 제자리를 찾아갑니다.</div>
+</div></div>
+
+<!-- 5 일정 -->
+<div class="card">
+<div class="ch"><span class="n c3">5</span><b>일정 — 이번 분기를 한 화면에</b></div>
+<div class="cb">
+<div class="fig">
+<svg viewBox="0 0 780 200" width="100%" height="200" style="display:block">
+<rect x="0" y="0" width="780" height="26" fill="#FAFAFA" stroke="#E4E4E7"/>
+<text x="14" y="18" font-size="11" fill="#71717A" font-family="ui-monospace,monospace">KR</text>
+<text x="330" y="18" font-size="11" fill="#71717A" text-anchor="middle" font-family="ui-monospace,monospace">7월</text>
+<text x="480" y="18" font-size="11" fill="#71717A" text-anchor="middle" font-family="ui-monospace,monospace">8월</text>
+<text x="630" y="18" font-size="11" fill="#71717A" text-anchor="middle" font-family="ui-monospace,monospace">9월</text>
+<g font-size="12" fill="#09090B" font-family="Pretendard,sans-serif">
+<text x="14" y="52">수수료 15% 인상</text><text x="14" y="90">3PL 5개사 계약</text><text x="14" y="128">콘텐츠 자동화</text><text x="14" y="166">DB 마케팅</text></g>
+<line x1="255" y1="26" x2="255" y2="192" stroke="#F1F1F3"/><line x1="405" y1="26" x2="405" y2="192" stroke="#F1F1F3"/><line x1="555" y1="26" x2="555" y2="192" stroke="#F1F1F3"/>
+<rect x="258" y="42" width="360" height="16" rx="8" fill="#2563EB"/><text x="268" y="54" font-size="10" fill="#fff" font-family="ui-monospace,monospace">D-52 · 82%</text>
+<rect x="258" y="80" width="170" height="16" rx="8" fill="#EF4444"/><text x="268" y="92" font-size="10" fill="#fff" font-family="ui-monospace,monospace">지연 7일 · 40%</text>
+<rect x="300" y="118" width="150" height="16" rx="8" fill="#F59E0B"/><text x="310" y="130" font-size="10" fill="#fff" font-family="ui-monospace,monospace">D-2 · 70%</text>
+<rect x="258" y="156" width="480" height="16" rx="8" fill="#818CF8"/><text x="268" y="168" font-size="10" fill="#fff" font-family="ui-monospace,monospace">정체 · 30%</text>
+<line x1="470" y1="26" x2="470" y2="192" stroke="#EF4444" stroke-width="2"/>
+<rect x="449" y="28" width="42" height="14" rx="4" fill="#EF4444"/><text x="470" y="38.5" font-size="9.5" fill="#fff" text-anchor="middle" font-family="ui-monospace,monospace">오늘</text>
+</svg>
+<div class="figcap">막대 = <b>시작일 ~ 마감일</b> &nbsp;/&nbsp; 빨간 세로선 = 오늘 &nbsp;/&nbsp; 막대를 누르면 그 KR이 열립니다</div>
+</div>
+<div class="note"><b>여기서 보이는 것</b> — 빨간 막대(지연)가 몇 개인지, 마감이 <b>특정 달에 몰려</b> 있는지, 어느 사업부가 비어 있는지. 주간 회의 전에 한 번 보시면 좋습니다.</div>
+</div></div>
+
+<!-- 6 활동 -->
+<div class="card">
+<div class="ch"><span class="n c5">6</span><b>활동 — 누가 무엇을 바꿨는지</b></div>
+<div class="cb">
+<div class="fig" style="padding:0;overflow:hidden">
+<div style="background:#FAFAFA;border-bottom:1px solid var(--bd);padding:9px 15px;font-size:12.5px;color:var(--tx3)">최근 7일 업데이트 <b>5명 / 36명</b> (14%) · 지연 <b style="color:var(--dtx)">2건</b> · 정체 <b style="color:#3730A3">5건</b></div>
+<div style="padding:13px 15px">
+<div style="display:flex;gap:11px;padding:9px 0;border-left:3px solid var(--ac);padding-left:11px;background:#FAFBFF;border-radius:0 8px 8px 0;margin-bottom:8px">
+<div style="width:28px;height:28px;border-radius:50%;background:#059669;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">병</div>
+<div style="flex:1;font-size:13px"><b>박병훈</b>님이 <span style="color:var(--ac);font-weight:600">3PL 5개사 계약</span> 을 <span class="kbd">2</span>→<span class="kbd" style="background:var(--sbg);color:var(--stx)">3</span> 로 업데이트 <span style="font-size:9.5px;background:var(--acbg);color:var(--ach);border-radius:20px;padding:1px 7px;font-weight:800">내 관련</span>
+<div style="font-size:12.5px;color:var(--tx3);background:var(--bgs);border:1px solid var(--bd);border-radius:8px;padding:7px 10px;margin-top:6px">A사 계약 완료, B사는 다음 주 최종 미팅</div></div>
+<div style="font-size:10.5px;color:var(--tx5);font-family:var(--fm)">14:22</div></div>
+<div style="display:flex;gap:11px;padding:9px 0 0">
+<div style="width:28px;height:28px;border-radius:50%;background:#84CC16;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0">근</div>
+<div style="flex:1;font-size:13px"><b>박근정</b>님이 <span style="color:var(--ac);font-weight:600">콘텐츠 자동화</span> 에 코멘트를 남김
+<div style="font-size:12.5px;color:var(--tx3);background:var(--bgs);border:1px solid var(--bd);border-radius:8px;padding:7px 10px;margin-top:6px"><span style="background:var(--acbg);color:var(--ach);border-radius:4px;padding:0 4px;font-weight:700">@곽경훈</span> 계정 권한이 아직 안 나와서 대기 중입니다</div></div>
+<div style="font-size:10.5px;color:var(--tx5);font-family:var(--fm)">11:40</div></div>
+</div></div>
+<div class="two">
+<div class="mini"><h4>여기 쌓이는 것</h4>
+<ul><li>진척 숫자 변경</li><li>마감일 변경</li><li>확신도 변경</li><li>코멘트 · @이름 부르기</li><li>업무 완료</li></ul></div>
+<div class="mini"><h4>@이름 부르기</h4>
+KR 안 코멘트에 <span class="kbd">@박근정</span> 처럼 적으면, 그분 <b>활동</b> 메뉴에 빨간 숫자가 뜹니다.<br>
+<span style="color:var(--tx4);font-size:12.5px">메모 한 칸을 서로 덮어쓰지 않고, 대화가 차곡차곡 쌓입니다.</span></div>
+</div>
+<div class="note d"><b>알림에 대해 솔직히 말씀드립니다</b><br>
+<b>앱에 들어왔을 때</b> 빨간 숫자로 알려주는 것까지가 가능합니다. 앱을 안 켠 상태에서 <b>카톡·문자·이메일로 알림을 보내는 건 안 됩니다</b>(별도 서버와 유료 전환이 필요합니다). 그래서 알림보다 <b>주 1회 기록하는 습관</b>이 훨씬 중요합니다.</div>
+</div></div>
+
+<!-- 7 대시보드 -->
+<div class="card">
+<div class="ch"><span class="n c1">7</span><b>대시보드는 오히려 더 단순해집니다</b></div>
+<div class="cb">
+<div class="ba">
+<div class="bx bef"><div class="t">한때 넣었다가 뺀 것</div>
+· 담당자별 KR 부하 → <b>뺐습니다</b><br><span style="font-size:12.5px">사람마다 15건씩 똑같이 나와서 아무 정보가 없었습니다. 실제 일의 양이 아니라 소속을 세고 있었습니다.</span><br><br>
+· 이번 주 체크인 카드 → <b>활동 메뉴로 옮겼습니다</b><br><span style="font-size:12.5px">아래 안내문과 같은 말을 두 번 하고 있었습니다.</span></div>
+<div class="arw">➜</div>
+<div class="bx aft"><div class="t">대신 이것</div>
+숫자 네 칸이 한 줄로 들어갑니다.<br><br>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><span class="pill late">지연 2건</span><span class="pill soon">이번 주 3건</span><span class="pill idle">정체 5건</span><span class="pill none">기한 미설정 14건</span></div>
+<div style="font-size:12.5px;margin-top:10px">누르면 바로 그 목록으로 넘어갑니다. <b>사람 이야기가 아니라 목표 상태 이야기</b>라 대시보드에 맞습니다.</div></div>
+</div>
+</div></div>
+
+<!-- 8 테스트 -->
+<div class="card">
+<div class="ch"><span class="n c2">8</span><b>이렇게 한번 해보세요 (5분)</b></div>
+<div class="cb">
+<div class="steps">
+<div class="step"><div class="sn">1</div><div class="st2">테스트 주소 접속 → 본인 이름 → 비밀번호 <span class="kbd">1234</span></div></div>
+<div class="step"><div class="sn">2</div><div class="st2"><b>내 업무</b>를 열어봅니다. 대부분 <b>기한 미설정</b>이면 정상입니다.</div></div>
+<div class="step"><div class="sn">3</div><div class="st2">KR 하나를 열고 <b>마감일</b>에 날짜를 넣고 저장 → 배지가 생기는지 봅니다.</div></div>
+<div class="step"><div class="sn">4</div><div class="st2"><span class="pill prog">진행상황</span> 을 눌러 <b>기록 한 줄</b>을 남겨봅니다. 그래프에 점이 찍힙니다.</div></div>
+<div class="step"><div class="sn">5</div><div class="st2"><span class="pill task">업무</span> 를 눌러 <b>+ 열 추가</b>로 실제 쓰실 항목(예: 거래처명)을 만들어 봅니다.</div></div>
+<div class="step"><div class="sn">6</div><div class="st2"><b>일정</b>과 <b>활동</b>을 한 번씩 눌러봅니다.</div></div>
+</div>
+<div class="note g"><b>피드백은 이렇게 주시면 가장 빠릅니다</b><br>
+"<b>진행상황 화면</b>의 <b>속도 부분</b>이 무슨 뜻인지 모르겠다" 처럼 <b>화면 이름 + 어느 부분</b>을 같이 적어주세요.</div>
+<div class="note"><b>기능이 아니라 습관이 관건입니다.</b> 지금까지 남은 기록이 전사 2건뿐이었습니다. 아무리 좋은 화면을 만들어도 기록이 없으면 빈 그래프만 남습니다. 그래서 <b>숫자 없이 메모만</b> 남길 수 있게 만들었습니다. <b>주 1회, 한 줄</b>이면 충분합니다.</div>
+</div></div>
+
+<div class="foot">
+연습장에서 무엇을 하셔도 실제 OKR은 바뀌지 않습니다. 편하게 눌러보세요.<br>
+2026.08.07 · 테스트 후 확정되면 실제 화면에 반영합니다
+</div>
+</div></body></html>
