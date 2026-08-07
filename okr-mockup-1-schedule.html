@@ -1,0 +1,143 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>목업 1안 · 일정 골격</title>
+<style>
+:root{--bg:#fff;--bgs:#FAFAFA;--bgh:#F4F4F5;--bd:#E4E4E7;--bdt:#D4D4D8;--tx:#09090B;--tx3:#52525B;--tx4:#71717A;--tx5:#A1A1AA;--ac:#2563EB;--acbg:#EFF6FF;--s:#10B981;--sbg:#ECFDF5;--stx:#065F46;--w:#F59E0B;--wbg:#FFFBEB;--wtx:#92400E;--d:#EF4444;--dbg:#FEF2F2;--dtx:#991B1B;--fm:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:#F4F4F5;color:var(--tx);line-height:1.6;padding:26px;font-size:14px}
+.page{max-width:1040px;margin:0 auto}
+h1{font-size:22px;letter-spacing:-.3px}
+.lead{font-size:13px;color:var(--tx4);margin:4px 0 18px}
+.mock{background:#fff;border:1px solid var(--bd);border-radius:14px;overflow:hidden;margin-bottom:22px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.mh{padding:13px 18px;border-bottom:1px solid var(--bd);background:var(--bgs);display:flex;align-items:center;gap:9px}
+.mh b{font-size:14px}.mh .num{width:21px;height:21px;border-radius:50%;background:var(--ac);color:#fff;font-size:11px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.mh .tagN{background:#DBEAFE;color:#1D4ED8;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700}
+.mb{padding:18px}
+.tabs{display:flex;gap:3px;border-bottom:1px solid var(--bd);padding:0 18px;background:#fff}
+.tab{padding:11px 14px;font-size:13px;color:var(--tx4);border-bottom:2px solid transparent;position:relative}
+.tab.on{color:var(--ac);border-bottom-color:var(--ac);font-weight:700}
+.tab.new::after{content:'NEW';font-size:8px;background:#2563EB;color:#fff;border-radius:8px;padding:1px 4px;margin-left:4px;vertical-align:top}
+.sec{font-size:12px;font-weight:700;color:var(--tx3);display:flex;align-items:center;gap:7px;margin:16px 0 8px}
+.sec:first-child{margin-top:0}
+.cnt{font-family:var(--fm);font-size:11px;background:var(--bgh);color:var(--tx4);border-radius:20px;padding:1px 8px}
+.row{border:1px solid var(--bd);border-radius:10px;padding:11px 14px;margin-bottom:7px;display:flex;align-items:center;gap:12px;background:#fff}
+.row.dz{border-color:#FECACA;background:#FFFBFB}
+.row.wz{border-color:#FDE68A;background:#FFFEFA}
+.row .t{flex:1;min-width:0}
+.row .nm{font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .mt{font-size:11px;color:var(--tx5);margin-top:2px;font-family:var(--fm)}
+.dd{font-family:var(--fm);font-size:11px;font-weight:700;border-radius:6px;padding:3px 8px;flex-shrink:0}
+.dd.ok{background:var(--sbg);color:var(--stx)}.dd.soon{background:var(--wbg);color:var(--wtx)}.dd.late{background:var(--dbg);color:var(--dtx)}.dd.idle{background:#EEF2FF;color:#3730A3}
+.bar{width:110px;height:6px;background:var(--bgh);border-radius:3px;overflow:hidden;flex-shrink:0}
+.bar i{display:block;height:6px;border-radius:3px}
+.pv{font-family:var(--fm);font-size:12px;width:38px;text-align:right;flex-shrink:0}
+.av{width:24px;height:24px;border-radius:50%;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
+.note{background:#F8FAFC;border-left:3px solid var(--ac);padding:10px 13px;font-size:12.5px;color:var(--tx3);border-radius:0 8px 8px 0;margin-top:14px;line-height:1.65}
+.note b{color:var(--tx)}
+.ba{display:flex;gap:11px;align-items:stretch}
+.bx{flex:1;border-radius:10px;padding:12px 14px;font-size:12.5px;line-height:1.55}
+.bad{background:#FAFAFA;border:1px solid var(--bd);color:var(--tx3)}
+.good{background:var(--acbg);border:1px solid #BFDBFE;color:#1E3A8A}
+.arw{align-self:center;color:var(--tx5);font-weight:700}
+label{font-size:11.5px;color:var(--tx3);font-weight:600;display:block;margin-bottom:5px}
+.inp{height:34px;border:1px solid var(--bdt);border-radius:7px;padding:0 10px;font-size:13px;display:flex;align-items:center;background:#fff;color:var(--tx3)}
+.inp.dt{font-family:var(--fm);justify-content:space-between}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+/* gantt */
+.gt{border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.gt .hd{display:flex;background:var(--bgs);border-bottom:1px solid var(--bd);font-size:11px;color:var(--tx4);font-family:var(--fm)}
+.gt .hd .lb{width:250px;flex-shrink:0;padding:7px 12px;border-right:1px solid var(--bd)}
+.gt .hd .mo{flex:1;text-align:center;padding:7px 0;border-right:1px solid #EFEFF1}
+.gr{display:flex;border-bottom:1px solid #F1F1F3;align-items:center}
+.gr:last-child{border-bottom:none}
+.gr .lb{width:250px;flex-shrink:0;padding:9px 12px;font-size:12.5px;border-right:1px solid var(--bd);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gr .track{flex:1;position:relative;height:38px}
+.gb{position:absolute;top:11px;height:16px;border-radius:8px;font-size:10px;color:#fff;display:flex;align-items:center;padding:0 8px;font-family:var(--fm);white-space:nowrap;overflow:hidden}
+.today{position:absolute;top:0;bottom:0;width:2px;background:#EF4444;z-index:3}
+.today span{position:absolute;top:-1px;left:-16px;font-size:9px;background:#EF4444;color:#fff;padding:0 4px;border-radius:3px;font-family:var(--fm)}
+.grid{position:absolute;top:0;bottom:0;width:1px;background:#F1F1F3}
+.foot{font-size:11px;color:var(--tx5);text-align:center;margin:6px 0 30px}
+</style></head><body><div class="page">
+
+<h1>목업 1안 — 일정 골격 <span style="font-size:12px;color:var(--tx5);font-weight:400">(추천 · 먼저 적용)</span></h1>
+<div class="lead">마감일을 날짜로 받아 <b>D-day·지연</b>을 자동 계산하고, '내 KR'을 <b>내 업무 4구간</b>으로 자동 분류합니다. 여기에 <b>'일정' 탭</b>을 신설해 분기 타임라인을 봅니다. — 기준일 2026.08.07</div>
+
+<!-- 1 -->
+<div class="mock">
+<div class="mh"><span class="num">1</span><b>탭 구성 — '일정' 탭 신설</b><span class="tagN">신규</span></div>
+<div class="tabs">
+<div class="tab">대시보드</div><div class="tab on">내 업무</div><div class="tab">사업별</div><div class="tab new">일정</div><div class="tab">사용자</div><div class="tab">설정</div>
+</div>
+<div class="mb" style="padding-top:14px">
+<div class="ba"><div class="bx bad"><b>지금</b><br>'내 KR' — 담당 항목이 <b>한 줄로 쭉 나열</b>만 됩니다. 무엇부터 해야 하는지 판단이 안 됩니다.</div><div class="arw">▶</div><div class="bx good"><b>바뀐 뒤</b><br>'내 업무' — <b>이번 주 마감 / 지연 / 정체 / 정상</b> 4구간으로 자동 분류. 열자마자 할 일이 보입니다.</div></div>
+</div></div>
+
+<!-- 2 -->
+<div class="mock">
+<div class="mh"><span class="num">2</span><b>'내 업무' 탭 — 4구간 자동 분류</b><span style="font-size:11px;color:var(--tx5);margin-left:auto">박근정 님 화면 예시</span></div>
+<div class="mb">
+
+<div class="sec" style="color:var(--dtx)">🔴 지연 — 마감일이 지났습니다 <span class="cnt">2</span></div>
+<div class="row dz"><div class="av" style="background:#84CC16">근</div><div class="t"><div class="nm">[KR1] 워드프레스를 활용한 GEO 작업</div><div class="mt">마감 2026.07.31 · 마지막 업데이트 07.18</div></div><div class="bar"><i style="width:45%;background:#EF4444"></i></div><div class="pv">45%</div><div class="dd late">지연 7일</div></div>
+<div class="row dz"><div class="av" style="background:#84CC16">근</div><div class="t"><div class="nm">[KR3] DB 마케팅</div><div class="mt">마감 2026.08.05 · 마지막 업데이트 07.29</div></div><div class="bar"><i style="width:20%;background:#EF4444"></i></div><div class="pv">20%</div><div class="dd late">지연 2일</div></div>
+
+<div class="sec" style="color:var(--wtx)">🟡 이번 주 마감 <span class="cnt">1</span></div>
+<div class="row wz"><div class="av" style="background:#84CC16">근</div><div class="t"><div class="nm">[KR2] 콘텐츠 자동화</div><div class="mt">마감 2026.08.09 (일) · 마지막 업데이트 08.05</div></div><div class="bar"><i style="width:70%;background:#F59E0B"></i></div><div class="pv">70%</div><div class="dd soon">D-2</div></div>
+
+<div class="sec" style="color:#3730A3">🔵 정체 — 14일 이상 값·메모 변화 없음 <span class="cnt">1</span></div>
+<div class="row"><div class="av" style="background:#84CC16">근</div><div class="t"><div class="nm">업무 효율화 40% 달성</div><div class="mt">마감 2026.09.30 · 마지막 업데이트 <b style="color:#3730A3">07.10 (28일 전)</b></div></div><div class="bar"><i style="width:30%;background:#818CF8"></i></div><div class="pv">30%</div><div class="dd idle">정체 28일</div></div>
+
+<div class="sec" style="color:var(--stx)">🟢 정상 <span class="cnt">2</span></div>
+<div class="row"><div class="av" style="background:#84CC16">근</div><div class="t"><div class="nm">매체관리 수임료 150%</div><div class="mt">마감 2026.12.31 · 마지막 업데이트 08.06</div></div><div class="bar"><i style="width:82%;background:#10B981"></i></div><div class="pv">82%</div><div class="dd ok">D-146</div></div>
+<div class="row"><div class="av" style="background:#84CC16">근</div><div class="t"><div class="nm">[KR4] 업무 자동화 및 표준화</div><div class="mt">마감 2026.09.30 · 마지막 업데이트 08.04</div></div><div class="bar"><i style="width:58%;background:#10B981"></i></div><div class="pv">58%</div><div class="dd ok">D-54</div></div>
+
+<div class="note"><b>분류 기준 (자동 · 사람이 지정하지 않음)</b><br>
+· <b>지연</b> = 마감일이 지났는데 100%가 아님 &nbsp;·&nbsp; <b>이번 주 마감</b> = 마감일이 7일 이내<br>
+· <b>정체</b> = 마감은 안 지났지만 14일 이상 아무 입력이 없음 &nbsp;·&nbsp; <b>정상</b> = 나머지<br>
+· 마감일을 안 넣은 KR은 <b>'기한 미설정'</b>으로 맨 아래에 따로 모입니다(강제 아님).</div>
+</div></div>
+
+<!-- 3 -->
+<div class="mock">
+<div class="mh"><span class="num">3</span><b>KR 수정 화면 — 기한 입력 방식 변경</b></div>
+<div class="mb">
+<div class="ba" style="margin-bottom:16px">
+<div class="bx bad" style="flex:1"><b>지금</b><div style="margin-top:7px"><label>기한</label><div class="inp" style="color:var(--tx5)">자유 입력 (대부분 비어 있음)</div></div><div style="margin-top:8px;font-size:11.5px">→ D-day·지연 계산 <b>불가</b>, 타임라인도 <b>불가</b></div></div>
+<div class="arw">▶</div>
+<div class="bx good" style="flex:1.4"><b>바뀐 뒤</b>
+<div class="g3" style="margin-top:7px">
+<div><label>시작일</label><div class="inp dt">2026-07-01 <span style="color:var(--tx5)">📅</span></div></div>
+<div><label>마감일</label><div class="inp dt">2026-09-30 <span style="color:var(--tx5)">📅</span></div></div>
+<div><label>자동 계산</label><div class="inp" style="background:var(--sbg);border-color:#A7F3D0;color:var(--stx);font-family:var(--fm);font-weight:700">D-54</div></div>
+</div>
+<div style="margin-top:8px;font-size:11.5px">→ 배지·분류·타임라인이 <b>전부 자동</b>으로 생성됩니다</div></div>
+</div>
+<div class="note" style="border-color:var(--w);background:var(--wbg);color:var(--wtx)"><b>기존 데이터는 건드리지 않습니다.</b> 이미 들어 있는 기한 텍스트는 그대로 두고, <b>새로 수정할 때만</b> 날짜 선택이 나타납니다. 날짜를 안 넣어도 기존처럼 동작합니다.</div>
+</div></div>
+
+<!-- 4 -->
+<div class="mock">
+<div class="mh"><span class="num">4</span><b>'일정' 탭 — 분기 타임라인</b><span class="tagN">신규 탭</span></div>
+<div class="mb">
+<div class="gt">
+<div class="hd"><div class="lb">KR</div><div class="mo">7월</div><div class="mo">8월</div><div class="mo">9월</div></div>
+
+<div class="gr"><div class="lb" style="font-weight:700;background:var(--bgs)">보따리익스 (해외물류)</div><div class="track" style="background:var(--bgs)"><div class="grid" style="left:33.3%"></div><div class="grid" style="left:66.6%"></div><div class="today" style="left:40.2%"><span>오늘</span></div></div></div>
+<div class="gr"><div class="lb">[통합 매출] 전년 대비 115%</div><div class="track"><div class="grid" style="left:33.3%"></div><div class="grid" style="left:66.6%"></div><div class="gb" style="left:1%;width:97%;background:#2563EB">진행 62%</div><div class="today" style="left:40.2%"></div></div></div>
+<div class="gr"><div class="lb">[확장] 신규 6개국 매출 비중 10%</div><div class="track"><div class="grid" style="left:33.3%"></div><div class="grid" style="left:66.6%"></div><div class="gb" style="left:20%;width:46%;background:#F59E0B">D-2 · 38%</div><div class="today" style="left:40.2%"></div></div></div>
+
+<div class="gr"><div class="lb" style="font-weight:700;background:var(--bgs)">로지스 (국내물류)</div><div class="track" style="background:var(--bgs)"><div class="grid" style="left:33.3%"></div><div class="grid" style="left:66.6%"></div><div class="today" style="left:40.2%"></div></div></div>
+<div class="gr"><div class="lb">신규 3PL 고객사 5개사 계약</div><div class="track"><div class="grid" style="left:33.3%"></div><div class="grid" style="left:66.6%"></div><div class="gb" style="left:1%;width:36%;background:#EF4444">지연 7일 · 40%</div><div class="today" style="left:40.2%"></div></div></div>
+<div class="gr"><div class="lb">출고 정확도 99% 이상 유지</div><div class="track"><div class="grid" style="left:33.3%"></div><div class="grid" style="left:66.6%"></div><div class="gb" style="left:1%;width:97%;background:#10B981">99% 유지</div><div class="today" style="left:40.2%"></div></div></div>
+
+<div class="gr"><div class="lb" style="font-weight:700;background:var(--bgs)">이레이즈 마케팅</div><div class="track" style="background:var(--bgs)"><div class="grid" style="left:33.3%"></div><div class="grid" style="left:66.6%"></div><div class="today" style="left:40.2%"></div></div></div>
+<div class="gr"><div class="lb">[KR2] 콘텐츠 자동화</div><div class="track"><div class="grid" style="left:33.3%"></div><div class="grid" style="left:66.6%"></div><div class="gb" style="left:8%;width:34%;background:#F59E0B">D-2 · 70%</div><div class="today" style="left:40.2%"></div></div></div>
+<div class="gr"><div class="lb">업무 효율화 40% 달성</div><div class="track"><div class="grid" style="left:33.3%"></div><div class="grid" style="left:66.6%"></div><div class="gb" style="left:1%;width:96%;background:#818CF8">정체 28일 · 30%</div><div class="today" style="left:40.2%"></div></div></div>
+</div>
+
+<div class="note"><b>이 화면으로 알 수 있는 것</b><br>
+· 마감이 <b>특정 시기에 몰려 있는지</b> — 9월 말에 다 몰려 있으면 미리 분산할 수 있습니다.<br>
+· <b>빨간 세로선(오늘) 왼쪽에서 끝났어야 할 막대</b>가 아직 빨간색이면 지연입니다.<br>
+· 사업부별로 접고 펼 수 있어, 대표·리더가 <b>한 화면에서 전사 일정</b>을 봅니다.</div>
+</div></div>
+
+<div class="foot">※ 목업입니다. 실제 데이터는 전혀 변경되지 않았고, 화면 구성안만 보여드립니다. — 2026.08.07</div>
+</div></body></html>
