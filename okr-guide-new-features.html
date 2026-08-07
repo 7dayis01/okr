@@ -1,0 +1,198 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OKR 신규 기능 안내 — 기존 vs 신규 · 사용법</title>
+<style>
+:root{--bg:#fff;--bgs:#FAFAFA;--bgh:#F4F4F5;--bd:#E4E4E7;--bdt:#D4D4D8;--tx:#09090B;--tx3:#52525B;--tx4:#71717A;--tx5:#A1A1AA;--ac:#2563EB;--ach:#1D4ED8;--acbg:#EFF6FF;--s:#10B981;--sbg:#ECFDF5;--stx:#065F46;--w:#F59E0B;--wbg:#FFFBEB;--wtx:#92400E;--d:#EF4444;--dbg:#FEF2F2;--dtx:#991B1B;--fm:ui-monospace,'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:#F4F4F5;color:var(--tx);line-height:1.65;padding:24px 20px 60px;font-size:14px}
+.page{max-width:1000px;margin:0 auto}
+.hero{background:#fff;border:1px solid var(--bd);border-radius:16px;padding:26px 28px;margin-bottom:20px}
+h1{font-size:25px;letter-spacing:-.4px}
+.sub{font-size:13.5px;color:var(--tx4);margin-top:6px}
+.url{display:inline-flex;align-items:center;gap:8px;background:#111827;color:#fff;border-radius:9px;padding:9px 15px;font-family:var(--fm);font-size:13px;margin-top:14px;text-decoration:none}
+.url span{background:#374151;border-radius:5px;padding:1px 7px;font-size:11px}
+.warn{background:var(--wbg);border:1px solid #FDE68A;color:var(--wtx);border-radius:10px;padding:11px 15px;font-size:12.5px;margin-top:14px;line-height:1.6}
+.card{background:#fff;border:1px solid var(--bd);border-radius:15px;margin-bottom:18px;overflow:hidden}
+.ch{padding:14px 20px;border-bottom:1px solid var(--bd);background:var(--bgs);display:flex;align-items:center;gap:10px}
+.ch b{font-size:15.5px}
+.n{width:23px;height:23px;border-radius:50%;color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700}
+.n1{background:var(--ac)}.n2{background:#7C3AED}.n3{background:#0891B2}.n4{background:#DB2777}.n5{background:#65A30D}
+.tag{font-size:10px;border-radius:20px;padding:2px 8px;font-weight:700}
+.t-new{background:#DBEAFE;color:#1D4ED8}.t-keep{background:var(--bgh);color:var(--tx4)}
+.cb{padding:18px 20px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid var(--bd);padding:10px 12px;text-align:left;vertical-align:top}
+th{background:var(--bgs);font-weight:700;color:var(--tx3);font-size:12px}
+td.c{text-align:center}
+.old{color:var(--tx4)}
+.new{color:var(--tx);font-weight:600}
+.arw{color:var(--tx5);font-weight:700;text-align:center}
+.step{display:flex;gap:12px;padding:11px 0;border-bottom:1px dashed var(--bd)}
+.step:last-child{border-bottom:none}
+.sn{width:22px;height:22px;border-radius:6px;background:var(--acbg);color:var(--ach);font-size:11.5px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-family:var(--fm)}
+.st{flex:1;font-size:13px}
+.st b{color:var(--tx)}
+.kbd{background:var(--bgh);border:1px solid var(--bd);border-radius:5px;padding:1px 7px;font-size:12px;font-family:var(--fm)}
+.badge{font-family:var(--fm);font-size:10.5px;font-weight:700;border-radius:6px;padding:2px 8px;display:inline-block}
+.b-late{background:var(--dbg);color:var(--dtx)}.b-soon{background:var(--wbg);color:var(--wtx)}.b-idle{background:#EEF2FF;color:#3730A3}.b-ok{background:var(--sbg);color:var(--stx)}.b-none{background:var(--bgh);color:var(--tx5)}
+.note{background:#F8FAFC;border-left:3px solid var(--ac);padding:11px 14px;font-size:12.5px;color:var(--tx3);border-radius:0 8px 8px 0;margin-top:14px;line-height:1.65}
+.note b{color:var(--tx)}
+.note.d{border-color:var(--d);background:#FEF7F7}
+.note.g{border-color:var(--s);background:#F6FEFA}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini{border:1px solid var(--bd);border-radius:10px;padding:13px 15px;font-size:12.5px;line-height:1.6}
+.mini h4{font-size:12.5px;margin-bottom:7px;color:var(--tx)}
+ul{margin:6px 0 0 17px}li{margin-bottom:4px;font-size:12.5px;color:var(--tx3)}
+.foot{font-size:11.5px;color:var(--tx5);text-align:center;margin-top:26px;line-height:1.7}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+</style></head><body><div class="page">
+
+<div class="hero">
+<h1>OKR 신규 기능 안내</h1>
+<div class="sub">기존과 무엇이 달라지는지, 어떻게 쓰는지 정리했습니다. <b>먼저 테스트 환경에서 확인 후</b> 본 서비스에 반영합니다.</div>
+<a class="url" href="https://7dayis01.github.io/okr/test.html">https://7dayis01.github.io/okr/test.html <span>테스트</span></a>
+<div class="warn"><b>테스트 환경 안내</b><br>
+· 실서비스(<span style="font-family:var(--fm)">7dayis01.github.io/okr/</span>)와 <b>데이터가 완전히 분리</b>되어 있습니다. 여기서 무엇을 바꿔도 실제 OKR에는 영향이 없습니다.<br>
+· 로그인 비밀번호는 전원 <span class="kbd">1234</span> 입니다. 다른 분 계정으로 들어가 권한 차이도 확인해보실 수 있습니다.<br>
+· 화면 왼쪽 아래 보라색 <b>TEST</b> 표시가 있으면 테스트 환경입니다.</div>
+</div>
+
+<!-- 요약 -->
+<div class="card">
+<div class="ch"><span class="n n1">0</span><b>한눈에 보는 변화</b></div>
+<div class="cb">
+<table>
+<tr><th style="width:16%">항목</th><th style="width:34%">기존</th><th style="width:6%"></th><th>신규</th></tr>
+<tr><td><b>탭</b></td><td class="old">대시보드 / 내 KR / 사업별 / 사용자 / 설정</td><td class="arw">▶</td><td class="new">대시보드 / <b>내 업무</b> / 사업별 / <b>일정</b> / <b>활동</b> / 사용자 / 설정</td></tr>
+<tr><td><b>관리 단위</b></td><td class="old">KR(목표 지표)까지만. 실무 내용은 메모 한 칸에 몰아 씀</td><td class="arw">▶</td><td class="new">KR 아래 <b>하위 업무를 표로 관리</b>. 광고주 리스트 등 KR별로 열을 직접 추가</td></tr>
+<tr><td><b>기한</b></td><td class="old">"6월 ~ 12월" 같은 자유 텍스트 (대부분 비어 있음)</td><td class="arw">▶</td><td class="new"><b>날짜로 입력</b> → D-day·지연이 자동 계산·표시</td></tr>
+<tr><td><b>내 화면</b></td><td class="old">담당 KR이 그냥 나열됨</td><td class="arw">▶</td><td class="new"><b>지연 / 이번 주 마감 / 정체 / 정상 / 기한 미설정</b> 5구간 자동 분류</td></tr>
+<tr><td><b>일정 파악</b></td><td class="old">방법 없음</td><td class="arw">▶</td><td class="new"><b>일정 탭</b> — 분기 타임라인으로 마감 쏠림·지연을 한 화면에</td></tr>
+<tr><td><b>변경 파악</b></td><td class="old">KR을 하나씩 열어봐야 함</td><td class="arw">▶</td><td class="new"><b>활동 탭</b> — 전사 변경 이력 + 안 읽은 소식 빨간 배지</td></tr>
+<tr><td><b>소통</b></td><td class="old">메모 한 칸을 여러 사람이 덮어씀</td><td class="arw">▶</td><td class="new"><b>코멘트 + @이름 언급</b>으로 대화가 쌓임</td></tr>
+<tr><td><b>위험 신호</b></td><td class="old">숫자 진척률만</td><td class="arw">▶</td><td class="new"><b>확신도 신호등</b>(순조·주의·위험) 담당자 자가진단 추가</td></tr>
+</table>
+<div class="note g"><b>기존 데이터는 그대로입니다.</b> 지금 입력돼 있는 KR·현재값·메모·담당자는 하나도 바뀌지 않습니다. 위 기능은 모두 <b>새로 추가되는 칸과 화면</b>이며, 날짜를 안 넣어도 예전처럼 동작합니다.</div>
+</div></div>
+
+<!-- 1 하위 업무 -->
+<div class="card">
+<div class="ch"><span class="n n2">1</span><b>하위 업무 — 실무를 표로 관리</b><span class="tag t-new">신규</span></div>
+<div class="cb">
+<p style="font-size:13px;color:var(--tx3);margin-bottom:12px">KR은 "수수료 15% 인상" 같은 <b>목표</b>입니다. 그 목표를 이루려고 실제로 하는 일(어떤 광고주와 언제 무엇을 협의하는지)을 KR 아래에 표로 붙였습니다. <b>KR마다 다른 표</b>를 만들 수 있습니다.</p>
+
+<div class="step"><div class="sn">1</div><div class="st"><b>사업별</b> 탭에서 KR 오른쪽의 파란 <span class="kbd">업무 1/4</span> 배지를 클릭합니다. (또는 KR을 열어 <b>업무 관리 열기</b> 버튼)</div></div>
+<div class="step"><div class="sn">2</div><div class="st"><b>+ 업무 추가</b> — 줄이 하나 생깁니다. 업무 내용·담당·기한·상태(대기/진행/완료)·비고를 입력합니다.</div></div>
+<div class="step"><div class="sn">3</div><div class="st"><b>+ 열 추가</b> — 필요한 항목을 직접 만듭니다. 예: <span class="kbd">광고주명</span> <span class="kbd">월 집행액</span> <span class="kbd">계약일</span>. 숫자 열인지 텍스트 열인지 선택합니다.</div></div>
+<div class="step"><div class="sn">4</div><div class="st"><b>저장 버튼이 없습니다.</b> 칸을 벗어나면 즉시 저장되고, 같은 화면을 보고 있는 다른 사람에게도 바로 반영됩니다.</div></div>
+
+<div class="grid2" style="margin-top:16px">
+<div class="mini"><h4>이렇게 쓰시면 됩니다</h4>
+<ul>
+<li>KR「수수료 15% 인상」 → 업무 = 광고주별 협의 건</li>
+<li>KR「3PL 5개사 계약」 → 업무 = 후보사별 진행 상황</li>
+<li>KR「채널 11개 풀가동」 → 업무 = 플랫폼별 입점 상태</li>
+</ul></div>
+<div class="mini"><h4>누가 편집할 수 있나</h4>
+<ul>
+<li><b>KR 목표값·현재값</b> — 관리자만 (기존 그대로)</li>
+<li><b>하위 업무</b> — 관리자 + <b>담당자</b> + 그룹 리더</li>
+<li>담당이 아닌 분은 <b>조회만</b> 됩니다</li>
+</ul></div>
+</div>
+<div class="note"><b>왜 담당자에게 열었나</b> — 실무 내용은 담당자가 가장 잘 알고 매일 바뀝니다. 관리자만 고칠 수 있으면 표가 금세 낡습니다. 대신 <b>목표 숫자는 여전히 관리자만</b> 바꿀 수 있어, 목표가 임의로 흔들리지는 않습니다.</div>
+<div class="note d"><b>지금은 참고용입니다</b> — 업무 표의 내용이 KR 진척률에 자동 반영되지는 않습니다. 먼저 써보시고, "완료 개수 비율" 또는 "숫자 열 합계"를 진척률에 연결할지 나중에 정하겠습니다.</div>
+</div></div>
+
+<!-- 2 일정 -->
+<div class="card">
+<div class="ch"><span class="n n3">2</span><b>마감일 · 일정 탭</b><span class="tag t-new">신규</span></div>
+<div class="cb">
+<p style="font-size:13px;color:var(--tx3);margin-bottom:12px">기존 <b>실행 기간</b> 칸은 자유 텍스트라 컴퓨터가 못 읽었습니다. <b>시작일 / 마감일</b>을 날짜로 받는 칸을 추가해, 남은 날짜와 지연을 자동으로 계산합니다.</p>
+
+<div class="step"><div class="sn">1</div><div class="st">KR을 클릭해 열면 <b>시작일 · 마감일</b> 칸이 있습니다. 날짜를 고르고 <b>저장</b>합니다.</div></div>
+<div class="step"><div class="sn">2</div><div class="st">저장하면 KR 옆에 자동으로 배지가 붙습니다 —
+<span class="badge b-ok">D-54</span> <span class="badge b-soon">D-2</span> <span class="badge b-late">지연 7일</span> <span class="badge b-idle">정체</span> <span class="badge b-none">기한 미설정</span></div></div>
+<div class="step"><div class="sn">3</div><div class="st"><b>일정</b> 탭에서 분기 타임라인을 봅니다. 막대는 시작일~마감일이고, <b>빨간 세로선이 오늘</b>입니다. <span class="kbd">◀ 이전</span> <span class="kbd">다음 ▶</span> 로 분기를 옮깁니다.</div></div>
+
+<table style="margin-top:14px">
+<tr><th style="width:22%">구분</th><th style="width:38%">판정 기준 (자동)</th><th>어떻게 보이나</th></tr>
+<tr><td><span class="badge b-late">지연</span></td><td>마감일이 지났는데 100%가 아님</td><td>빨간 막대 / '내 업무' 맨 위</td></tr>
+<tr><td><span class="badge b-soon">이번 주 마감</span></td><td>마감일이 7일 이내</td><td>주황 막대 / D-일수 표시</td></tr>
+<tr><td><span class="badge b-idle">정체</span></td><td>마감 전이지만 <b>14일 이상</b> 값·메모·업무 변화 없음</td><td>보라 막대</td></tr>
+<tr><td><span class="badge b-none">기한 미설정</span></td><td>마감일을 아직 안 넣음</td><td>목록 맨 아래에 따로 모임</td></tr>
+</table>
+<div class="note"><b>날짜를 꼭 넣어야 하나요?</b> 강제는 아닙니다. 다만 날짜가 없으면 지연·정체 판정과 타임라인에서 빠지고 <b>기한 미설정</b>으로만 모입니다. 담당 KR부터 하나씩 채워주시면 됩니다.</div>
+</div></div>
+
+<!-- 3 내 업무 -->
+<div class="card">
+<div class="ch"><span class="n n4">3</span><b>'내 KR' → '내 업무'로 강화</b><span class="tag t-new">개편</span></div>
+<div class="cb">
+<p style="font-size:13px;color:var(--tx3);margin-bottom:10px">기존에는 담당 KR이 그냥 나열됐습니다. 이제 <b>무엇부터 해야 하는지</b> 순서대로 자동 분류됩니다.</p>
+<table>
+<tr><th style="width:30%">순서</th><th>내용</th></tr>
+<tr><td><span class="badge b-late">지연</span></td><td>마감이 지난 것 — 가장 먼저 처리</td></tr>
+<tr><td><span class="badge b-soon">이번 주 마감</span></td><td>7일 이내 마감</td></tr>
+<tr><td><span class="badge b-idle">정체</span></td><td>14일 이상 손대지 않은 것</td></tr>
+<tr><td><span class="badge b-ok">정상</span></td><td>일정대로 진행 중</td></tr>
+<tr><td><span class="badge b-none">기한 미설정</span></td><td>마감일을 넣어달라는 뜻</td></tr>
+</table>
+<div class="note">각 줄에는 <b>마감일 · 마지막 업데이트 날짜 · 업무 진행(완료/전체)</b>이 함께 나옵니다. 줄을 클릭하면 KR이 바로 열립니다.</div>
+</div></div>
+
+<!-- 4 활동 -->
+<div class="card">
+<div class="ch"><span class="n n5">4</span><b>활동 탭 · 코멘트 · 확신도</b><span class="tag t-new">신규</span></div>
+<div class="cb">
+<div class="grid2">
+<div class="mini"><h4>활동 탭 — 전사 변경 이력</h4>
+<p style="color:var(--tx3)">누가 무엇을 언제 바꿨는지 시간순으로 쌓입니다.</p>
+<ul>
+<li>현재값 변경 (0 → 82)</li>
+<li>마감일 변경</li>
+<li>확신도 변경</li>
+<li>코멘트 작성 · @언급</li>
+<li>업무 완료</li>
+</ul>
+<p style="margin-top:8px;color:var(--tx3)"><b>전체 / 내 관련</b> 로 걸러 볼 수 있고, 마지막 접속 이후 새 소식은 탭에 <b style="color:var(--d)">빨간 숫자</b>로 표시됩니다.</p>
+</div>
+<div class="mini"><h4>코멘트 · @언급</h4>
+<p style="color:var(--tx3)">KR을 열면 아래에 코멘트 영역이 있습니다.</p>
+<ul>
+<li>메모 한 칸을 덮어쓰지 않고 <b>대화가 쌓입니다</b></li>
+<li><span class="kbd">@박근정</span> 처럼 이름을 부르면 그분 활동 탭에 표시됩니다</li>
+<li>"왜 멈춰 있었는지"가 기록으로 남습니다</li>
+</ul>
+</div>
+</div>
+<div class="grid2" style="margin-top:14px">
+<div class="mini"><h4>확신도 신호등</h4>
+<p style="color:var(--tx3)">KR 안에서 담당자가 <b>순조 / 주의 / 위험</b>을 직접 고릅니다. 숫자는 좋아 보여도 담당자만 아는 위험이 있기 때문입니다. 잠금 중에도 담당자가 바꿀 수 있습니다.</p></div>
+<div class="mini"><h4>대시보드 추가 지표</h4>
+<ul>
+<li><b>이번 주 체크인 현황</b> — 최근 7일간 몇 명이 업데이트했는지</li>
+<li><b>담당자별 KR 부하</b> — 누가 몇 건을 지고 있는지, 지연은 몇 건인지</li>
+</ul></div>
+</div>
+<div class="note d"><b>알림의 한계 — 미리 말씀드립니다</b><br>
+앱에 들어왔을 때 <b>빨간 배지로 알려주는 것</b>까지가 가능합니다. 앱이 꺼져 있는데 <b>카톡·이메일·휴대폰 푸시를 보내는 것은 지원되지 않습니다</b>(별도 서버와 유료 전환이 필요). 그래서 알림보다 <b>주 1회 업데이트 습관</b>이 훨씬 중요합니다.</div>
+</div></div>
+
+<!-- 5 테스트 -->
+<div class="card">
+<div class="ch"><span class="n n1">5</span><b>이렇게 테스트해 주세요</b></div>
+<div class="cb">
+<div class="step"><div class="sn">1</div><div class="st">테스트 주소 접속 → 본인 이름 선택 → 비밀번호 <span class="kbd">1234</span></div></div>
+<div class="step"><div class="sn">2</div><div class="st"><b>내 업무</b> 탭 — 내 담당이 어떻게 분류되는지 봅니다. 대부분 <b>기한 미설정</b>일 텐데 정상입니다(아직 날짜를 안 넣어서).</div></div>
+<div class="step"><div class="sn">3</div><div class="st">KR을 하나 열어 <b>마감일</b>을 넣고 저장 → 배지가 생기고 <b>일정</b> 탭 타임라인에 막대가 나타나는지 확인합니다.</div></div>
+<div class="step"><div class="sn">4</div><div class="st"><b>사업별</b> → KR 옆 <span class="kbd">업무</span> 배지 → 업무 몇 건과 열을 만들어 봅니다. 실제 쓰실 항목으로 만들어 보시면 부족한 점이 잘 보입니다.</div></div>
+<div class="step"><div class="sn">5</div><div class="st">코멘트에 <span class="kbd">@이름</span> 을 넣어보고, <b>활동</b> 탭에 남는지 확인합니다.</div></div>
+<div class="step"><div class="sn">6</div><div class="st">가능하면 <b>다른 분과 동시에</b> 접속해 같은 KR의 업무를 같이 입력해보세요. 서로 실시간으로 보이고 내용이 사라지지 않아야 정상입니다.</div></div>
+<div class="note g"><b>확인된 사항</b> — 두 사람이 같은 KR에 동시에 업무를 넣는 상황을 실제로 시험했고, <b>양쪽 내용이 모두 남고 유실이 없음</b>을 확인했습니다. 업무를 한 덩어리가 아니라 <b>한 건씩 따로</b> 저장하도록 만들어서입니다.</div>
+</div></div>
+
+<div class="foot">
+피드백은 "이 화면의 이 부분" 형태로 알려주시면 반영이 빠릅니다.<br>
+테스트에서 확정된 뒤 실서비스에 반영합니다. · 2026.08.07
+</div>
+</div></body></html>
