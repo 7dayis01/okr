@@ -457,7 +457,7 @@ select.st.todo{color:var(--tx4)}select.st.doing{color:var(--wtx);font-weight:700
 <div class="mf"><span class="lf" id="mpLf"></span><button class="btn" onclick="copyProg()">텍스트 복사</button><button class="btn" onclick="window.print()">인쇄 / PDF</button><button class="btn" onclick="closeM('mProg')">닫기</button></div></div></div>
 <div class="modal" id="mTask" hidden><div class="mc mc-w"><div class="mh"><div><h3 id="mtT"></h3><div class="sub" id="mtS"></div></div><div class="mcl" onclick="closeM('mTask')">&times;</div></div>
 <div class="mb" id="mtB"></div>
-<div class="mf"><span class="lf">입력하면 즉시 저장됩니다 (별도 저장 버튼 없음)</span><button class="btn" onclick="closeM('mTask')">닫기</button></div></div></div>
+<div class="mf"><span class="lf">내용을 입력한 뒤 <b>저장</b>을 눌러주세요</span><button class="btn" onclick="closeM('mTask')">닫기</button><button class="btn btnp" id="tSaveBtn" onclick="saveTasks()">저장</button></div></div></div>
 <div class="modal" id="mPickParent" hidden><div class="mc" style="max-width:480px"><div class="mh"><div><h3>상위 사업 KR 선택</h3><div class="sub" id="mPickSub"></div></div><div class="mcl" onclick="closeM('mPickParent')">×</div></div>
 <div class="mb"><div class="fg"><label>이 하위 과제가 어느 사업 KR 아래에 들어갈지 선택</label><select id="pickParentSel" style="width:100%;height:38px;padding:0 10px;border:1px solid var(--bd);border-radius:7px;font-size:13px"></select></div></div>
 <div class="mf"><button class="btn" onclick="closeM('mPickParent')">취소</button><button class="btn btnp" onclick="confirmPickParent()">확인</button></div></div></div>
@@ -832,7 +832,24 @@ function stepDel(i,p){grabForm();const o=tgtObj(p);if(o.steps){o.steps.splice(i,
 
 /* ===== 하위 업무(Task) — 업무 1건 = 문서 1개 (동시편집 안전) ===== */
 let TASKS={},TCOL=null,_tsubbed=false,_taskKr=null;
-function tSub(){if(!TCOL||_tsubbed)return;_tsubbed=true;TCOL.where('_k','==','task').onSnapshot(qs=>{const n={};qs.forEach(d=>{n[d.id]=d.data()});TASKS=n;const m=document.getElementById('mTask');if(m&&!m.hidden)rTaskBody();try{if(state.cu)go(location.hash.replace('#','')||'dash')}catch(e){}},e=>console.warn('task snap',e));}
+
+let _tDirty=new Set(),_tDel=new Set();
+function tDirtyCnt(){return _tDirty.size+_tDel.size}
+function updSaveBar(){const b=document.getElementById('tSaveBtn');const m=document.getElementById('tSaveMsg');const n=tDirtyCnt();
+ if(b){b.disabled=!n;b.style.opacity=n?'1':'.45';b.textContent=n?('저장 ('+n+')'):'저장'}
+ if(m)m.textContent=n?('저장되지 않은 변경 '+n+'건 — [저장]을 눌러야 반영됩니다'):'모든 변경이 저장되었습니다'}
+function saveTasks(){if(!TCOL){alert('연결 상태를 확인해주세요.');return}
+ let empty=0;
+ [..._tDirty].forEach(id=>{const t=TASKS[id];if(t&&!(t.t||'').trim()){delete TASKS[id];_tDirty.delete(id);if(!t._new)_tDel.add(id);empty++}});
+ const w=[];const doneNow=[];
+ _tDirty.forEach(id=>{const t=TASKS[id];if(!t)return;const o=Object.assign({},t);delete o._new;delete o._logged;w.push(TCOL.doc(id).set(o));if(t.st==='done'&&!t._logged){t._logged=1;doneNow.push(t)}});
+ _tDel.forEach(id=>{w.push(TCOL.doc(id).delete())});
+ Promise.all(w).then(()=>{doneNow.forEach(t=>logAct(t.kr,'task',{txt:'업무 완료 — '+(t.t||'제목 없음')}));
+  _tDirty.clear();_tDel.clear();rTaskBody();
+  const m=document.getElementById('tSaveMsg');if(m)m.textContent=empty?('저장했습니다 · 내용이 비어 있던 '+empty+'줄은 저장하지 않았습니다'):'저장했습니다';
+ }).catch(e=>{console.warn('task save',e);alert('저장에 실패했습니다. 잠시 후 다시 시도해주세요.')})}
+function discardTasks(){_tDirty.forEach(id=>{if(TASKS[id]&&TASKS[id]._new)delete TASKS[id]});_tDirty.clear();_tDel.clear();rTaskBody()}
+function tSub(){if(!TCOL||_tsubbed)return;_tsubbed=true;TCOL.where('_k','==','task').onSnapshot(qs=>{const n={};qs.forEach(d=>{n[d.id]=d.data()});_tDirty.forEach(id=>{if(TASKS[id])n[id]=TASKS[id]});_tDel.forEach(id=>{delete n[id]});TASKS=n;const m=document.getElementById('mTask');if(m&&!m.hidden)rTaskBody();try{if(state.cu)go(location.hash.replace('#','')||'dash')}catch(e){}},e=>console.warn('task snap',e));}
 function tid(){return 't_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function tWrite(id,o){if(!TCOL)return;TCOL.doc(id).set(o).catch(e=>console.warn('task write',e))}
 function krTasks(krId){return Object.entries(TASKS).filter(([,t])=>t&&t.kr===krId).sort((a,b)=>(a[1].ord||0)-(b[1].ord||0))}
@@ -840,10 +857,10 @@ function canEditTask(krId){return canEditMemo(krId)}
 function tcols(krId){return (KRS[krId]&&KRS[krId].tcols)||[]}
 function taskBadge(krId){const n=krTasks(krId).length;const d=krTasks(krId).filter(([,t])=>t.st==='done').length;return n?`<span class="tbadge" onclick="event.stopPropagation();openTasks('${krId}')">업무 ${d}/${n}</span>`:`<span class="tbadge z" onclick="event.stopPropagation();openTasks('${krId}')">업무 +</span>`}
 function taskEntryHtml(krId){const n=krTasks(krId).length;return `<div class="fg"><label>하위 업무 (실무 관리)</label><button class="btn" style="width:100%;justify-content:center" onclick="openTasks('${krId}')">업무 관리 열기 &middot; ${n}건</button></div>`}
-function addTask(krId){const id=tid();const me=uById(state.cu);const rs=krTasks(krId);const ord=(rs.length?rs[rs.length-1][1].ord||0:0)+10;const o={_k:'task',kr:krId,t:'',ow:state.cu||'',due:'',st:'todo',memo:'',c:{},ord,ua:Date.now(),ub:me&&me.name||'-'};TASKS[id]=o;tWrite(id,o);rTaskBody()}
-function setT(id,f,v){const t=TASKS[id];if(!t)return;const me=uById(state.cu);const o=Object.assign({},t,{_k:'task',[f]:v,ua:Date.now(),ub:me&&me.name||'-'});TASKS[id]=o;tWrite(id,o);if(f==='st'){if(v==='done')logAct(t.kr,'task',{txt:'업무 완료 — '+(t.t||'제목 없음')});rTaskBody()}}
-function setTC(id,k,v){const t=TASKS[id];if(!t)return;const me=uById(state.cu);const c=Object.assign({},t.c||{});c[k]=v;const o=Object.assign({},t,{_k:'task',c,ua:Date.now(),ub:me&&me.name||'-'});TASKS[id]=o;tWrite(id,o)}
-function rmTask(id){if(!confirm('이 업무를 삭제할까요?'))return;delete TASKS[id];if(TCOL)TCOL.doc(id).delete().catch(e=>console.warn('task del',e));rTaskBody()}
+function addTask(krId){const id=tid();const me=uById(state.cu);const rs=krTasks(krId);const ord=(rs.length?rs[rs.length-1][1].ord||0:0)+10;const o={_k:'task',kr:krId,t:'',ow:state.cu||'',due:'',st:'todo',memo:'',c:{},ord,ua:Date.now(),ub:me&&me.name||'-',_new:1};TASKS[id]=o;_tDirty.add(id);rTaskBody()}
+function setT(id,f,v){const t=TASKS[id];if(!t)return;const me=uById(state.cu);const o=Object.assign({},t,{_k:'task',[f]:v,ua:Date.now(),ub:me&&me.name||'-'});TASKS[id]=o;_tDirty.add(id);if(f==='st')rTaskBody();else updSaveBar()}
+function setTC(id,k,v){const t=TASKS[id];if(!t)return;const me=uById(state.cu);const c=Object.assign({},t.c||{});c[k]=v;const o=Object.assign({},t,{_k:'task',c,ua:Date.now(),ub:me&&me.name||'-'});TASKS[id]=o;_tDirty.add(id);updSaveBar()}
+function rmTask(id){const t=TASKS[id];if(!t)return;if((t.t||'').trim()&&!confirm('이 업무를 삭제할까요?'))return;if(!t._new)_tDel.add(id);_tDirty.delete(id);delete TASKS[id];rTaskBody()}
 function addCol(krId){const l=prompt('추가할 열 이름을 입력하세요 (예: 광고주명, 계약금액)');if(!l||!l.trim())return;const ty=confirm('숫자만 입력하는 열입니까?\n확인 = 숫자 / 취소 = 텍스트')?'num':'text';const c=tcols(krId).slice();c.push({k:'c'+Date.now().toString(36),l:l.trim(),ty});KRS[krId].tcols=c;saveS();cloudKrWrite({[krId]:KRS[krId]});rTaskBody()}
 function delCol(krId,k){if(!confirm('이 열을 삭제할까요? 입력된 값도 함께 사라집니다.'))return;KRS[krId].tcols=tcols(krId).filter(c=>c.k!==k);saveS();cloudKrWrite({[krId]:KRS[krId]});rTaskBody()}
 function openTasks(krId){const k=KRS[krId];if(!k)return;_taskKr=krId;document.getElementById('mtT').textContent=k.text;document.getElementById('mtS').textContent=krId+' · 하위 업무';document.getElementById('mTask').hidden=false;rTaskBody()}
@@ -869,8 +886,8 @@ rows.forEach(([id,t],i)=>{
 });
 h+='</tbody></table></div>';
 const last=rows.map(([,t])=>t).sort((a,b)=>(b.ua||0)-(a.ua||0))[0];
-h+=`<div class="tft">${last?'마지막 수정 '+new Date(last.ua).toLocaleString('ko-KR')+' · '+esc(last.ub):'&nbsp;'}<span style="float:right">이 표는 참고용입니다 — KR 진척률에 자동 반영되지 않습니다.</span></div>`;
-document.getElementById('mtB').innerHTML=h;}
+h+=`<div class="tft"><span id="tSaveMsg">${tDirtyCnt()?'저장되지 않은 변경 '+tDirtyCnt()+'건 — [저장]을 눌러야 반영됩니다':(last?'마지막 저장 '+new Date(last.ua).toLocaleString('ko-KR')+' · '+esc(last.ub):'&nbsp;')}</span><span style="float:right">이 표는 참고용입니다 — KR 진척률에 자동 반영되지 않습니다.</span></div>`;
+document.getElementById('mtB').innerHTML=h;updSaveBar()}
 
 
 /* ===== 일정(마감일) · 활동 · 코멘트 · 확신도 ===== */
@@ -1131,7 +1148,7 @@ function confirmPickParent(){const pid=$('#pickParentSel').value;if(!pid)return;
 function saveObj(){const v=$('#objText').value.trim();if(!v){alert('내용 입력');return}if(state.editObjType==='biz'){BIZ[state.editObjBid].obj=v}else if(state.editObjType==='co'){CO.obj=v}state.editObjType=null;state.editObjBid=null;saveS();cloudMeta();closeM('mObj');go('biz')}
 function exportData(){const data={state,KRS,USERS,BIZ,CO,exportedAt:new Date().toISOString(),version:STORE};const json=JSON.stringify(data,null,2);const blob=new Blob([json],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`okr-backup-${new Date().toISOString().slice(0,10).replace(/-/g,'')}.json`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}
 function importData(file){if(!file)return;if(!confirm('현재 데이터를 백업 파일로 덮어씁니다. 계속할까요?'))return;const reader=new FileReader();reader.onload=e=>{try{const d=JSON.parse(e.target.result);if(d.KRS){Object.keys(KRS).forEach(k=>delete KRS[k]);Object.assign(KRS,d.KRS)}if(d.USERS){USERS.length=0;d.USERS.forEach(u=>USERS.push(u))}if(d.BIZ)Object.assign(BIZ,d.BIZ);if(d.CO)Object.assign(CO,d.CO);if(d.state)Object.assign(state,d.state);saveS();cloudInit();alert('복원 완료 (백업 시점: '+(d.exportedAt||'알 수 없음')+').\n페이지를 새로 로드합니다.');location.reload()}catch(err){alert('복원 실패: '+err.message)}};reader.readAsText(file)}
-function closeM(id){if(id==='mKr'&&state.isNewKr){const krId=state.currentKr;if(KRS[krId]){const typed=($('#krT')?.value||'').trim();const hasModel=(KRS[krId].text||'').trim();if(!hasModel&&!typed){delete KRS[krId];Object.values(KRS).forEach(k=>{if(k.children)k.children=k.children.filter(c=>c!==krId)});saveS();go('biz')}else if(!hasModel&&typed){KRS[krId].text=typed;saveS();cloudKrWrite({[krId]:KRS[krId],...(KRS[krId].parent&&KRS[KRS[krId].parent]?{[KRS[krId].parent]:KRS[KRS[krId].parent]}:{})});go(location.hash.replace('#','')||'biz')}}state.isNewKr=false}$('#'+id).hidden=true}
+function closeM(id){if(id==='mTask'&&tDirtyCnt()){if(!confirm('저장하지 않은 변경 '+tDirtyCnt()+'건이 있습니다.\n저장하지 않고 닫을까요?'))return;discardTasks()}if(id==='mKr'&&state.isNewKr){const krId=state.currentKr;if(KRS[krId]){const typed=($('#krT')?.value||'').trim();const hasModel=(KRS[krId].text||'').trim();if(!hasModel&&!typed){delete KRS[krId];Object.values(KRS).forEach(k=>{if(k.children)k.children=k.children.filter(c=>c!==krId)});saveS();go('biz')}else if(!hasModel&&typed){KRS[krId].text=typed;saveS();cloudKrWrite({[krId]:KRS[krId],...(KRS[krId].parent&&KRS[KRS[krId].parent]?{[KRS[krId].parent]:KRS[KRS[krId].parent]}:{})});go(location.hash.replace('#','')||'biz')}}state.isNewKr=false}$('#'+id).hidden=true}
 
 loadS();
 if(state.settings&&state.settings.terms)Object.assign(TERMS,state.settings.terms);
