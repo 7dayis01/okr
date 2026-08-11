@@ -1,0 +1,282 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OKR 업데이트 안내 — 무엇이 바뀌었나</title>
+<style>
+:root{--bd:#E4E4E7;--bdt:#D4D4D8;--tx:#09090B;--tx3:#52525B;--tx4:#71717A;--tx5:#A1A1AA;--bgs:#FAFAFA;--bgh:#F4F4F5;--ac:#2563EB;--ach:#1D4ED8;--acbg:#EFF6FF;--s:#10B981;--sbg:#ECFDF5;--stx:#065F46;--w:#F59E0B;--wbg:#FFFBEB;--wtx:#92400E;--d:#EF4444;--dbg:#FEF2F2;--dtx:#991B1B;--pp:#7C3AED;--ppbg:#F5F3FF;--tl:#0891B2;--fm:ui-monospace,'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:#F4F4F5;color:var(--tx);line-height:1.72;padding:22px 18px 66px;font-size:14.5px}
+.page{max-width:1000px;margin:0 auto}
+.hero{background:#fff;border:1px solid var(--bd);border-radius:18px;padding:28px 30px;margin-bottom:20px;text-align:center}
+h1{font-size:27px;letter-spacing:-.5px}
+.hs{font-size:14px;color:var(--tx4);margin-top:8px}
+.url{display:inline-flex;align-items:center;gap:9px;background:#111827;color:#fff;border-radius:10px;padding:11px 18px;font-family:var(--fm);font-size:13.5px;margin-top:16px;text-decoration:none}
+.card{background:#fff;border:1px solid var(--bd);border-radius:16px;margin-bottom:19px;overflow:hidden}
+.ch{padding:15px 22px;border-bottom:1px solid var(--bd);background:var(--bgs);display:flex;align-items:center;gap:10px}
+.ch b{font-size:16.5px}
+.n{width:26px;height:26px;border-radius:9px;color:#fff;font-size:13px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:800}
+.c1{background:var(--pp)}.c2{background:var(--ac)}.c3{background:#DB2777}.c4{background:var(--tl)}.c5{background:#65A30D}.c6{background:var(--d)}
+.cb{padding:20px 22px}
+.path{display:flex;align-items:flex-start;gap:9px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:11px;padding:11px 14px;margin-bottom:16px;font-size:13px;line-height:1.65}
+.path .lab{background:#0F172A;color:#fff;font-size:10.5px;font-weight:800;border-radius:6px;padding:3px 9px;flex-shrink:0;letter-spacing:.4px}
+.path .go{color:var(--tx3)}
+.path .go b{color:var(--tx);background:#fff;border:1px solid var(--bdt);border-radius:6px;padding:1px 8px;font-size:12.5px;white-space:nowrap;display:inline-block;margin:1px 0}
+.path .go i{font-style:normal;color:var(--tx5);margin:0 4px}
+.big{font-size:15px;color:var(--tx3);margin-bottom:15px;line-height:1.75}
+.big b{color:var(--tx)}
+.fig{border:1px solid var(--bd);border-radius:13px;padding:16px;background:#fff;margin:14px 0}
+.figcap{font-size:12px;color:var(--tx5);text-align:center;margin-top:10px}
+.tabbar{display:flex;gap:2px;border-bottom:2px solid var(--bd);padding:0 6px;flex-wrap:wrap}
+.tb{padding:9px 13px;font-size:13px;color:var(--tx4);border-bottom:3px solid transparent;margin-bottom:-2px}
+.tb.on{color:var(--ac);border-bottom-color:var(--ac);font-weight:800}
+.tb.new{color:var(--pp);font-weight:800}
+.tb.new::after{content:'NEW';font-size:8px;background:var(--pp);color:#fff;border-radius:8px;padding:1px 5px;margin-left:5px;vertical-align:top}
+.tb.gone{color:var(--tx5);text-decoration:line-through;opacity:.55}
+.tb .rb{background:var(--d);color:#fff;font-size:9.5px;border-radius:20px;padding:1px 6px;margin-left:5px;font-weight:800}
+.krrow{border:1px solid var(--bd);border-radius:11px;padding:12px 15px;display:flex;align-items:center;gap:9px;font-size:13.5px;background:#fff;margin-top:9px}
+.krrow .dot{width:9px;height:9px;border-radius:50%;background:#DB2777;flex-shrink:0}
+.krrow .nm{flex:1;font-weight:600}
+.pill{font-family:var(--fm);font-size:10.5px;border-radius:20px;padding:3px 9px;border:1px solid var(--bd);color:var(--tx4);white-space:nowrap}
+.pill.prog{background:var(--ppbg);color:#6D28D9;border-color:#DDD6FE;font-weight:800}
+.pill.late{background:var(--dbg);color:var(--dtx);border-color:#FECACA;font-weight:700}
+.pill.soon{background:var(--wbg);color:var(--wtx);border-color:#FDE68A;font-weight:700}
+.pill.idle{background:#EEF2FF;color:#3730A3;border-color:#C7D2FE;font-weight:700}
+.pill.ok{background:var(--sbg);color:var(--stx);border-color:#A7F3D0;font-weight:700}
+.pill.none{background:var(--bgh);color:var(--tx5)}
+.buckets{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.bk{border-radius:12px;padding:13px 11px;text-align:center;border:2px solid}
+.bk .ico{font-size:20px;line-height:1}
+.bk .ti{font-size:13px;font-weight:800;margin:5px 0 3px}
+.bk .de{font-size:11.5px;line-height:1.5}
+.bk.l{border-color:#FECACA;background:var(--dbg);color:var(--dtx)}
+.bk.s{border-color:#FDE68A;background:var(--wbg);color:var(--wtx)}
+.bk.i{border-color:#C7D2FE;background:#EEF2FF;color:#3730A3}
+.bk.o{border-color:#A7F3D0;background:var(--sbg);color:var(--stx)}
+.bk.n{border-color:var(--bd);background:var(--bgs);color:var(--tx4)}
+.steps{margin-top:4px}
+.step{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed var(--bd)}
+.step:last-child{border-bottom:none}
+.sn{width:26px;height:26px;border-radius:9px;background:var(--acbg);color:var(--ach);font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--fm)}
+.st2{flex:1;font-size:14px}
+.kbd{background:var(--bgh);border:1px solid var(--bdt);border-radius:6px;padding:2px 8px;font-size:12.5px;font-family:var(--fm)}
+.note{border-left:4px solid var(--ac);background:#F8FAFC;padding:13px 16px;font-size:13.5px;color:var(--tx3);border-radius:0 10px 10px 0;margin-top:15px;line-height:1.7}
+.note b{color:var(--tx)}
+.note.g{border-color:var(--s);background:#F5FEFA}
+.note.w{border-color:var(--w);background:var(--wbg);color:var(--wtx)}
+.note.w b{color:var(--wtx)}
+.note.d{border-color:var(--d);background:#FEF7F7}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th,td{border:1px solid var(--bd);padding:11px 13px;text-align:left;vertical-align:top}
+th{background:var(--bgs);font-weight:800;color:var(--tx3);font-size:12.5px}
+td.c{text-align:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini{border:1px solid var(--bd);border-radius:12px;padding:15px 17px;font-size:13.5px;line-height:1.7}
+.mini h4{font-size:14px;margin-bottom:8px}
+ul{margin:8px 0 0 19px}li{margin-bottom:5px;color:var(--tx3)}
+.mn{border-radius:5px;padding:1px 6px;font-weight:700}
+.mn.p{background:var(--acbg);color:var(--ach)}
+.mn.t{background:#F5F3FF;color:#6D28D9}
+.mn.o{background:#F0FDFA;color:#0F766E}
+.tcard{border:1px solid var(--bd);border-radius:12px;padding:13px 15px;background:#fff}
+.tcard .top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.tdot{width:11px;height:11px;border-radius:3px}
+.tcard .nm2{font-weight:800;font-size:14px;flex:1}
+.tmini{font-size:10.5px;color:var(--tx5);font-family:var(--fm)}
+.avs{display:flex;align-items:center}
+.avs .av{width:24px;height:24px;border-radius:50%;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:800;border:2px solid #fff;margin-left:-6px}
+.avs .av:first-child{margin-left:0}
+.ulistbar{display:flex;align-items:center;gap:9px;border:1px solid var(--bd);border-radius:11px;padding:11px 15px;background:#fff;font-size:13.5px}
+.ulistbar .ucnt{font-family:var(--fm);font-size:11px;background:var(--bgh);color:var(--tx4);border-radius:20px;padding:1px 8px}
+.foot{font-size:12px;color:var(--tx5);text-align:center;margin-top:22px;line-height:1.8}
+@media(max-width:800px){.two{grid-template-columns:1fr}.buckets{grid-template-columns:1fr 1fr}}
+</style></head><body><div class="page">
+
+<div class="hero">
+<h1>OKR이 이렇게 바뀌었습니다</h1>
+<div class="hs">목표 숫자만 보던 도구에서 → <b>지금 어떤 상황인지 함께 보는</b> 도구로.<br>실제 화면에 반영 완료 · 새로고침하시면 바로 보입니다.</div>
+<a class="url" href="https://7dayis01.github.io/okr/#dash">https://7dayis01.github.io/okr/</a>
+<div class="note g" style="text-align:left;margin-top:18px"><b>기존 데이터는 그대로입니다.</b> KR 93개, 사용자 36명, 지금까지 입력한 값·메모·담당자 모두 변함이 없습니다. 아래 기능은 <b>새로 추가된 것</b>이며, 반영 전 데이터 백업도 따로 보관해 두었습니다.</div>
+</div>
+
+<!-- 0 -->
+<div class="card">
+<div class="ch"><span class="n c2">0</span><b>먼저, 상단 메뉴가 바뀌었습니다</b></div>
+<div class="cb">
+<div class="path"><span class="lab">경로</span><div class="go">로그인 후 <b>화면 맨 위 메뉴줄</b></div></div>
+<div class="fig">
+<div class="tabbar"><div class="tb">대시보드</div><div class="tb on">내 업무</div><div class="tb">사업별</div><div class="tb new">활동<span class="rb">3</span></div><div class="tb">사용자</div><div class="tb">설정</div></div>
+<div class="figcap"><b>내 KR</b> → <b>내 업무</b>로 이름 변경 · <b>활동</b> 메뉴 신설</div>
+</div>
+<table>
+<tr><th style="width:18%">메뉴</th><th style="width:40%">무엇을 보나</th><th>언제 들어가나</th></tr>
+<tr><td><b>내 업무</b></td><td>내가 맡은 것들이 <b>급한 순서대로</b> 정리됨</td><td>출근해서 제일 먼저</td></tr>
+<tr><td><b>활동</b> <span style="color:var(--pp);font-size:11px">신규</span></td><td>누가 무엇을 바꿨는지 <b>새 소식 목록</b></td><td>자리 비웠다 돌아왔을 때</td></tr>
+<tr><td><b>사용자</b></td><td>조직도 + <b>팀 관리</b>(신규)</td><td>팀을 만들거나 고칠 때</td></tr>
+</table>
+</div></div>
+
+<!-- 1 진행상황 -->
+<div class="card">
+<div class="ch"><span class="n c1">1</span><b>진행상황 — 이번 업데이트의 핵심</b></div>
+<div class="cb">
+<div class="path"><span class="lab">경로</span><div class="go"><b>사업별</b><i>→</i>사업 선택<i>→</i>KR 줄의 보라색 <b>진행상황</b> 버튼 &nbsp;|&nbsp; <b>내 업무</b><i>→</i>각 줄의 <b>진행상황</b> &nbsp;|&nbsp; <b>KR 클릭</b><i>→</i>팝업 아래 <b>진행상황 보기</b></div></div>
+<div class="big">담당자가 <b>짧은 기록 한 줄</b>을 남기면, 그것을 모아 <b>그래프와 요약이 저절로</b> 만들어집니다. KR이 보이는 곳이면 어디서든 보라색 버튼으로 들어갑니다.</div>
+
+<div class="fig">
+<div class="krrow"><span class="dot"></span><span class="nm">매체 대행 마크업(수임료) 10% → 15% 인상</span><span class="pill prog">진행상황 5</span><span class="pill soon">D-52</span></div>
+<div class="figcap">보라색 배지 뒤 숫자는 <b>쌓인 기록 건수</b>입니다</div>
+</div>
+
+<div class="fig">
+<svg viewBox="0 0 760 240" width="100%" height="240" style="display:block">
+<g font-size="10" fill="#A1A1AA" font-family="ui-monospace,monospace">
+<line x1="56" y1="170" x2="690" y2="170" stroke="#E4E4E7"/><text x="48" y="173" text-anchor="end">0%</text>
+<line x1="56" y1="98" x2="690" y2="98" stroke="#F1F1F3"/><text x="48" y="101" text-anchor="end">50%</text>
+<line x1="56" y1="26" x2="690" y2="26" stroke="#D4D4D8" stroke-dasharray="4 3"/><text x="48" y="29" text-anchor="end">100%</text></g>
+<path d="M80,156 L190,142 L300,118 L420,96 L520,60 L520,170 L80,170 Z" fill="#2563EB" opacity=".07"/>
+<path d="M80,156 L190,142 L300,118 L420,96 L520,60" fill="none" stroke="#2563EB" stroke-width="2.8" stroke-linejoin="round"/>
+<path d="M520,60 L676,26" fill="none" stroke="#A1A1AA" stroke-width="1.8" stroke-dasharray="6 5"/>
+<line x1="530" y1="18" x2="530" y2="178" stroke="#EF4444" stroke-width="1.8"/>
+<rect x="509" y="4" width="42" height="14" rx="4" fill="#EF4444"/><text x="530" y="14.5" font-size="9.5" fill="#fff" text-anchor="middle" font-family="ui-monospace,monospace">오늘</text>
+<circle cx="80" cy="156" r="5.5" fill="#fff" stroke="#10B981" stroke-width="2.6"/>
+<circle cx="190" cy="142" r="5.5" fill="#fff" stroke="#10B981" stroke-width="2.6"/>
+<circle cx="300" cy="118" r="5.5" fill="#fff" stroke="#F59E0B" stroke-width="2.6"/>
+<circle cx="420" cy="96" r="5.5" fill="#fff" stroke="#EF4444" stroke-width="2.6"/>
+<circle cx="520" cy="60" r="7" fill="#2563EB" stroke="#fff" stroke-width="2.6"/>
+<text x="14" y="203" font-size="10" fill="#71717A" font-family="Pretendard,sans-serif">확신도</text>
+<rect x="80" y="194" width="220" height="12" rx="4" fill="#10B981" opacity=".85"/>
+<rect x="300" y="194" width="120" height="12" rx="4" fill="#F59E0B" opacity=".85"/>
+<rect x="420" y="194" width="60" height="12" rx="4" fill="#EF4444" opacity=".85"/>
+<rect x="480" y="194" width="50" height="12" rx="4" fill="#F59E0B" opacity=".85"/>
+<g font-size="11.5" font-family="Pretendard,sans-serif">
+<line x1="600" y1="45" x2="640" y2="60" stroke="#A1A1AA" stroke-width="1.2"/><text x="644" y="64" fill="#52525B">이 속도로 가야</text><text x="644" y="79" fill="#52525B">기한을 맞춥니다</text>
+<line x1="420" y1="88" x2="400" y2="52" stroke="#EF4444" stroke-width="1.2"/><rect x="288" y="34" width="118" height="18" rx="5" fill="#111827"/><text x="347" y="47" font-size="10" fill="#fff" text-anchor="middle">누르면 그때 기록이 열림</text></g>
+</svg>
+<div class="figcap"><b>파란 선</b> 실제 진척 &nbsp;/&nbsp; <b>회색 점선</b> 기한을 맞추려면 가야 할 속도 &nbsp;/&nbsp; <b>동그라미</b> 기록(테두리 색 = 그때 분위기) &nbsp;/&nbsp; <b>빨간 선</b> 오늘</div>
+</div>
+
+<div class="note"><b>그림 하나로 알 수 있는 것</b><br>
+· 파란 선이 회색 점선보다 <b>완만하면</b> → 이대로는 기한을 못 맞춥니다.<br>
+· 동그라미 사이가 <b>멀면</b> → 그동안 아무도 손대지 않았다는 뜻입니다.<br>
+· 아래 띠에 <b>빨간 구간</b>이 있으면 → 숫자는 올랐어도 그때 문제가 있었다는 뜻입니다.</div>
+
+<h3 style="font-size:15px;margin:20px 0 8px">기록 남기는 방법</h3>
+<div class="steps">
+<div class="step"><div class="sn">1</div><div class="st2">KR 줄의 <span class="pill prog">진행상황</span> 을 누릅니다.</div></div>
+<div class="step"><div class="sn">2</div><div class="st2">아래 <b>진행 기록 남기기</b>에 입력합니다.<br>
+<span class="kbd">현재값</span> 숫자가 바뀌었으면 <span style="color:var(--tx5)">(안 바뀌었으면 비워둠)</span> &nbsp; <span class="kbd">확신도</span> 순조·주의·위험 <span style="color:var(--tx5)">(선택)</span> &nbsp; <span class="kbd">진행 내용</span> 한두 줄 <span style="color:var(--d);font-weight:700">(필수)</span></div></div>
+<div class="step"><div class="sn">3</div><div class="st2"><b>기록 남기기</b>를 누르면 끝입니다. 그래프에 점이 찍히고 요약이 다시 계산됩니다.</div></div>
+</div>
+<div class="note g"><b>숫자가 안 바뀌어도 기록해 주세요.</b> 예전에는 숫자를 바꿔야만 기록이 남아서, "이번 주는 법무 검토 대기라 진척 없음" 같은 중요한 상황이 어디에도 남지 않았습니다. 이제 <b>메모만 남겨도</b> 기록이 됩니다.</div>
+</div></div>
+
+<!-- 2 내 업무 -->
+<div class="card">
+<div class="ch"><span class="n c3">2</span><b>내 업무 — 급한 순서로 자동 정리</b></div>
+<div class="cb">
+<div class="path"><span class="lab">경로</span><div class="go">상단 메뉴 <b>내 업무</b> &nbsp;·&nbsp; 마감일 입력은 <b>KR 클릭</b><i>→</i><b>시작일 / 마감일</b><i>→</i><b>저장</b></div></div>
+<div class="fig">
+<div class="buckets">
+<div class="bk l"><div class="ico">🔴</div><div class="ti">지연</div><div class="de">마감이<br>지났습니다</div></div>
+<div class="bk s"><div class="ico">🟡</div><div class="ti">이번 주</div><div class="de">7일 안에<br>마감입니다</div></div>
+<div class="bk i"><div class="ico">🔵</div><div class="ti">정체</div><div class="de">2주 넘게<br>기록이 없습니다</div></div>
+<div class="bk o"><div class="ico">🟢</div><div class="ti">정상</div><div class="de">일정대로<br>가고 있습니다</div></div>
+<div class="bk n"><div class="ico">⚪</div><div class="ti">기한 미설정</div><div class="de">마감일을<br>넣어주세요</div></div>
+</div>
+<div class="figcap">위에서부터 급한 순서 — <b>위쪽부터 처리</b>하시면 됩니다</div>
+</div>
+<div class="note w"><b>처음 들어가면 거의 다 '기한 미설정'일 겁니다.</b> 고장이 아니라 아직 마감일을 아무도 안 넣어서입니다. KR을 열어 <b>마감일</b>에 날짜를 넣으면 제자리를 찾아갑니다. 날짜를 넣으면 KR 옆에 <span class="pill ok">D-54</span> <span class="pill soon">D-2</span> <span class="pill late">지연 7일</span> 같은 배지가 자동으로 붙습니다.</div>
+</div></div>
+
+<!-- 3 활동 -->
+<div class="card">
+<div class="ch"><span class="n c5">3</span><b>활동 — 누가 무엇을 바꿨는지</b></div>
+<div class="cb">
+<div class="path"><span class="lab">경로</span><div class="go">상단 메뉴 <b>활동</b> (빨간 숫자 = 안 읽은 소식)</div></div>
+<div class="two">
+<div class="mini"><h4>여기 쌓이는 것</h4>
+<ul><li>진척 숫자 변경</li><li>마감일 변경</li><li>확신도 변경</li><li>진행 기록 · @호출</li></ul>
+<p style="margin-top:8px;color:var(--tx3)"><b>전체 / 내 관련</b>로 걸러 볼 수 있습니다.</p></div>
+<div class="mini"><h4>맨 위 한 줄 요약</h4>
+<p style="color:var(--tx3)">최근 7일 업데이트 <b>N명 / 36명</b> · 지연 <b>N건</b> · 정체 <b>N건</b></p>
+<p style="margin-top:8px;color:var(--tx3);font-size:12.5px">대시보드에도 <b>지연 · 이번 주 · 정체 · 기한 미설정</b> 4칸이 있고, 누르면 해당 목록으로 넘어갑니다.</p></div>
+</div>
+<div class="note d"><b>알림에 대해 솔직히 말씀드립니다</b><br>
+<b>앱에 들어왔을 때</b> 빨간 숫자로 알려주는 것까지가 가능합니다. 앱을 안 켠 상태에서 <b>카톡·문자·이메일 알림은 지원되지 않습니다</b>(별도 서버와 유료 전환이 필요합니다). 그래서 알림보다 <b>주 1회 기록하는 습관</b>이 훨씬 중요합니다.</div>
+</div></div>
+
+<!-- 4 팀 -->
+<div class="card">
+<div class="ch"><span class="n c4">4</span><b>팀 — 업무 단위로 사람 묶기</b></div>
+<div class="cb">
+<div class="path"><span class="lab">경로</span><div class="go">상단 메뉴 <b>사용자</b><i>→</i>화면 아래쪽 <b>팀</b> 영역<i>→</i><b>+ 팀 만들기</b></div></div>
+<div class="big"><b>사업부는 그대로</b>입니다. 그 위에 <b>팀</b>이 새로 생겼습니다. 팀은 <b>이 KR을 같이 하는 사람들</b>의 모임이라, 사업부를 넘나들고 한 사람이 여러 팀에 들어갈 수 있습니다.</div>
+<div class="fig">
+<div style="display:flex;align-items:center;gap:9px;margin-bottom:10px"><b style="font-size:15px">팀</b><span class="tmini">7개 · 업무 단위 모임 (사업부와 별개)</span></div>
+<div class="two">
+<div class="tcard"><div class="top"><span class="tdot" style="background:#DB2777"></span><span class="nm2">수수료 인상 TF</span><span class="tmini">KR 1</span></div>
+<div class="avs"><span class="av" style="background:#84CC16">근</span><span class="av" style="background:#F97316">수</span><span class="av" style="background:#3B82F6">경</span><span class="av" style="background:#06B6D4">곽</span></div>
+<div class="tmini" style="margin-top:7px">4명 · 리더 박근정 · 전사</div></div>
+<div class="tcard"><div class="top"><span class="tdot" style="background:#2563EB"></span><span class="nm2">익스 전체</span><span class="tmini">KR 14</span></div>
+<div class="avs"><span class="av" style="background:#06B6D4">곽</span><span class="av" style="background:#059669">병</span><span class="av" style="background:#10B981">숙</span><span class="av" style="background:#F59E0B">혜</span></div>
+<div class="tmini" style="margin-top:7px">19명 · 보따리익스 (해외물류)</div></div>
+</div>
+<div class="figcap">기존 그룹 6개(익스·로지스·마케팅·푸드 전체, 경영지원팀, 운영지원팀)는 <b>팀으로 그대로 옮겨졌고 멤버도 자동으로 채워졌습니다</b></div>
+</div>
+<table>
+<tr><th style="width:26%">할 수 있는 것</th><th>설명</th></tr>
+<tr><td>팀 만들기 · 수정</td><td>이름 · 색 · 멤버 · 리더를 지정합니다. 멤버는 <b>사업부와 무관하게</b> 고를 수 있습니다.</td></tr>
+<tr><td>KR 담당자로 지정</td><td>KR 담당자에 팀을 넣으면 <b>팀원 전원의 '내 업무'</b>에 그 KR이 뜨고, 기록도 남길 수 있습니다.</td></tr>
+<tr><td>삭제</td><td>그 팀이 담당인 KR 개수를 먼저 알려주고, 확인하면 담당을 해제합니다.</td></tr>
+</table>
+<div class="note"><b>편집은 관리자·임원만</b> 가능합니다(박병훈 대표이사 · 이유란 상무 · 이성일 이사 · 곽경훈). 나머지 분들은 팀 구성을 <b>보기만</b> 하십니다.</div>
+</div></div>
+
+<!-- 5 @호출 -->
+<div class="card">
+<div class="ch"><span class="n c1">5</span><b>@호출 — 사람 · 팀 · 사업부</b></div>
+<div class="cb">
+<div class="path"><span class="lab">경로</span><div class="go"><b>진행상황</b><i>→</i><b>진행 내용</b> 칸에서 <b>@</b> 입력</div></div>
+<div class="big"><b>@</b> 를 치면 <b>팀 → 사업부 → 사람</b> 순으로 목록이 뜹니다. 이름 일부만 쳐도 걸러집니다.</div>
+<div class="fig">
+<div style="font-size:14px;line-height:2.1">
+C사 이탈 위험 있어 대응 필요합니다. <span class="mn t">@수수료 인상 TF</span> 확인 부탁드리고,<br>
+단가표는 <span class="mn o">@이레이즈 마케팅</span> 쪽에서 정리해 주세요. <span class="mn p">@박근정</span> 님 일정 공유 부탁합니다.
+</div>
+<div class="figcap"><span class="mn t">팀</span> 보라 &nbsp;·&nbsp; <span class="mn o">사업부</span> 초록 &nbsp;·&nbsp; <span class="mn p">사람</span> 파랑</div>
+</div>
+<div class="note g">팀이나 사업부를 부르면 <b>그 안의 사람 전원</b>에게 전달됩니다. 활동 탭에서 나를 직접 부른 것은 <b>나 호출</b>, 팀·사업부로 불린 것은 <b>팀 호출</b> 배지로 구분되며 <b>둘 다 '내 관련'</b>에 들어갑니다.</div>
+</div></div>
+
+<!-- 6 정리된 것 -->
+<div class="card">
+<div class="ch"><span class="n c6">6</span><b>정리·삭제된 것</b></div>
+<div class="cb">
+<table>
+<tr><th style="width:24%">항목</th><th>내용</th></tr>
+<tr><td><b>일정 탭</b></td><td>분기 타임라인 화면을 <b>삭제</b>했습니다. 마감일 배지와 '내 업무' 분류는 그대로 남습니다.</td></tr>
+<tr><td><b>KR 팝업</b></td><td>입력 항목 <b>19개 → 13개</b>로 줄었습니다. 확신도 · 변경 이력 · 체크인 메모가 <b>진행상황 화면으로 모였습니다.</b></td></tr>
+<tr><td><b>대시보드</b></td><td>담당자별 부하 · 체크인 카드를 빼고, <b>지연 · 이번 주 · 정체 · 기한 미설정</b> 4칸으로 정리했습니다.</td></tr>
+<tr><td><b>사용자 명단</b></td><td>화면이 길어져서 <b>기본 접힘</b>으로 바꿨습니다. <span class="kbd">▶ 사용자 명단</span> 을 누르면 펼쳐집니다.</td></tr>
+</table>
+<div class="fig">
+<div class="ulistbar">▶ <b>사용자 명단</b> <span class="ucnt">36명</span> <span style="margin-left:auto;color:var(--tx5);font-size:11.5px">클릭하면 펼쳐집니다</span></div>
+<div class="figcap">사용자 탭이 <b>조직도 → 명단(접힘) → 팀</b> 순으로 한 화면에 들어옵니다</div>
+</div>
+</div></div>
+
+<!-- 7 -->
+<div class="card">
+<div class="ch"><span class="n c2">7</span><b>오늘 이것만 해보셔도 됩니다 (3분)</b></div>
+<div class="cb">
+<div class="steps">
+<div class="step"><div class="sn">1</div><div class="st2"><b>내 업무</b>를 엽니다. 대부분 <b>기한 미설정</b>이면 정상입니다.</div></div>
+<div class="step"><div class="sn">2</div><div class="st2">담당 KR 하나를 열어 <b>마감일</b>을 넣고 저장합니다.</div></div>
+<div class="step"><div class="sn">3</div><div class="st2"><span class="pill prog">진행상황</span> 을 눌러 <b>기록 한 줄</b>을 남깁니다. 숫자가 안 바뀌었으면 메모만 쓰셔도 됩니다.</div></div>
+</div>
+<div class="note"><b>이 도구의 성패는 기능이 아니라 기록입니다.</b> 지금까지 남은 기록이 전사 2건뿐이었습니다. 아무리 좋은 화면을 만들어도 기록이 없으면 빈 그래프만 남습니다. <b>주 1회, 한 줄</b>이면 충분합니다.</div>
+</div></div>
+
+<div class="foot">
+문의나 불편한 점은 곽경훈에게 알려주세요.<br>
+2026.08.11 반영 · 반영 전 데이터는 별도 백업 보관 중입니다
+</div>
+</div></body></html>
