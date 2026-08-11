@@ -647,7 +647,7 @@ ${iks.map(ikid=>{const ik=KRS[ikid];if(!ik)return'';const ip=pct(ik);const iow=o
 <div class="row" onclick="openKr('${ikid}')">
 <div class="expand leaf">▶</div>
 <div class="rd" style="background:${COLORS[ck.biz]};opacity:.3"></div>
-<div class="rt"><span class="rtag">${TERMS.subtask}</span><span>${ik.text}</span><span class="rid">${ikid}</span>${taskBadge(ikid)}</div>
+<div class="rt"><span class="rtag">${TERMS.subtask}</span><span>${ik.text}</span><span class="rid">${ikid}</span></div>
 <div class="rown">${renderOwners(ik)}</div>
 <div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(ip)}%;background:${COLORS[ck.biz]};opacity:.7"></div></div><span class="rpct pct-color ${pctCls(ip)}">${pctTxt(ip)}</span></div>
 </div>`}).join('')}
@@ -671,14 +671,14 @@ function rBizDetail(bid){const b=BIZ[bid];const bkrs=Object.entries(KRS).filter(
 <div class="row root ${state.sel===id?'sel':''}" onclick="selRow('${id}');openKr('${id}')">
 <div class="expand ${iks.length?(ikex?'open':''):'leaf'}" onclick="event.stopPropagation();togE('${id}')">▶</div>
 <div class="rd" style="background:${COLORS[bid]}"></div>
-<div class="rt"><b>${k.text}</b><span class="rid">${id}</span><span class="bd ${k.type==='committed'?'com':'asp'}">${k.type==='committed'?TERMS.committed:TERMS.aspirational}</span>${taskBadge(id)}${progBadge(id)}${ddBadge(id)}</div>
+<div class="rt"><b>${k.text}</b><span class="rid">${id}</span><span class="bd ${k.type==='committed'?'com':'asp'}">${k.type==='committed'?TERMS.committed:TERMS.aspirational}</span>${progBadge(id)}${ddBadge(id)}</div>
 <div class="rown">${renderOwners(k)}</div>
 <div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(p)}%;background:${COLORS[bid]}"></div></div><span class="rpct pct-color ${pctCls(p)}">${pctTxt(p)}</span></div>
 </div>
 ${iks.length?`<div class="children" ${!ikex?'hidden':''}>${iks.map(ikid=>{const ik=KRS[ikid];if(!ik)return'';const ip=pct(ik);const iow=ownerInfo(ik.owner);return `<div class="row" onclick="openKr('${ikid}')">
 <div class="expand leaf">▶</div>
 <div class="rd" style="background:${COLORS[bid]};opacity:.5"></div>
-<div class="rt"><span class="rtag">${TERMS.subtask}</span><span>${ik.text}</span><span class="rid">${ikid}</span>${taskBadge(ikid)}</div>
+<div class="rt"><span class="rtag">${TERMS.subtask}</span><span>${ik.text}</span><span class="rid">${ikid}</span></div>
 <div class="rown">${renderOwners(ik)}</div>
 <div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(ip)}%;background:${COLORS[bid]};opacity:.7"></div></div><span class="rpct pct-color ${pctCls(ip)}">${pctTxt(ip)}</span></div>
 </div>`}).join('')}</div>`:''}
@@ -988,7 +988,7 @@ function rStatusLine(){const ids=Object.keys(KRS).filter(id=>!id.includes('-IK-'
 /* ===== KR 진행상황 ===== */
 let _progKr=null,_progConf='';
 function progBadge(id){const n=progPoints(id).length;return `<span class="pbadge" onclick="event.stopPropagation();openProg('${id}')">진행상황${n?' '+n:''}</span>`}
-function progEntryHtml(id){return `<div class="fg"><label>진행상황 (기록·그래프)</label><button class="btn" style="width:100%;justify-content:center" onclick="openProg('${id}')">진행상황 보기 &middot; 기록 ${progPoints(id).length}건</button></div>`}
+function progEntryHtml(id){return `<div class="fg"><label>진행상황</label><button class="btn btnp" style="width:100%;justify-content:center;height:40px" onclick="openProg('${id}')">진행상황 보기 &middot; 기록 ${progPoints(id).length}건</button><div style="font-size:11.5px;color:var(--tx4);margin-top:6px">진척 기록 &middot; 확신도 &middot; 그래프 &middot; 변경 이력은 모두 이 화면에서 봅니다.</div></div>`}
 function toP(k,v){const b=(k.baseline===undefined||k.baseline===null)?0:k.baseline;const t=k.tgt;if(t===undefined||t===null||t===b)return 0;return Math.max(0,Math.min(130,Math.round((v-b)/(t-b)*100)))}
 function progPoints(id){const k=KRS[id];if(!k)return [];const out=[];
  const near=(t,v)=>out.some(q=>q.v===v&&Math.abs(q.t-t)<180000);
@@ -1074,7 +1074,7 @@ function rProg(){const id=_progKr;if(!id)return;const k=KRS[id];const S=progSumm
  if(ed){h+=`<h3>진행 기록 남기기</h3><div class="inbox">
  <div class="inrow"><div><label>현재값 (선택)</label><input type="number" id="pgVal" placeholder="${k.cur}" step="any"></div>
  <div><label>확신도 (선택)</label><div class="segp"><div class="g ${_progConf==='g'?'on':''}" onclick="setPConf('g')">순조</div><div class="y ${_progConf==='y'?'on':''}" onclick="setPConf('y')">주의</div><div class="r ${_progConf==='r'?'on':''}" onclick="setPConf('r')">위험</div></div></div></div>
- <div><label>진행 내용 · 특이사항 <span style="color:var(--d)">필수</span></label><textarea id="pgMemo" placeholder="무엇이 진행됐고 무엇이 막혀 있는지 적어주세요. 값을 안 바꿔도 메모만 남길 수 있습니다."></textarea></div>
+ <div><label>진행 내용 · 특이사항 <span style="color:var(--d)">필수</span></label><textarea id="pgMemo" placeholder="무엇이 진행됐고 무엇이 막혀 있는지 적어주세요. 값을 안 바꿔도 메모만 남길 수 있습니다. @이름 으로 담당자를 부를 수 있습니다."></textarea></div>
  <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:9px;align-items:center"><span style="font-size:11px;color:var(--tx5);margin-right:auto">값 없이 <b>메모만</b> 남겨도 기록됩니다</span><button class="btn btnp" onclick="addProgLog()">기록 남기기</button></div></div>`}
  else h+='<h3>진행 기록</h3><div style="font-size:12.5px;color:var(--tx4);background:var(--bgs);border:1px solid var(--bd);border-radius:9px;padding:10px 13px">담당자·관리자만 기록을 남길 수 있습니다. 아래 이력은 자유롭게 보실 수 있습니다.</div>';
  // 타임라인
@@ -1088,7 +1088,7 @@ function rProg(){const id=_progKr;if(!id)return;const k=KRS[id];const S=progSumm
   else if(a.ty==='conf')head=`<span class="chg">확신도 ${esc(a.from)} → ${esc(a.to)}</span>`;
   else if(a.ty==='cmt'){head='<span class="chg">코멘트</span>';memo=mentHtml(a.txt||'')}
   else if(a.ty==='task')head='<span class="chg">업무</span>';
-  h+=`<div class="ti ${cls}" data-rec="${a.at}"><div class="hd2"><span class="who">${esc(a.by)}</span><span>${new Date(a.at).toLocaleDateString('ko-KR')}</span>${head}${a.conf?`<span class="tagm tm-${a.conf}">${CLl[a.conf]}</span>`:''}</div>${memo?`<div class="memo2">${a.ty==='cmt'?memo:esc(memo)}</div>`:''}</div>`});
+  h+=`<div class="ti ${cls}" data-rec="${a.at}"><div class="hd2"><span class="who">${esc(a.by)}</span><span>${new Date(a.at).toLocaleDateString('ko-KR')}</span>${head}${a.conf?`<span class="tagm tm-${a.conf}">${CLl[a.conf]}</span>`:''}</div>${memo?`<div class="memo2">${a.ty==='cmt'?memo:mentHtml(memo)}</div>`:''}</div>`});
  h+='</div></div>';
  // 우측 요약
  h+='<div class="psec"><h3>자동 요약 <span class="cnt">기록에서 계산</span></h3>';
@@ -1098,8 +1098,7 @@ function rProg(){const id=_progKr;if(!id)return;const k=KRS[id];const S=progSumm
  h+=`<div class="sum"><h4>기록 활동</h4><div class="kv"><span>총 기록</span><b>${S.cnt}건</b></div><div class="kv"><span>마지막 기록</span><b>${S.last?Math.round((Date.now()-S.last.t)/86400000)+'일 전':'없음'}</b></div><div class="kv"><span>평균 간격</span><b>${S.gap!==null?S.gap+'일':'—'}</b></div><div class="kv"><span>확신도 변경</span><b>${S.confCnt}회</b></div></div>`;
  const mx=S.by.length?S.by[0][1]:1;
  h+=`<div class="sum"><h4>참여 담당자</h4>${S.by.length?S.by.map(([nm,c])=>{const u=USERS.find(x=>x.name===nm);return `<div class="who2"><span class="av" style="background:${(u||{}).color||'#A1A1AA'}">${nm[0]}</span><span style="width:52px">${esc(nm)}</span><span class="bar"><i style="width:${Math.round(c/mx*100)}%"></i></span><span class="mono" style="font-size:11px;color:var(--tx4)">${c}건</span></div>`}).join(''):'<div style="color:var(--tx5);font-size:12px">기록 없음</div>'}</div>`;
- h+=`<div class="sum"><h4>하위 업무</h4><div class="kv"><span>완료</span><b>${tkDone} / ${tk.length}</b></div><div class="kv"><span>지연</span><b style="color:${tkLate?'var(--dtx)':'var(--tx4)'}">${tkLate}건</b></div><div class="kv"><span style="color:var(--ac);cursor:pointer" onclick="openTasks('${id}')">업무 표 열기 &#9656;</span><b></b></div></div>`;
- h+='</div></div>';
+  h+='</div></div>';
  document.getElementById('mpB').innerHTML=h}
 function addProgLog(){const id=_progKr;if(!id||!canEditMemo(id))return;const k=KRS[id];
  const memo=(document.getElementById('pgMemo')||{}).value||'';const raw=(document.getElementById('pgVal')||{}).value||'';
@@ -1111,7 +1110,7 @@ function addProgLog(){const id=_progKr;if(!id||!canEditMemo(id))return;const k=K
  if(!state.history[id])state.history[id]=[];
  state.history[id].push({at:nowStamp(),cur:oldCur,newCur:newCur,by:(me&&me.name)||'-',memo:memo});
  saveS();cloudKrWrite({[id]:KRS[id]},null,{['_history.'+id]:state.history[id]});
- logAct(id,'log',{from:String(oldCur),to:String(newCur),txt:memo,conf:_progConf||''});
+ const ment=USERS.filter(u=>memo.indexOf('@'+u.name)>=0).map(u=>u.id);logAct(id,'log',{from:String(oldCur),to:String(newCur),txt:memo,conf:_progConf||'',ment:ment});
  _progConf='';
  setTimeout(()=>{rProg();try{go(location.hash.replace('#','')||'dash')}catch(e){}},500)}
 function copyProg(){const id=_progKr;if(!id)return;const k=KRS[id];const S=progSummary(id);const CL={g:'순조',y:'주의',r:'위험'};
@@ -1126,9 +1125,9 @@ function copyProg(){const id=_progKr;if(!id)return;const k=KRS[id];const S=progS
 function openKr(id){const k=KRS[id];if(!k)return;state.currentKr=id;const p=pct(k);const ow=uById(k.owner);const ed=canEdit(id);const em=canEditMemo(id);const bid=k.biz||(KRS[k.parent]&&KRS[k.parent].biz);const bname=bid?BIZ[bid]?.name:'';$('#mkT').textContent=k.text;$('#mkS').textContent=`${bname} · ${id}`;$('#mkLf').textContent=ed?'':(em?'🔒 수치는 관리자만 · 메모는 작성 가능':'🔒 수정 권한 없음');$('#mkSave').style.display=(ed||em)?'inline-flex':'none';$('#mkDel').style.display=(uById(state.cu)?.role==='admin')?'inline-flex':'none';
 $('#mkB').innerHTML=`${!ed?(em?'<div class="lock-b">🔒 편집 잠금 중 — 수치는 관리자만 수정 가능합니다. <b>메모(세부 메모·체크인 메모)는 작성해 저장할 수 있습니다.</b></div>':'<div class="lock-b">🔒 본인이 담당이 아니거나 권한이 없어 수정할 수 없습니다 — 조회만 가능</div>'):''}<div class="knum"><div><div class="knl">진척률</div><div class="knv">${p}%</div></div><div><div class="knl">현재</div><div class="knv">${k.cur}${k.unit}<span class="src-tag ${k.cur===0?'unset':'real'}">${k.cur===0?'미입력':'실제'}</span></div></div><div><div class="knl">목표</div><div class="knv">${k.tgt}${k.unit}</div></div><div><div class="knl">상태</div><div><span class="bd ${status(p)}">${status(p)==='s'?'달성':status(p)==='o'?'정상':status(p)==='w'?'주의':'위험'}</span></div></div></div>
 <div class="fg"><label>KR 텍스트</label><input type="text" id="krT" value="${k.text.replace(/"/g,'&quot;')}" ${!ed?'disabled':''}></div>
-${measureUI(k,ed)}<div class="fg"><label>체크인 메모 (현재값 변경 시 함께 저장)</label><input type="text" id="krMemo" placeholder="예: 7월 1주차 영업 마감 / 콜드체인 손실률 개선 등" ${!(ed||em)?'disabled':''}></div>
+${measureUI(k,ed)}
 <div class="fg" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div><label>타입</label><select id="krTy" ${!ed?'disabled':''}><option value="committed" ${k.type==='committed'?'selected':''}>필수 (committed)</option><option value="aspirational" ${k.type==='aspirational'?'selected':''}>도전 (aspirational)</option></select></div><div><label>담당자 (그룹 1 + 개인 N)</label><div class="owner-picker"><div class="owner-chips" id="krOChips"></div>${ed?'<input type="text" id="krOSearch" placeholder="이름/그룹 검색..." oninput="renderKrOpts()" onfocus="renderKrOpts()"><div class="owner-options" id="krOOpts"></div>':''}</div></div></div>
-<div class="fg"><label>세부 메모</label><textarea id="krNote" rows="4" ${!(ed||em)?'disabled':''} style="width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;font-family:inherit;line-height:1.6;resize:vertical;background:${!(ed||em)?'var(--bgs)':'#fff'};color:var(--tx2)">${(k.note||'').replace(/"/g,'&quot;')}</textarea></div><div class="fg" style="display:grid;grid-template-columns:1fr 1fr 104px;gap:8px"><div><label>시작일</label><input type="date" id="krStart" value="${k.start||''}" ${!ed?'disabled':''}></div><div><label>마감일</label><input type="date" id="krDue" value="${k.due||''}" ${!ed?'disabled':''}></div><div><label>자동 계산</label><div style="padding-top:7px">${ddBadge(id)}</div></div></div><div class="fg"><label>확신도 — 담당자 자가진단 (숫자로 안 잡히는 위험)</label>${confUI(id)}</div><div class="fg"><label>실행 기간 (기존 텍스트 · 참고용)</label><input type="text" id="krPeriod" value="${(k.period||'').replace(/"/g,'&quot;')}" ${!ed?'disabled':''} placeholder="예: 6월 ~ 12월"></div><div class="fg"><label>현재값 변경 히스토리</label>${sparkline(id)}<div style="font-size:11px;color:var(--tx4);padding:8px 10px;background:var(--bgs);border-radius:6px">${(state.history[id]||[]).slice(-3).reverse().map(h=>`${h.at} · ${h.cur} → ${h.newCur} (${h.by})${h.memo?` — 💬 ${h.memo}`:''}`).join('<br>')||'기록 없음'}</div></div>`+progEntryHtml(id)+taskEntryHtml(id)+cmtUI(id);
+<div class="fg"><label>세부 메모</label><textarea id="krNote" rows="4" ${!(ed||em)?'disabled':''} style="width:100%;padding:8px 10px;border:1px solid var(--bd);border-radius:6px;font-size:12px;font-family:inherit;line-height:1.6;resize:vertical;background:${!(ed||em)?'var(--bgs)':'#fff'};color:var(--tx2)">${(k.note||'').replace(/"/g,'&quot;')}</textarea></div><div class="fg" style="display:grid;grid-template-columns:1fr 1fr 104px;gap:8px"><div><label>시작일</label><input type="date" id="krStart" value="${k.start||''}" ${!ed?'disabled':''}></div><div><label>마감일</label><input type="date" id="krDue" value="${k.due||''}" ${!ed?'disabled':''}></div><div><label>자동 계산</label><div style="padding-top:7px">${ddBadge(id)}</div></div></div>${k.period?`<div class="fg"><label>실행 기간 (예전 입력값 · 참고용)</label><input type="text" id="krPeriod" value="${(k.period||'').replace(/"/g,'&quot;')}" ${!ed?'disabled':''}></div>`:''}`+progEntryHtml(id);
 state.krOwners=[...getOwners(k)];renderKrChips();if(ed){renderKrOpts()}if($('#krMemo'))$('#krMemo').value='';$('#mKr').hidden=false}
 function saveKr(){const id=state.currentKr;const k=KRS[id];if(!k)return;let _dueChg=null;const _full=canEdit(id);const _memoOnly=!_full&&canEditMemo(id);if(!_full&&!_memoOnly)return;const oldCur=k.cur;if(_full){k.text=$('#krT').value;readBlock(k,'');if(k.m2)readBlock(k.m2,'2');k.type=$('#krTy').value;k.owners=[...(state.krOwners||[])];delete k.owner;k.period=$('#krPeriod')?.value||'';const _od=k.due||'';const _nd=$('#krDue')?.value||'';k.start=$('#krStart')?.value||'';k.due=_nd;if(_od!==_nd)_dueChg=[_od,_nd];}k.note=$('#krNote')?$('#krNote').value:(k.note||'');state.isNewKr=false;const memo=$('#krMemo')?.value||'';if(oldCur!==k.cur||memo){if(!state.history[id])state.history[id]=[];state.history[id].push({at:nowStamp(),cur:oldCur,newCur:k.cur,by:uById(state.cu)?.name||'-',memo})}if(_dueChg)logAct(id,'due',{from:_dueChg[0]||'미설정',to:_dueChg[1]||'미설정'});if(oldCur!==k.cur)logAct(id,'val',{from:String(oldCur),to:String(k.cur),txt:memo});else if(memo)logAct(id,'memo',{txt:memo});saveS();cloudKrWrite({[id]:KRS[id],...(k.parent&&KRS[k.parent]?{[k.parent]:KRS[k.parent]}:{})},null,{['_history.'+id]:state.history[id]||[]});closeM('mKr');go(location.hash.replace('#','')||'biz')}
 function renderKrChips(){const el=$('#krOChips');if(!el)return;const oids=state.krOwners||[];el.innerHTML=oids.length?oids.map(oid=>{const info=ownerInfo(oid);if(!info)return '';return `<span class="owner-chip" style="background:${info.color}1A;color:${info.color};border-color:${info.color}40">${info.type==='group'?'群 ':''}${info.name}<span class="x" onclick="removeKrOwner('${oid}')">×</span></span>`}).join(''):'<span style="color:var(--tx5);font-size:11px;padding:4px 2px">담당자 없음 (그룹/개인 검색해 추가)</span>'}
