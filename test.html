@@ -453,6 +453,15 @@ select.st.todo{color:var(--tx4)}select.st.doing{color:var(--wtx);font-weight:700
 .mdrow .sub{color:var(--tx5);font-size:11px;margin-left:auto;font-family:var(--fm)}
 .badge2{font-size:9.5px;border-radius:20px;padding:1px 7px;font-weight:800;margin-left:5px}
 .b-team{background:#F5F3FF;color:#6D28D9}
+
+.ulistbar{display:flex;align-items:center;gap:9px;border:1px solid var(--bd);border-radius:11px;padding:11px 15px;margin-top:14px;cursor:pointer;background:#fff;user-select:none}
+.ulistbar:hover{border-color:var(--bdt);background:var(--bgs)}
+.ulistbar b{font-size:14px}
+.ulistbar .chev{font-size:10px;color:var(--tx4);transition:transform .15s}
+.ulistbar .chev.open{transform:rotate(90deg)}
+.ulistbar .ucnt{font-family:var(--fm);font-size:11px;background:var(--bgh);color:var(--tx4);border-radius:20px;padding:1px 8px}
+.ulistbar .uhint{margin-left:auto;font-size:11.5px;color:var(--tx5)}
+.utbl[hidden]{display:none}
 </style></head><body>
 <div class="login" id="login"><div class="lc">
 <div class="lb"><h1>OKR Workspace</h1><p>이름으로 검색 또는 사업부 선택</p></div>
@@ -801,10 +810,12 @@ function rUser(){const u=uById(state.cu);const can=canEditUser();const f=state.u
 ${Object.entries(BU).map(([id,b])=>`<div class="org-shape ${f===id?'on':''}" onclick="filterUser('${id}')"><div class="org-shape-c" style="background:${COLORS[b.biz?.[0]||Object.values(BIZ).find(x=>x.bu===id)?.id]||'#71717A'}">${b.name[0]}</div><div class="org-shape-n">${b.name.replace(' 사업부','')}</div><div class="org-shape-l">${b.name}</div><span class="org-shape-cnt">${buCnt(id)}</span></div>`).join('')}
 <div class="org-shape ${f==='etc'?'on':''}" onclick="filterUser('etc')"><div class="org-shape-c" style="background:#6366F1">전</div><div class="org-shape-n">전사</div><div class="org-shape-l">관리자·임원</div><span class="org-shape-cnt">${etcCnt}</span></div>
 </div>
-<div class="utbl"><div class="uth"><div></div><div>이름·이메일</div><div>사업부</div><div>역할</div><div>색상</div><div></div></div>
+<div class="ulistbar" onclick="togUList()"><span class="chev ${state.uOpen?'open':''}">▶</span><b>사용자 명단</b><span class="ucnt">${filtered.length}명</span><span class="uhint">${state.uOpen?'접기':'클릭하면 펼쳐집니다'}</span></div>
+<div class="utbl" ${state.uOpen?'':'hidden'}><div class="uth"><div></div><div>이름·이메일</div><div>사업부</div><div>역할</div><div>색상</div><div></div></div>
 ${filtered.length?filtered.map(usr=>{const kct=Object.values(KRS).filter(k=>k.owner===usr.id).length;return `<div class="urow" onclick="${can?`openUser('${usr.id}')`:''}"><div class="uavn" style="background:${usr.color}">${usr.name[0]}</div><div><div style="font-weight:500">${usr.name}</div><div class="usub">${usr.email||usr.id}</div></div><div>${(()=>{const bs=getUserBus(usr);return bs.length?bs.map(b=>BU[b]?.name).filter(Boolean).join(', '):'전사'})()}</div><div><span class="urtag">${RL[usr.role]||usr.role}</span></div><div class="mono" style="font-size:11px;color:var(--tx3)">${kct}개 KR</div><div style="text-align:right;color:var(--tx5)">${can?'›':''}</div></div>`}).join(''):'<div style="padding:32px;text-align:center;color:var(--tx4);font-size:13px">해당 사업부에 인원이 없습니다</div>'}
 </div>${rTeams()}`}
-function filterUser(bu){state.userFilter=state.userFilter===bu?null:bu;go('user')}
+function togUList(){state.uOpen=!state.uOpen;saveS();go('user')}
+function filterUser(bu){state.userFilter=state.userFilter===bu?null:bu;if(!state.uOpen)state.uOpen=true;saveS();go('user')}
 function renderBuList(selected){selected=selected||[];$('#uBuList').innerHTML=Object.entries(BU).map(([id,b])=>`<label style="display:flex;align-items:center;gap:6px;font-size:12px;padding:6px 8px;background:var(--bgs);border-radius:6px;cursor:pointer"><input type="checkbox" value="${id}" ${selected.includes(id)?'checked':''}>${b.name}</label>`).join('')}
 function newUser(){if(!canEditUser())return;state.editUid=null;$('#muT').textContent='사용자 추가';$('#muS').textContent='';$('#uN').value='';$('#uE').value='';$('#uR').value='staff';$('#uR').disabled=false;$('#uRhint').style.display='none';renderBuList([]);if($('#uTeam_mgmt')){$('#uTeam_mgmt').checked=false;$('#uTeam_ops').checked=false;}$('#uDel').style.display='none';$('#mUser').hidden=false}
 function openUser(id){if(!canEditUser())return;const u=uById(id);if(!u)return;state.editUid=id;$('#muT').textContent='사용자 편집';$('#muS').textContent=u.name;$('#uN').value=u.name;$('#uE').value=u.email||'';$('#uR').value=u.role;$('#uR').disabled=(id===state.cu);$('#uRhint').style.display=(id===state.cu)?'block':'none';renderBuList(getUserBus(u));if($('#uTeam_mgmt')){$('#uTeam_mgmt').checked=(u.teams||[]).includes('g_mgmt');$('#uTeam_ops').checked=(u.teams||[]).includes('g_ops');}$('#uDel').style.display=id!==state.cu?'inline-flex':'none';$('#mUser').hidden=false}
