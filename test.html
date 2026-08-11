@@ -638,7 +638,7 @@ ${Object.entries(KRS).filter(([id,k])=>k.parent===ck.id).map(([id,k])=>{const p=
 <div class="row ${state.sel===id?'sel':''}" onclick="selRow('${id}');openKr('${id}')">
 <div class="expand ${iks.length?(ikex?'open':''):'leaf'}" onclick="event.stopPropagation();togE('${id}')">▶</div>
 <div class="rd" style="background:${COLORS[ck.biz]};opacity:.5"></div>
-<div class="rt"><span>${k.text}</span><span class="rid">${id}</span><span class="bd ${k.type==='committed'?'com':'asp'}">${k.type==='committed'?TERMS.committed:TERMS.aspirational}</span>${k.flag==='pending'?'<span class="kr-flag pending">📝 피드백 필요</span>':''}${k.flag==='health'?'<span class="kr-flag health">🛡 정성 지표</span>':''}${k.linkedTo&&k.linkedTo.length?`<span class="kr-flag link">🔗 ${k.linkedTo.length}개 연결</span>`:''}</div>
+<div class="rt"><span>${k.text}</span><span class="rid">${id}</span><span class="bd ${k.type==='committed'?'com':'asp'}">${k.type==='committed'?TERMS.committed:TERMS.aspirational}</span>${progBadge(id)}${k.flag==='pending'?'<span class="kr-flag pending">📝 피드백 필요</span>':''}${k.flag==='health'?'<span class="kr-flag health">🛡 정성 지표</span>':''}${k.linkedTo&&k.linkedTo.length?`<span class="kr-flag link">🔗 ${k.linkedTo.length}개 연결</span>`:''}</div>
 <div class="rown">${renderOwners(k)}</div>
 <div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(p)}%;background:${COLORS[ck.biz]}"></div></div><span class="rpct pct-color ${pctCls(p)}">${pctTxt(p)}</span></div>
 </div>
@@ -647,7 +647,7 @@ ${iks.map(ikid=>{const ik=KRS[ikid];if(!ik)return'';const ip=pct(ik);const iow=o
 <div class="row" onclick="openKr('${ikid}')">
 <div class="expand leaf">▶</div>
 <div class="rd" style="background:${COLORS[ck.biz]};opacity:.3"></div>
-<div class="rt"><span class="rtag">${TERMS.subtask}</span><span>${ik.text}</span><span class="rid">${ikid}</span></div>
+<div class="rt"><span class="rtag">${TERMS.subtask}</span><span>${ik.text}</span><span class="rid">${ikid}</span>${progBadge(ikid)}</div>
 <div class="rown">${renderOwners(ik)}</div>
 <div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(ip)}%;background:${COLORS[ck.biz]};opacity:.7"></div></div><span class="rpct pct-color ${pctCls(ip)}">${pctTxt(ip)}</span></div>
 </div>`}).join('')}
@@ -678,7 +678,7 @@ function rBizDetail(bid){const b=BIZ[bid];const bkrs=Object.entries(KRS).filter(
 ${iks.length?`<div class="children" ${!ikex?'hidden':''}>${iks.map(ikid=>{const ik=KRS[ikid];if(!ik)return'';const ip=pct(ik);const iow=ownerInfo(ik.owner);return `<div class="row" onclick="openKr('${ikid}')">
 <div class="expand leaf">▶</div>
 <div class="rd" style="background:${COLORS[bid]};opacity:.5"></div>
-<div class="rt"><span class="rtag">${TERMS.subtask}</span><span>${ik.text}</span><span class="rid">${ikid}</span></div>
+<div class="rt"><span class="rtag">${TERMS.subtask}</span><span>${ik.text}</span><span class="rid">${ikid}</span>${progBadge(ikid)}</div>
 <div class="rown">${renderOwners(ik)}</div>
 <div class="rprog"><div class="rbar"><div class="rbar-f" style="width:${pctW(ip)}%;background:${COLORS[bid]};opacity:.7"></div></div><span class="rpct pct-color ${pctCls(ip)}">${pctTxt(ip)}</span></div>
 </div>`}).join('')}</div>`:''}
@@ -917,7 +917,7 @@ function cmtUI(id){const L=krComments(id);return `<div class="fg"><label>코멘�
 function addCmt(id){const el=document.getElementById('cmIn');const v=((el&&el.value)||'').trim();if(!v)return;const ment=USERS.filter(u=>v.indexOf('@'+u.name)>=0).map(u=>u.id);el.value='';logAct(id,'cmt',{txt:v,ment:ment});setTimeout(()=>{if(state.currentKr===id)openKr(id)},400)}
 /* 내 업무 */
 function rMyWork(){const u=uById(state.cu);if(!u)return rMyKr();const mine=Object.entries(KRS).filter(([,k])=>getOwners(k).includes(state.cu));const G={late:[],soon:[],idle:[],ok:[],none:[]};mine.forEach(e=>{(G[krState(e[0])]||G.none).push(e)});
-const row=([id,k])=>{const p=pct(k);const la=lastAct(id);const tk=krTasks(id);return `<div class="wrow ${krState(id)}" onclick="openKr('${id}')"><div class="wt"><div class="wn">${esc(k.text)}</div><div class="wm">${k.due?'마감 '+k.due:'기한 미설정'} · 업데이트 ${la?new Date(la).toLocaleDateString('ko-KR'):'없음'}${tk.length?' · 업무 '+tk.filter(([,t])=>t.st==='done').length+'/'+tk.length:''}</div></div><div class="wbar"><i style="width:${pctW(p)}%"></i></div><div class="wp mono">${pctTxt(p)}</div>${ddBadge(id)}</div>`};
+const row=([id,k])=>{const p=pct(k);const la=lastAct(id);const tk=krTasks(id);return `<div class="wrow ${krState(id)}" onclick="openKr('${id}')"><div class="wt"><div class="wn">${esc(k.text)}</div><div class="wm">${k.due?'마감 '+k.due:'기한 미설정'} · 업데이트 ${la?new Date(la).toLocaleDateString('ko-KR'):'없음'}${tk.length?' · 업무 '+tk.filter(([,t])=>t.st==='done').length+'/'+tk.length:''}</div></div><div class="wbar"><i style="width:${pctW(p)}%"></i></div><div class="wp mono">${pctTxt(p)}</div>${progBadge(id)}${ddBadge(id)}</div>`};
 const sec=(t,arr,cls)=>arr.length?`<div class="wsec ${cls}">${t}<span class="cnt">${arr.length}</span></div>${arr.map(row).join('')}`:'';
 return `<div class="ph"><div><h1>내 업무</h1><p>담당 ${mine.length}건 · 마감일과 최근 업데이트를 기준으로 자동 분류됩니다</p></div></div>${mine.length?'':'<div class="empty2">담당으로 지정된 KR이 없습니다.</div>'}${sec('지연 — 마감일이 지났습니다',G.late,'late')}${sec('이번 주 마감 (7일 이내)',G.soon,'soon')}${sec('정체 — 14일 이상 변화 없음',G.idle,'idle')}${sec('정상',G.ok,'ok')}${sec('기한 미설정',G.none,'none')}<div class="wnote"><b>분류 기준 (자동)</b><br>지연 = 마감일 경과 &amp; 미완료 · 이번 주 = 마감 7일 이내 · 정체 = 14일 이상 값·메모·업무 변화 없음 · 기한 미설정 = 마감일 미입력<br>마감일은 KR을 열어 <b>마감일</b> 칸에 날짜를 넣으면 설정됩니다.</div><div style="margin-top:26px;border-top:1px solid var(--bd);padding-top:18px">${rMyKr()}</div>`}
 /* 일정 */
@@ -939,14 +939,14 @@ if(!rows.length)h+=`<div class="gr"><div class="lb" style="color:var(--tx5)">이
 Object.keys(byB).forEach(b=>{const bn=(BIZ[b]&&BIZ[b].name)||'기타';const col=(typeof COLORS!=='undefined'&&COLORS[b])||'#2563EB';
  h+=`<div class="gr bz"><div class="lb">${esc(bn)}</div><div class="track">${linesN}</div></div>`;
  byB[b].forEach(([id,k,st,en])=>{const l=((st-S)/span*100),w=Math.max(((en-st)/span*100),2.5);const s=krState(id);const bg=s==='late'?'#EF4444':s==='soon'?'#F59E0B':s==='idle'?'#818CF8':col;const lbl=s==='late'?'지연':s==='idle'?'정체':(dleft(k.due)!==null?'D-'+dleft(k.due):'');
- h+=`<div class="gr"><div class="lb" onclick="openKr('${id}')" title="${esc(k.text)}">${esc(k.text)}</div><div class="track">${linesN}<div class="gb" style="left:${l.toFixed(2)}%;width:${w.toFixed(2)}%;background:${bg}" onclick="openKr('${id}')">${lbl} ${pctTxt(pct(k))}</div></div></div>`})});
+ h+=`<div class="gr"><div class="lb" title="${esc(k.text)}"><span onclick="openKr('${id}')" style="cursor:pointer">${esc(k.text)}</span>${progBadge(id)}</div><div class="track">${linesN}<div class="gb" style="left:${l.toFixed(2)}%;width:${w.toFixed(2)}%;background:${bg}" onclick="openKr('${id}')">${lbl} ${pctTxt(pct(k))}</div></div></div>`})});
 h+='</div>';
 if(noDue.length)h+=`<div class="wsec none" style="margin-top:22px">기한 미설정<span class="cnt">${noDue.length}</span></div>`+noDue.slice(0,40).map(([id,k])=>`<div class="wrow none" onclick="openKr('${id}')"><div class="wt"><div class="wn">${esc(k.text)}</div><div class="wm">${(BIZ[k.biz]&&BIZ[k.biz].name)||''}</div></div>${ddBadge(id)}</div>`).join('');
 h+='<div class="wnote">막대는 <b>시작일 ~ 마감일</b>입니다. 빨간 세로선이 오늘이며, 선 왼쪽에서 끝났어야 할 막대가 빨갛다면 지연입니다. 날짜를 넣지 않은 KR은 아래 <b>기한 미설정</b>에 모입니다.</div>';
 return h}
 /* 활동 */
 function setActF(f){state.actF=f;saveS();go('act')}
-function actLine(a){const k=KRS[a.kr];const kt=k?esc(k.text):'(삭제된 KR)';const kr=`<span class="kr" onclick="openKr('${a.kr}')">${kt}</span>`;const me=(a.ment||[]).includes(state.cu);
+function actLine(a){const k=KRS[a.kr];const kt=k?esc(k.text):'(삭제된 KR)';const kr=`<span class="kr" onclick="openKr('${a.kr}')">${kt}</span>${KRS[a.kr]?progBadge(a.kr):''}`;const me=(a.ment||[]).includes(state.cu);
  const tag=(me||(k&&getOwners(k).includes(state.cu)))?'<span class="mineTag">내 관련</span>':'';
  if(a.ty==='val')return {l1:`<b>${esc(a.by)}</b>님이 ${kr} 을 <span class="chg">${esc(a.from)}</span>→<span class="chg up">${esc(a.to)}</span> 로 업데이트${tag}`,memo:a.txt||''};
  if(a.ty==='due')return {l1:`<b>${esc(a.by)}</b>님이 ${kr} 의 마감일을 <span class="chg">${esc(a.from)}</span>→<span class="chg">${esc(a.to)}</span> 로 변경${tag}`,memo:''};
@@ -987,7 +987,7 @@ function rStatusLine(){const ids=Object.keys(KRS).filter(id=>!id.includes('-IK-'
  return `<div class="statline"><div class="stbox late" onclick="go('myKr')"><div class="l">지연</div><div class="v">${c.late}건</div></div><div class="stbox soon" onclick="go('myKr')"><div class="l">이번 주 마감</div><div class="v">${c.soon}건</div></div><div class="stbox idle" onclick="go('myKr')"><div class="l">정체 (14일+)</div><div class="v">${c.idle}건</div></div><div class="stbox none" onclick="go('cal')"><div class="l">기한 미설정</div><div class="v">${c.none}건</div></div></div>`}
 /* ===== KR 진행상황 ===== */
 let _progKr=null,_progConf='';
-function progBadge(id){const n=progPoints(id).length;return `<span class="pbadge" onclick="event.stopPropagation();openProg('${id}')">진행상황${n?' '+n:''}</span>`}
+function progBadge(id){if(!KRS[id])return '';const n=progPoints(id).length;return `<span class="pbadge" title="진행상황 보기 (기록 ${n}건)" onclick="event.stopPropagation();openProg('${id}')">진행상황${n?' '+n:''}</span>`}
 function progEntryHtml(id){return `<div class="fg"><label>진행상황</label><button class="btn btnp" style="width:100%;justify-content:center;height:40px" onclick="openProg('${id}')">진행상황 보기 &middot; 기록 ${progPoints(id).length}건</button><div style="font-size:11.5px;color:var(--tx4);margin-top:6px">진척 기록 &middot; 확신도 &middot; 그래프 &middot; 변경 이력은 모두 이 화면에서 봅니다.</div></div>`}
 function toP(k,v){const b=(k.baseline===undefined||k.baseline===null)?0:k.baseline;const t=k.tgt;if(t===undefined||t===null||t===b)return 0;return Math.max(0,Math.min(130,Math.round((v-b)/(t-b)*100)))}
 function progPoints(id){const k=KRS[id];if(!k)return [];const out=[];
