@@ -905,17 +905,17 @@ function saveTasks(){if(!TCOL){alert('연결 상태를 확인해주세요.');ret
   const m=document.getElementById('tSaveMsg');if(m)m.textContent=empty?('저장했습니다 · 내용이 비어 있던 '+empty+'줄은 저장하지 않았습니다'):'저장했습니다';
  }).catch(e=>{console.warn('task save',e);alert('저장에 실패했습니다. 잠시 후 다시 시도해주세요.')})}
 function discardTasks(){_tDirty.forEach(id=>{if(TASKS[id]&&TASKS[id]._new)delete TASKS[id]});_tDirty.clear();_tDel.clear();rTaskBody()}
-function tSub(){if(!TCOL||_tsubbed)return;_tsubbed=true;TCOL.where('_k','==','task').onSnapshot(qs=>{const n={};qs.forEach(d=>{n[d.id]=d.data()});_tDirty.forEach(id=>{if(TASKS[id])n[id]=TASKS[id]});_tDel.forEach(id=>{delete n[id]});TASKS=n;const m=document.getElementById('mTask');if(m&&!m.hidden)rTaskBody();try{if(state.cu)go(location.hash.replace('#','')||'dash')}catch(e){}},e=>console.warn('task snap',e));}
-function tid(){return 't_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function tSub(){if(!TCOL||_tsubbed)return;_tsubbed=true;TCOL.where('_k','==','task_t').onSnapshot(qs=>{const n={};qs.forEach(d=>{n[d.id]=d.data()});_tDirty.forEach(id=>{if(TASKS[id])n[id]=TASKS[id]});_tDel.forEach(id=>{delete n[id]});TASKS=n;const m=document.getElementById('mTask');if(m&&!m.hidden)rTaskBody();try{if(state.cu)go(location.hash.replace('#','')||'dash')}catch(e){}},e=>console.warn('task snap',e));}
+function tid(){return 'tt_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function tWrite(id,o){if(!TCOL)return;TCOL.doc(id).set(o).catch(e=>console.warn('task write',e))}
 function krTasks(krId){return Object.entries(TASKS).filter(([,t])=>t&&t.kr===krId).sort((a,b)=>(a[1].ord||0)-(b[1].ord||0))}
 function canEditTask(krId){return canEditMemo(krId)}
 function tcols(krId){return (KRS[krId]&&KRS[krId].tcols)||[]}
 function taskBadge(krId){const n=krTasks(krId).length;const d=krTasks(krId).filter(([,t])=>t.st==='done').length;return n?`<span class="tbadge" onclick="event.stopPropagation();openTasks('${krId}')">업무 ${d}/${n}</span>`:`<span class="tbadge z" onclick="event.stopPropagation();openTasks('${krId}')">업무 +</span>`}
 function taskEntryHtml(krId){const n=krTasks(krId).length;return `<div class="fg"><label>하위 업무 (실무 관리)</label><button class="btn" style="width:100%;justify-content:center" onclick="openTasks('${krId}')">업무 관리 열기 &middot; ${n}건</button></div>`}
-function addTask(krId){const id=tid();const me=uById(state.cu);const rs=krTasks(krId);const ord=(rs.length?rs[rs.length-1][1].ord||0:0)+10;const o={_k:'task',kr:krId,t:'',ow:state.cu||'',due:'',st:'todo',memo:'',c:{},ord,ua:Date.now(),ub:me&&me.name||'-',_new:1};TASKS[id]=o;_tDirty.add(id);rTaskBody()}
-function setT(id,f,v){const t=TASKS[id];if(!t)return;const me=uById(state.cu);const o=Object.assign({},t,{_k:'task',[f]:v,ua:Date.now(),ub:me&&me.name||'-'});TASKS[id]=o;_tDirty.add(id);if(f==='st')rTaskBody();else updSaveBar()}
-function setTC(id,k,v){const t=TASKS[id];if(!t)return;const me=uById(state.cu);const c=Object.assign({},t.c||{});c[k]=v;const o=Object.assign({},t,{_k:'task',c,ua:Date.now(),ub:me&&me.name||'-'});TASKS[id]=o;_tDirty.add(id);updSaveBar()}
+function addTask(krId){const id=tid();const me=uById(state.cu);const rs=krTasks(krId);const ord=(rs.length?rs[rs.length-1][1].ord||0:0)+10;const o={_k:'task_t',kr:krId,t:'',ow:state.cu||'',due:'',st:'todo',memo:'',c:{},ord,ua:Date.now(),ub:me&&me.name||'-',_new:1};TASKS[id]=o;_tDirty.add(id);rTaskBody()}
+function setT(id,f,v){const t=TASKS[id];if(!t)return;const me=uById(state.cu);const o=Object.assign({},t,{_k:'task_t',[f]:v,ua:Date.now(),ub:me&&me.name||'-'});TASKS[id]=o;_tDirty.add(id);if(f==='st')rTaskBody();else updSaveBar()}
+function setTC(id,k,v){const t=TASKS[id];if(!t)return;const me=uById(state.cu);const c=Object.assign({},t.c||{});c[k]=v;const o=Object.assign({},t,{_k:'task_t',c,ua:Date.now(),ub:me&&me.name||'-'});TASKS[id]=o;_tDirty.add(id);updSaveBar()}
 function rmTask(id){const t=TASKS[id];if(!t)return;if((t.t||'').trim()&&!confirm('이 업무를 삭제할까요?'))return;if(!t._new)_tDel.add(id);_tDirty.delete(id);delete TASKS[id];rTaskBody()}
 function addCol(krId){const l=prompt('추가할 열 이름을 입력하세요 (예: 광고주명, 계약금액)');if(!l||!l.trim())return;const ty=confirm('숫자만 입력하는 열입니까?\n확인 = 숫자 / 취소 = 텍스트')?'num':'text';const c=tcols(krId).slice();c.push({k:'c'+Date.now().toString(36),l:l.trim(),ty});KRS[krId].tcols=c;saveS();cloudKrWrite({[krId]:KRS[krId]});rTaskBody()}
 function delCol(krId,k){if(!confirm('이 열을 삭제할까요? 입력된 값도 함께 사라집니다.'))return;KRS[krId].tcols=tcols(krId).filter(c=>c.k!==k);saveS();cloudKrWrite({[krId]:KRS[krId]});rTaskBody()}
@@ -958,8 +958,8 @@ function confUI(id){const k=KRS[id];const c=k.conf||'';const ed=canEditMemo(id);
 function setConf(id,v){const k=KRS[id];if(!k||!canEditMemo(id))return;const L={g:'순조',y:'주의',r:'위험'};const old=k.conf||'';if(old===v)return;k.conf=v;saveS();cloudKrWrite({[id]:k});logAct(id,'conf',{from:L[old]||'미설정',to:L[v]});openKr(id)}
 /* 활동 로그 */
 let ACTS={},_asubbed=false;
-function aSub(){if(!TCOL||_asubbed)return;_asubbed=true;TCOL.where('_k','==','act').onSnapshot(qs=>{const n={};qs.forEach(d=>{n[d.id]=d.data()});ACTS=n;updActBdg();const v=(location.hash.replace('#','')||'dash');if(state.cu&&['act','dash','myKr'].includes(v))try{go(v)}catch(e){}},e=>console.warn('act snap',e))}
-function logAct(kr,ty,o){if(!TCOL)return;const me=uById(state.cu);const id='a_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);const doc=Object.assign({_k:'act',kr:kr||'',ty:ty,by:(me&&me.name)||'-',byId:state.cu||'',at:Date.now()},o||{});ACTS[id]=doc;TCOL.doc(id).set(doc).catch(e=>console.warn('act write',e))}
+function aSub(){if(!TCOL||_asubbed)return;_asubbed=true;TCOL.where('_k','==','act_t').onSnapshot(qs=>{const n={};qs.forEach(d=>{n[d.id]=d.data()});ACTS=n;updActBdg();const v=(location.hash.replace('#','')||'dash');if(state.cu&&['act','dash','myKr'].includes(v))try{go(v)}catch(e){}},e=>console.warn('act snap',e))}
+function logAct(kr,ty,o){if(!TCOL)return;const me=uById(state.cu);const id='at_'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);const doc=Object.assign({_k:'act_t',kr:kr||'',ty:ty,by:(me&&me.name)||'-',byId:state.cu||'',at:Date.now()},o||{});ACTS[id]=doc;TCOL.doc(id).set(doc).catch(e=>console.warn('act write',e))}
 function actList(){return Object.entries(ACTS).filter(([,a])=>a&&a.at).sort((a,b)=>(b[1].at||0)-(a[1].at||0)).slice(0,300)}
 function seenKey(){return 'okr-test-seen-'+(state.cu||'x')}
 function lastSeen(){return +(localStorage.getItem(seenKey())||0)}
