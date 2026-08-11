@@ -1,0 +1,228 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>목업 — 진행상황 진입점 지도</title>
+<style>
+:root{--bd:#E4E4E7;--bdt:#D4D4D8;--tx:#09090B;--tx3:#52525B;--tx4:#71717A;--tx5:#A1A1AA;--bgs:#FAFAFA;--bgh:#F4F4F5;--ac:#2563EB;--ach:#1D4ED8;--acbg:#EFF6FF;--s:#10B981;--sbg:#ECFDF5;--stx:#065F46;--w:#F59E0B;--wbg:#FFFBEB;--wtx:#92400E;--d:#EF4444;--dbg:#FEF2F2;--dtx:#991B1B;--pp:#7C3AED;--ppbg:#F5F3FF;--fm:ui-monospace,'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Pretendard,-apple-system,'Malgun Gothic',sans-serif;background:#F4F4F5;color:var(--tx);line-height:1.65;padding:22px 18px 60px;font-size:14px}
+.page{max-width:1010px;margin:0 auto}
+h1{font-size:24px;letter-spacing:-.4px}
+.lead{font-size:13.5px;color:var(--tx4);margin:6px 0 20px}
+.card{background:#fff;border:1px solid var(--bd);border-radius:15px;margin-bottom:18px;overflow:hidden}
+.ch{padding:14px 20px;border-bottom:1px solid var(--bd);background:var(--bgs);display:flex;align-items:center;gap:10px}
+.ch b{font-size:15.5px}
+.n{width:24px;height:24px;border-radius:8px;color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:800}
+.now{background:var(--pp)}.add{background:var(--tx5)}
+.st{font-size:10.5px;border-radius:20px;padding:2px 9px;font-weight:800;margin-left:auto}
+.st-o{background:var(--sbg);color:var(--stx)}
+.st-x{background:var(--bgh);color:var(--tx4)}
+.cb{padding:18px 20px}
+.desc{font-size:13.5px;color:var(--tx3);margin-bottom:13px}
+.desc b{color:var(--tx)}
+/* 앱 화면 흉내 */
+.app{border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:#fff}
+.apphd{background:#fff;border-bottom:1px solid var(--bd);display:flex;gap:2px;padding:0 10px}
+.tb{padding:9px 12px;font-size:12.5px;color:var(--tx4);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tb.on{color:var(--ac);border-bottom-color:var(--ac);font-weight:800}
+.appbd{padding:13px 15px;background:#fff}
+.row{border:1px solid var(--bd);border-radius:10px;padding:10px 13px;display:flex;align-items:center;gap:9px;font-size:13px;background:#fff;margin-bottom:7px}
+.row:last-child{margin-bottom:0}
+.row.sub{margin-left:26px;background:var(--bgs)}
+.row .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.row .nm{flex:1;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .own{font-size:11.5px;color:var(--tx4);width:60px;flex-shrink:0}
+.bar{width:70px;height:5px;background:var(--bgh);border-radius:3px;overflow:hidden;flex-shrink:0}
+.bar i{display:block;height:5px;border-radius:3px}
+.pc{width:38px;text-align:right;font-family:var(--fm);font-size:11.5px;flex-shrink:0}
+.pill{font-family:var(--fm);font-size:10px;border-radius:20px;padding:2px 8px;border:1px solid var(--bd);color:var(--tx4);white-space:nowrap;flex-shrink:0}
+.pill.prog{background:var(--ppbg);color:#6D28D9;border-color:#DDD6FE;font-weight:800}
+.pill.progNew{background:#fff;color:var(--pp);border:1.5px dashed var(--pp);font-weight:800}
+.pill.late{background:var(--dbg);color:var(--dtx);border-color:#FECACA;font-weight:700}
+.pill.soon{background:var(--wbg);color:var(--wtx);border-color:#FDE68A;font-weight:700}
+.pill.idle{background:#EEF2FF;color:#3730A3;border-color:#C7D2FE;font-weight:700}
+.pill.ok{background:var(--sbg);color:var(--stx);border-color:#A7F3D0;font-weight:700}
+.pill.none{background:var(--bgh);color:var(--tx5)}
+.sec{font-size:11.5px;font-weight:800;margin:12px 0 6px;display:flex;align-items:center;gap:6px}
+.sec:first-child{margin-top:0}
+.sec .cnt{font-family:var(--fm);font-size:10px;background:var(--bgh);color:var(--tx4);border-radius:20px;padding:1px 7px;font-weight:400}
+.sec.l{color:var(--dtx)}.sec.i{color:#3730A3}.sec.n{color:var(--tx4)}
+/* 팝업 흉내 */
+.modal{border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+.mh{padding:13px 17px;border-bottom:1px solid var(--bd)}
+.mh h4{font-size:14px}.mh .s{font-size:11px;color:var(--tx5);font-family:var(--fm);margin-top:2px}
+.mb{padding:14px 17px}
+.fg{margin-bottom:11px}
+.fg label{font-size:11px;color:var(--tx4);font-weight:700;display:block;margin-bottom:4px}
+.inp{height:32px;border:1px solid var(--bdt);border-radius:7px;background:#fff;display:flex;align-items:center;padding:0 10px;font-size:12.5px;color:var(--tx3)}
+.btnwide{height:40px;border-radius:8px;background:var(--pp);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13.5px;font-weight:700}
+.hintline{font-size:11.5px;color:var(--tx4);margin-top:6px}
+.mf{padding:11px 17px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:8px;background:var(--bgs)}
+.b2{height:31px;padding:0 14px;border-radius:7px;border:1px solid var(--bd);background:#fff;font-size:12.5px;display:flex;align-items:center;color:var(--tx3)}
+.b2.p{background:#111827;color:#fff;border-color:#111827;font-weight:700}
+/* 화살표 주석 */
+.ann{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--pp);font-weight:700;margin-top:9px}
+.ann .ar{font-size:15px}
+.ann.gray{color:var(--tx4);font-weight:600}
+/* 간트 */
+.gt{border:1px solid var(--bd);border-radius:10px;overflow:hidden;font-size:12px}
+.gr{display:flex;border-bottom:1px solid #F1F1F3;align-items:center}
+.gr:last-child{border-bottom:none}
+.gr .lb{width:210px;flex-shrink:0;padding:9px 12px;border-right:1px solid var(--bd);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gr .tk{flex:1;position:relative;height:36px}
+.gb{position:absolute;top:10px;height:16px;border-radius:8px;font-size:9.5px;color:#fff;display:flex;align-items:center;padding:0 8px;font-family:var(--fm)}
+.today{position:absolute;top:0;bottom:0;width:2px;background:var(--d)}
+/* 활동 */
+.fi{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #F4F4F5;align-items:flex-start;font-size:12.5px}
+.fi:last-child{border-bottom:none}
+.av{width:26px;height:26px;border-radius:50%;color:#fff;font-size:10.5px;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+.krlink{color:var(--ac);font-weight:700}
+/* 표 */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{border:1px solid var(--bd);padding:10px 12px;text-align:left;vertical-align:middle}
+th{background:var(--bgs);font-weight:800;color:var(--tx3);font-size:12px}
+td.c{text-align:center}
+.yes{color:var(--stx);font-weight:800}
+.no{color:var(--tx5)}
+.plan{color:var(--pp);font-weight:800}
+.note{border-left:4px solid var(--ac);background:#F8FAFC;padding:12px 15px;font-size:13px;color:var(--tx3);border-radius:0 9px 9px 0;margin-top:14px;line-height:1.7}
+.note b{color:var(--tx)}
+.note.p{border-color:var(--pp);background:var(--ppbg)}
+.note.w{border-color:var(--w);background:var(--wbg);color:var(--wtx)}
+.note.w b{color:var(--wtx)}
+.foot{font-size:11.5px;color:var(--tx5);text-align:center;margin-top:8px}
+@media(max-width:780px){.gr .lb{width:120px}}
+</style></head><body><div class="page">
+
+<h1>진행상황 — 어디서 들어가나</h1>
+<div class="lead">현재 <b>실제로 노출되는 곳 2군데</b>와, <b>추가하면 좋을 곳 4군데</b>를 화면 그림으로 정리했습니다. — 2026.08.07 테스트 화면 실측 기준</div>
+
+<!-- 요약표 -->
+<div class="card">
+<div class="ch"><span class="n now">＊</span><b>한눈에 보기</b></div>
+<div class="cb">
+<table>
+<tr><th style="width:18%">화면</th><th style="width:36%">진행상황 진입 방법</th><th style="width:14%" class="c">현재</th><th class="c">제안</th></tr>
+<tr><td><b>사업별</b></td><td>KR 줄 오른쪽 <span class="pill prog">진행상황 5</span> 배지 클릭</td><td class="c yes">있음</td><td class="c">유지</td></tr>
+<tr><td><b>KR 팝업</b></td><td>맨 아래 <b>진행상황 보기</b> 버튼</td><td class="c yes">있음</td><td class="c">유지</td></tr>
+<tr style="background:#FCFBFF"><td><b>내 업무</b></td><td>각 줄 오른쪽에 배지 추가</td><td class="c no">없음</td><td class="c plan">추가 권장</td></tr>
+<tr style="background:#FCFBFF"><td><b>활동</b></td><td>KR 이름 옆에 배지 추가</td><td class="c no">없음</td><td class="c plan">추가 권장</td></tr>
+<tr style="background:#FCFBFF"><td><b>일정</b></td><td>막대 클릭 시 진행상황으로</td><td class="c no">없음</td><td class="c plan">추가 검토</td></tr>
+<tr style="background:#FCFBFF"><td><b>전사 트리</b></td><td>사업 KR 줄에 배지 추가</td><td class="c no">없음</td><td class="c plan">추가 검토</td></tr>
+<tr><td><b>대시보드</b></td><td>지연·정체 칸 클릭 → 목록으로 이동</td><td class="c no">없음</td><td class="c no">불필요</td></tr>
+</table>
+<div class="note w"><b>지금 상태의 문제</b> — 진행상황은 <b>'사업별'에 들어가야만</b> 눈에 띕니다. 그런데 담당자가 매일 여는 곳은 <b>'내 업무'</b>입니다. 정작 기록을 남길 사람이 버튼을 못 보는 구조입니다.</div>
+</div></div>
+
+<!-- 1 사업별 -->
+<div class="card">
+<div class="ch"><span class="n now">1</span><b>사업별 — KR 줄의 배지</b><span class="st st-o">현재 있음</span></div>
+<div class="cb">
+<div class="app">
+<div class="apphd"><div class="tb">대시보드</div><div class="tb">내 업무</div><div class="tb on">사업별</div><div class="tb">일정</div><div class="tb">활동</div></div>
+<div class="appbd">
+<div class="row"><span class="dot" style="background:#DB2777"></span><span class="nm">매체 대행 마크업(수임료) 10% → 15% 인상</span><span class="own">박근정</span><span class="bar"><i style="width:82%;background:#DB2777"></i></span><span class="pc">82%</span><span class="pill prog">진행상황 5</span><span class="pill soon">D-52</span></div>
+<div class="row"><span class="dot" style="background:#DB2777"></span><span class="nm">[KR1] 워드프레스를 활용한 GEO 작업</span><span class="own">박근정</span><span class="bar"><i style="width:45%;background:#DB2777"></i></span><span class="pc">45%</span><span class="pill prog">진행상황</span><span class="pill late">지연 7일</span></div>
+<div class="row sub"><span class="dot" style="background:#DB2777;opacity:.5"></span><span class="nm" style="font-weight:400"><span class="pill" style="margin-right:6px">과제</span>블로그 상위노출 30건</span><span class="own">이지우</span><span class="bar"><i style="width:60%;background:#DB2777;opacity:.7"></i></span><span class="pc">60%</span><span class="pill none">기한 미설정</span></div>
+</div></div>
+<div class="ann"><span class="ar">↑</span> 보라색 <b>진행상황</b> 배지 — 뒤 숫자는 쌓인 기록 건수입니다 (없으면 숫자 없음)</div>
+<div class="ann gray"><span class="ar">↑</span> <b>하위 과제 줄에는 배지가 없습니다.</b> 과제는 KR 안에서 관리하는 항목이라 뺐습니다 — 필요하면 넣을 수 있습니다</div>
+</div></div>
+
+<!-- 2 KR 팝업 -->
+<div class="card">
+<div class="ch"><span class="n now">2</span><b>KR 팝업 — 맨 아래 버튼</b><span class="st st-o">현재 있음</span></div>
+<div class="cb">
+<div class="desc">KR을 클릭하면 열리는 <b>수정 팝업</b>입니다. 정리 후 항목이 19개 → 13개로 줄었고, 맨 아래에 진행상황 버튼이 있습니다.</div>
+<div class="modal">
+<div class="mh"><h4>매체 대행 마크업(수임료) 10% → 15% 인상</h4><div class="s">이레이즈 마케팅 · MKT-KR-1</div></div>
+<div class="mb">
+<div class="fg"><label>담당자</label><div class="inp">박근정 외 3명</div></div>
+<div class="fg"><label>세부 메모</label><div class="inp" style="height:44px;align-items:flex-start;padding-top:8px;color:var(--tx5)">…</div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr 96px;gap:8px" class="fg">
+<div><label>시작일</label><div class="inp" style="font-family:var(--fm)">2026-04-29</div></div>
+<div><label>마감일</label><div class="inp" style="font-family:var(--fm)">2026-09-28</div></div>
+<div><label>자동 계산</label><div style="padding-top:7px"><span class="pill soon">D-52</span></div></div></div>
+<div class="fg" style="margin-bottom:0"><label>진행상황</label><div class="btnwide">진행상황 보기 · 기록 5건</div>
+<div class="hintline">진척 기록 · 확신도 · 그래프 · 변경 이력은 모두 이 화면에서 봅니다.</div></div>
+</div>
+<div class="mf"><span class="b2">삭제</span><span class="b2">닫기</span><span class="b2 p">저장</span></div>
+</div>
+<div class="ann"><span class="ar">↑</span> 예전에 팝업 안에 흩어져 있던 <b>확신도 · 히스토리 · 코멘트 · 체크인 메모</b>가 전부 이 버튼 안으로 들어갔습니다</div>
+</div></div>
+
+<!-- 3 내 업무 (제안) -->
+<div class="card">
+<div class="ch"><span class="n add">3</span><b>내 업무 — 각 줄에 배지 추가</b><span class="st st-x">제안 · 지금은 없음</span></div>
+<div class="cb">
+<div class="desc"><b>가장 중요한 자리입니다.</b> 담당자가 매일 여는 화면이고, "정체" 구간에 뜬 KR은 <b>기록을 남겨야 풀립니다</b>. 여기에 버튼이 있어야 바로 행동으로 이어집니다.</div>
+<div class="app">
+<div class="apphd"><div class="tb">대시보드</div><div class="tb on">내 업무</div><div class="tb">사업별</div><div class="tb">일정</div><div class="tb">활동</div></div>
+<div class="appbd">
+<div class="sec l">지연 — 마감일이 지났습니다 <span class="cnt">1</span></div>
+<div class="row" style="border-color:#FECACA"><span class="nm">[KR1] 워드프레스를 활용한 GEO 작업<div style="font-size:10.5px;color:var(--tx5);font-family:var(--fm);font-weight:400">마감 2026-07-31 · 업데이트 07.18</div></span><span class="bar"><i style="width:45%;background:#EF4444"></i></span><span class="pc">45%</span><span class="pill progNew">진행상황</span><span class="pill late">지연 7일</span></div>
+<div class="sec i">정체 — 14일 이상 변화 없음 <span class="cnt">1</span></div>
+<div class="row" style="border-color:#C7D2FE"><span class="nm">업무 효율화 40% 달성<div style="font-size:10.5px;color:var(--tx5);font-family:var(--fm);font-weight:400">마감 2026-09-30 · 업데이트 07.10 (28일 전)</div></span><span class="bar"><i style="width:30%;background:#818CF8"></i></span><span class="pc">30%</span><span class="pill progNew">진행상황</span><span class="pill idle">정체</span></div>
+<div class="sec n">기한 미설정 <span class="cnt">8</span></div>
+<div class="row"><span class="nm">신규 6개국 GEO 적용 및 LLM 지사명 노출</span><span class="bar"><i style="width:0%"></i></span><span class="pc">—</span><span class="pill progNew">진행상황</span><span class="pill none">기한 미설정</span></div>
+</div></div>
+<div class="ann"><span class="ar">↑</span> 점선 표시가 <b>새로 추가할 배지</b>입니다 — 정체·지연 줄에서 바로 기록을 남길 수 있습니다</div>
+<div class="note p"><b>왜 여기가 핵심인가</b> — '정체'는 <b>기록이 없어서</b> 뜨는 표시입니다. 그 줄 바로 옆에 기록 버튼이 있으면 <b>보자마자 해결</b>됩니다. 지금은 사업별로 이동해서 그 KR을 다시 찾아야 합니다.</div>
+</div></div>
+
+<!-- 4 활동 (제안) -->
+<div class="card">
+<div class="ch"><span class="n add">4</span><b>활동 — KR 이름 옆에 배지 추가</b><span class="st st-x">제안 · 지금은 없음</span></div>
+<div class="cb">
+<div class="desc">활동 목록에서 KR 이름을 누르면 지금은 <b>수정 팝업</b>이 열립니다. 남의 변경 내역을 보다가 열었는데 수정 화면이 나오는 건 어색합니다. <b>진행상황이 더 맞습니다.</b></div>
+<div class="app">
+<div class="apphd"><div class="tb">대시보드</div><div class="tb">내 업무</div><div class="tb">사업별</div><div class="tb">일정</div><div class="tb on">활동</div></div>
+<div class="appbd">
+<div class="fi"><span class="av" style="background:#06B6D4">곽</span><div style="flex:1"><b>곽경훈</b>님이 <span class="krlink">매체 대행 마크업 10%→15% 인상</span> <span class="pill progNew">진행상황</span> 을 <span style="font-family:var(--fm);background:var(--bgh);border-radius:4px;padding:1px 6px">28</span>→<span style="font-family:var(--fm);background:var(--sbg);color:var(--stx);border-radius:4px;padding:1px 6px">41</span> 로 업데이트
+<div style="font-size:12px;color:var(--tx3);background:var(--bgs);border:1px solid var(--bd);border-radius:7px;padding:6px 9px;margin-top:5px">7월 수임료 집계 반영. 8월 신규 유입이 줄어 하반기 유지가 불확실합니다</div></div><span style="font-size:10px;color:var(--tx5);font-family:var(--fm)">14:22</span></div>
+<div class="fi"><span class="av" style="background:#F97316">수</span><div style="flex:1"><b>이수인</b>님이 <span class="krlink">3PL 고객사 5개사 계약</span> <span class="pill progNew">진행상황</span> 의 확신도를 <span style="font-family:var(--fm);background:var(--bgh);border-radius:4px;padding:1px 6px">순조</span>→<span style="font-family:var(--fm);background:var(--wbg);color:var(--wtx);border-radius:4px;padding:1px 6px">주의</span> 로 변경</div><span style="font-size:10px;color:var(--tx5);font-family:var(--fm)">10:15</span></div>
+</div></div>
+<div class="ann"><span class="ar">↑</span> 점선 배지를 누르면 <b>그 KR의 전체 흐름</b>(그래프+기록)으로 바로 이동합니다</div>
+</div></div>
+
+<!-- 5 일정 (검토) -->
+<div class="card">
+<div class="ch"><span class="n add">5</span><b>일정 — 막대를 누르면</b><span class="st st-x">검토 · 지금은 수정 팝업</span></div>
+<div class="cb">
+<div class="desc">타임라인 막대를 누르면 지금은 <b>수정 팝업</b>이 열립니다. 일정 화면은 <b>상태를 보는 곳</b>이니 진행상황으로 가는 게 자연스럽습니다.</div>
+<div class="gt">
+<div class="gr" style="background:var(--bgs);font-size:11px;color:var(--tx4);font-family:var(--fm)"><div class="lb">KR</div><div class="tk" style="height:26px;display:flex"><div style="flex:1;text-align:center;padding-top:5px">7월</div><div style="flex:1;text-align:center;padding-top:5px">8월</div><div style="flex:1;text-align:center;padding-top:5px">9월</div></div></div>
+<div class="gr"><div class="lb">수수료 15% 인상</div><div class="tk"><div class="gb" style="left:2%;width:88%;background:#2563EB">D-52 · 82%</div><div class="today" style="left:40%"></div></div></div>
+<div class="gr"><div class="lb">3PL 5개사 계약</div><div class="tk"><div class="gb" style="left:2%;width:34%;background:#EF4444">지연 7일</div><div class="today" style="left:40%"></div></div></div>
+</div>
+<div class="ann"><span class="ar">↑</span> 막대 클릭 → <b>진행상황</b> / 왼쪽 KR 이름 클릭 → <b>수정 팝업</b> 으로 나누는 방안을 제안합니다</div>
+<div class="note"><b>다르게 볼 수도 있습니다.</b> 지금처럼 <b>둘 다 수정 팝업</b>으로 두고, 팝업 안의 버튼으로 진행상황에 들어가는 것도 방법입니다. 클릭이 한 번 늘지만 <b>동작이 단순</b>합니다. 어느 쪽이 나을지 의견 주세요.</div>
+</div></div>
+
+<!-- 6 전사 트리 -->
+<div class="card">
+<div class="ch"><span class="n add">6</span><b>전사 트리 — 사업 KR 줄</b><span class="st st-x">검토 · 지금은 없음</span></div>
+<div class="cb">
+<div class="desc">전사 목표 아래 사업 KR이 나열되는 화면입니다. 대표·리더가 위에서 아래로 훑는 자리라 <b>배지가 있으면 유용</b>하지만, 줄이 94개라 <b>화면이 시끄러워질</b> 수 있습니다.</div>
+<div class="app"><div class="appbd">
+<div class="row" style="background:#111827;color:#fff;border-color:#111827"><span class="nm">2026년 사업별 수익성 기반의 전사 매출 구조 정상화</span><span class="pc" style="color:#fff">62%</span></div>
+<div class="row sub"><span class="dot" style="background:#2563EB"></span><span class="nm">[통합 매출] 전년 대비 115% 달성</span><span class="bar"><i style="width:62%;background:#2563EB"></i></span><span class="pc">62%</span><span class="pill progNew">진행상황</span></div>
+<div class="row sub"><span class="dot" style="background:#059669"></span><span class="nm">3PL 신뢰도 있는 파트너로 자리잡고 운영 체계를 고도화</span><span class="bar"><i style="width:40%;background:#059669"></i></span><span class="pc">40%</span><span class="pill progNew">진행상황</span></div>
+</div></div>
+<div class="ann gray"><span class="ar">↑</span> 넣는다면 <b>사업 KR 줄에만</b> 넣고, 그 아래 하위 과제 줄에는 넣지 않는 것을 권합니다</div>
+</div></div>
+
+<!-- 결론 -->
+<div class="card">
+<div class="ch"><span class="n now">＝</span><b>제 추천</b></div>
+<div class="cb">
+<table>
+<tr><th style="width:12%" class="c">순위</th><th style="width:22%">어디에</th><th>이유</th></tr>
+<tr><td class="c"><b style="color:var(--pp)">1순위</b></td><td><b>내 업무</b> 각 줄</td><td>담당자가 매일 여는 화면. 정체·지연을 <b>보자마자 해결</b>할 수 있습니다. 이것 하나만 추가해도 기록률이 가장 크게 올라갑니다.</td></tr>
+<tr><td class="c"><b style="color:var(--pp)">2순위</b></td><td><b>활동</b> KR 이름 옆</td><td>남의 변경을 보다가 "이 KR 지금 어떻게 돼가지?"로 자연스럽게 이어집니다.</td></tr>
+<tr><td class="c">3순위</td><td><b>일정</b> 막대 클릭</td><td>보는 화면이라 진행상황이 더 맞지만, 클릭 동작이 두 갈래로 나뉘어 헷갈릴 수 있습니다.</td></tr>
+<tr><td class="c">보류</td><td><b>전사 트리</b></td><td>94줄에 배지가 붙으면 화면이 복잡해집니다. 대표 요청이 있을 때 넣는 편이 낫습니다.</td></tr>
+</table>
+<div class="note p"><b>가장 단순한 결론</b> — <b>1순위(내 업무)만 추가</b>하고 나머지는 두는 것을 권합니다. 진입점을 늘릴수록 화면은 다시 복잡해집니다. 지금 목적은 <b>"기록을 남기게 만드는 것"</b>이고, 그건 '내 업무' 한 곳이면 충분합니다.</div>
+</div></div>
+
+<div class="foot">※ 목업입니다. 실제 데이터는 변경되지 않았고 화면 구성안만 보여드립니다. — 2026.08.07</div>
+</div></body></html>
