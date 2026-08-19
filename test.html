@@ -462,6 +462,18 @@ select.st.todo{color:var(--tx4)}select.st.doing{color:var(--wtx);font-weight:700
 .ulistbar .ucnt{font-family:var(--fm);font-size:11px;background:var(--bgh);color:var(--tx4);border-radius:20px;padding:1px 8px}
 .ulistbar .uhint{margin-left:auto;font-size:11.5px;color:var(--tx5)}
 .utbl[hidden]{display:none}
+
+.rectools{margin-left:auto;display:inline-flex;gap:8px;font-family:var(--ff)}
+.rectools span{font-size:11px;color:var(--tx5);cursor:pointer;padding:1px 5px;border-radius:5px}
+.rectools span:hover{background:var(--bgh);color:var(--ac)}
+.rectools span:last-child:hover{color:var(--dtx)}
+.edtag{font-size:9.5px;background:var(--bgh);color:var(--tx5);border-radius:20px;padding:1px 7px;font-family:var(--ff)}
+.recform{border:1px solid var(--ac);background:var(--acbg);border-radius:10px;padding:11px 13px;margin-bottom:14px}
+.recform .rf{display:grid;grid-template-columns:1fr 1.5fr;gap:9px;margin-bottom:8px}
+.recform label{font-size:10.5px;color:var(--tx4);font-weight:700;display:block;margin-bottom:4px}
+.recform input[type=number],.recform input[type=date],.recform textarea{width:100%;border:1px solid var(--bdt);border-radius:7px;padding:7px 9px;font-size:12.5px;font-family:inherit;background:#fff}
+.recform textarea{min-height:54px;resize:vertical;line-height:1.55}
+.recform .rbtns{display:flex;justify-content:flex-end;gap:7px;margin-top:9px;align-items:center}
 </style></head><body>
 <div class="login" id="login"><div class="lc">
 <div class="lb"><h1>OKR Workspace</h1><p>이름으로 검색 또는 사업부 선택</p></div>
@@ -1084,7 +1096,60 @@ function progSummary(id){const k=KRS[id];const pts=progPoints(id);const now=Date
  const by={};pts.forEach(q=>{by[q.by]=(by[q.by]||0)+1});out.by=Object.entries(by).sort((a,b)=>b[1]-a[1]);
  out.confCnt=Object.values(ACTS).filter(a=>a&&a.kr===id&&(a.ty==='conf'||(a.ty==='log'&&a.conf))).length;
  return out}
-function openProg(id){const k=KRS[id];if(!k)return;_progKr=id;_progConf=k.conf||'';
+
+/* ===== 기록 수정 · 삭제 ===== */
+let _recEdit=null,_recConf='';
+function canEditRec(a){const u=uById(state.cu);if(!u)return false;if(u.role==='admin')return true;return a.byId===state.cu}
+function editRec(eid){const a=ACTS[eid];if(!a||!canEditRec(a))return;_recEdit=eid;_recConf=a.conf||'';rProg()}
+function cancelRec(){_recEdit=null;_recConf='';rProg()}
+function setRConf(v){_recConf=(_recConf===v)?'':v;rProg()}
+function recEditForm(eid,a,k){const CL={g:'순조',y:'주의',r:'위험'};
+ const isVal=(a.ty==='log'||a.ty==='val');const isDue=(a.ty==='due');
+ return `<div class="ti ${a.conf||''}"><div class="recform">
+ <div style="font-size:11.5px;font-weight:800;color:var(--ach);margin-bottom:8px">기록 수정 &middot; ${esc(a.by)} &middot; ${new Date(a.at).toLocaleString('ko-KR')}</div>
+ ${isVal?`<div class="rf"><div><label>현재값 (${esc(k.unit||'')})</label><input type="number" id="rcVal" value="${esc(a.to)}" step="any"></div>
+ <div><label>확신도</label><div class="segp"><div class="g ${_recConf==='g'?'on':''}" onclick="setRConf('g')">순조</div><div class="y ${_recConf==='y'?'on':''}" onclick="setRConf('y')">주의</div><div class="r ${_recConf==='r'?'on':''}" onclick="setRConf('r')">위험</div></div></div></div>`:''}
+ ${isDue?`<div class="rf"><div><label>변경된 마감일</label><input type="date" id="rcDue" value="${esc(a.to)}"></div><div></div></div>`:''}
+ <div><label>내용 · 특이사항</label><textarea id="rcMemo">${esc(a.txt||'')}</textarea></div>
+ <div class="rbtns"><span style="font-size:11px;color:var(--tx4);margin-right:auto">저장하면 <b>수정됨</b> 표시가 붙습니다${isVal?' · 값을 바꾸면 그래프도 다시 계산됩니다':''}</span><button class="btn" onclick="cancelRec()">취소</button><button class="btn btnp" onclick="saveRec('${eid}')">저장</button></div>
+ </div></div>`}
+function syncHist(krId){/* 그래프용 히스토리를 기록 기준으로 재구성 */
+ const rows=Object.values(ACTS).filter(a=>a&&a.kr===krId&&(a.ty==='log'||a.ty==='val')).sort((x,y)=>x.at-y.at);
+ const P=n=>String(n).padStart(2,'0');
+ const h=rows.map(a=>{const d=new Date(a.at);return {at:d.getFullYear()+'-'+P(d.getMonth()+1)+'-'+P(d.getDate())+' '+P(d.getHours())+':'+P(d.getMinutes()),cur:Number(a.from)||0,newCur:Number(a.to)||0,by:a.by||'-',memo:a.txt||''}});
+ state.history[krId]=h;return h}
+function saveRec(eid){const a=ACTS[eid];if(!a||!canEditRec(a))return;const krId=a.kr;const k=KRS[krId];
+ const memo=(document.getElementById('rcMemo')||{}).value||'';
+ const o=Object.assign({},a,{txt:memo,ed:Date.now(),edBy:(uById(state.cu)||{}).name||'-'});
+ if(a.ty==='log'||a.ty==='val'){const raw=(document.getElementById('rcVal')||{}).value;
+  if(raw!==''&&raw!==undefined&&!isNaN(Number(raw)))o.to=String(Number(raw));
+  o.conf=_recConf||'';o.ment=parseMent(memo);}
+ if(a.ty==='due'){const dv=(document.getElementById('rcDue')||{}).value;if(dv)o.to=dv;}
+ ACTS[eid]=o;
+ if(!TCOL){alert('연결 상태를 확인해주세요.');return}
+ TCOL.doc(eid).set(o).then(()=>{
+  const upd={};
+  // 최신 기록이면 KR 현재값·확신도·마감일을 따라 갱신
+  const rows=Object.values(ACTS).filter(x=>x&&x.kr===krId&&(x.ty==='log'||x.ty==='val')).sort((x,y)=>y.at-x.at);
+  if(k){
+   if(rows.length&&rows[0].at===o.at&&(o.ty==='log'||o.ty==='val')){const nv=Number(o.to);if(!isNaN(nv))k.cur=nv;if(o.conf)k.conf=o.conf;}
+   if(o.ty==='due'){const dl=Object.values(ACTS).filter(x=>x&&x.kr===krId&&x.ty==='due').sort((x,y)=>y.at-x.at);if(dl.length&&dl[0].at===o.at&&o.to&&o.to!=='미설정')k.due=o.to;}
+   const hh=syncHist(krId);
+   saveS();cloudKrWrite({[krId]:k},null,{['_history.'+krId]:hh});
+  }
+  _recEdit=null;_recConf='';setTimeout(()=>{rProg();try{go(location.hash.replace('#','')||'dash')}catch(e){}},350);
+ }).catch(e=>{console.warn('rec save',e);alert('저장에 실패했습니다. 잠시 후 다시 시도해주세요.')})}
+function delRec(eid){const a=ACTS[eid];if(!a||!canEditRec(a))return;
+ if(!confirm('이 기록을 삭제할까요?\n삭제하면 그래프에서도 사라지며 되돌릴 수 없습니다.'))return;
+ const krId=a.kr;delete ACTS[eid];
+ if(TCOL)TCOL.doc(eid).delete().catch(e=>console.warn('rec del',e));
+ const k=KRS[krId];
+ if(k){const rows=Object.values(ACTS).filter(x=>x&&x.kr===krId&&(x.ty==='log'||x.ty==='val')).sort((x,y)=>y.at-x.at);
+  if(rows.length){const nv=Number(rows[0].to);if(!isNaN(nv))k.cur=nv}
+  const hh=syncHist(krId);saveS();cloudKrWrite({[krId]:k},null,{['_history.'+krId]:hh});}
+ _recEdit=null;setTimeout(()=>{rProg();try{go(location.hash.replace('#','')||'dash')}catch(e){}},350)}
+
+function openProg(id){const k=KRS[id];if(!k)return;_progKr=id;_progConf=k.conf||'';_recEdit=null;
  const bid=k.biz||((KRS[k.parent]||{}).biz);
  document.getElementById('mpT').textContent=k.text;
  document.getElementById('mpS').textContent=((BIZ[bid]||{}).name||'')+' · '+id;
@@ -1121,7 +1186,11 @@ function rProg(){const id=_progKr;if(!id)return;const k=KRS[id];const S=progSumm
   else if(a.ty==='conf')head=`<span class="chg">확신도 ${esc(a.from)} → ${esc(a.to)}</span>`;
   else if(a.ty==='cmt'){head='<span class="chg">코멘트</span>';memo=mentHtml(a.txt||'')}
   else if(a.ty==='task')head='<span class="chg">업무</span>';
-  h+=`<div class="ti ${cls}" data-rec="${a.at}"><div class="hd2"><span class="who">${esc(a.by)}</span><span>${new Date(a.at).toLocaleDateString('ko-KR')}</span>${head}${a.conf?`<span class="tagm tm-${a.conf}">${CLl[a.conf]}</span>`:''}</div>${memo?`<div class="memo2">${a.ty==='cmt'?memo:mentHtml(memo)}</div>`:''}</div>`});
+  const cane=canEditRec(a);
+  const edited=a.ed?`<span class="edtag" title="${esc(a.by)} · ${new Date(a.ed).toLocaleString('ko-KR')}">수정됨</span>`:'';
+  const tools=cane?`<span class="rectools"><span onclick="editRec('${eid}')">수정</span><span onclick="delRec('${eid}')">삭제</span></span>`:'';
+  if(_recEdit===eid){h+=recEditForm(eid,a,k);return}
+  h+=`<div class="ti ${cls}" data-rec="${a.at}"><div class="hd2"><span class="who">${esc(a.by)}</span><span>${new Date(a.at).toLocaleDateString('ko-KR')}</span>${head}${a.conf?`<span class="tagm tm-${a.conf}">${CLl[a.conf]}</span>`:''}${edited}${tools}</div>${memo?`<div class="memo2">${a.ty==='cmt'?memo:mentHtml(memo)}</div>`:''}</div>`});
  h+='</div></div>';
  // 우측 요약
  h+='<div class="psec"><h3>자동 요약 <span class="cnt">기록에서 계산</span></h3>';
